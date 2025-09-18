@@ -1,5 +1,5 @@
 # Actividad 1
-## Escribir unas líneas de código que saluden con el mensaje: <<Hola Mundo>>
+## Escribir unas líneas de código que saluden con el mensaje: 'Hola Mundo'
 
 # Actividad 2
 ## Diseñar un progrrama que pida un número al usuario -- por teclado-- y a continuación lo muestre
