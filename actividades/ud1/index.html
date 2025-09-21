@@ -5,119 +5,151 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Actividades – Unidad 1</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.55; margin: 0; padding: 24px; }
-    h1, h2 { line-height: 1.2; }
-    hr { border: 0; height: 1px; background: #ddd; margin: 24px 0; }
-    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    pre { background: #f6f8fa; padding: 12px; border-radius: 8px; overflow: auto; }
-    .wrap { max-width: 900px; margin: 0 auto; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.55;
+      margin: 0;
+      padding: 24px;
+      background: #f7f9fc;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    details {
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #fff;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      list-style: none;
+      font-size: 1.1em;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::before {
+      content: "▶ ";
+      font-size: 0.9em;
+      color: #283593;
+    }
+    details[open] summary::before {
+      content: "▼ ";
+    }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    pre {
+      background: #f6f8fa;
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
 
-    <h1>Actividad 1</h1>
-    <h2>✨ Escribir unas líneas de código que saluden con el mensaje: <strong>'Hola Mundo'</strong></h2>
+    <details>
+      <summary>Actividad 1 ✨</summary>
+      <p>Escribir unas líneas de código que saluden con el mensaje: <strong>'Hola Mundo'</strong></p>
+    </details>
 
-    <hr />
+    <details>
+      <summary>Actividad 2 🖥️</summary>
+      <p>Diseñar un programa que <strong>pida un número al usuario</strong> —por teclado— y a continuación lo muestre.</p>
+    </details>
 
-    <h1>Actividad 2</h1>
-    <h2>🖥️ Diseñar un programa que <strong>pida un número al usuario</strong> —por teclado— y a continuación lo muestre.</h2>
+    <details>
+      <summary>Actividad 3 👶</summary>
+      <p>Pedir al usuario su <strong>edad</strong> y mostrar la que tendrá el <strong>próximo año</strong>.</p>
+    </details>
 
-    <hr />
+    <details>
+      <summary>Actividad 4 📅</summary>
+      <p>Escribir una aplicación que pida el <strong>año actual</strong> y el de <strong>nacimiento</strong> del usuario.<br>
+      Debe calcular su <strong>edad</strong>, suponiendo que en el año en curso el usuario ya ha cumplido años.</p>
+    </details>
 
-    <h1>Actividad 3</h1>
-    <h2>👶 Pedir al usuario su <strong>edad</strong> y mostrar la que tendrá el <strong>próximo año</strong>.</h2>
+    <details>
+      <summary>Actividad 5 🔄</summary>
+      <p>El tipo <strong>short</strong> permite almacenar valores comprendidos entre <strong>-32768 y 32767</strong>.<br>
+      Escribir un programa que compruebe que el rango de valores de un tipo se comporta de forma <strong>cíclica</strong>, es decir, el valor siguiente al máximo es el valor mínimo.</p>
+    </details>
 
-    <hr />
+    <details>
+      <summary>Actividad 6 ➗</summary>
+      <p>Crear una aplicación que calcule la <strong>media aritmética</strong> de dos <strong>notas enteras</strong>.<br>
+      Hay que tener en cuenta que la media puede contener <strong>decimales</strong>.</p>
+    </details>
 
-    <h1>Actividad 4</h1>
-    <h2>📅 Escribir una aplicación que pida el <strong>año actual</strong> y el de <strong>nacimiento</strong> del usuario.<br>
-      Debe calcular su <strong>edad</strong>, suponiendo que en el año en curso el usuario ya ha cumplido años.
-    </h2>
-
-    <hr />
-
-    <h1>Actividad 5</h1>
-    <h2>🔄 El tipo <strong>short</strong> permite almacenar valores comprendidos entre <strong>-32768 y 32767</strong>.<br>
-      Escribir un programa que compruebe que el rango de valores de un tipo se comporta de forma <strong>cíclica</strong>, es decir, el valor siguiente al máximo es el valor mínimo.
-    </h2>
-
-    <hr />
-
-    <h1>Actividad 6</h1>
-    <h2>➗ Crear una aplicación que calcule la <strong>media aritmética</strong> de dos <strong>notas enteras</strong>.<br>
-      Hay que tener en cuenta que la media puede contener <strong>decimales</strong>.
-    </h2>
-
-    <hr />
-
-    <h1>Actividad 7</h1>
-    <h2>📐 Diseñar una aplicación que calcule la <strong>longitud</strong> y el <strong>área de una circunferencia</strong>.<br>
-      Para ello, el usuario debe introducir el <strong>radio</strong> (que puede contener decimales).
-    </h2>
-    <pre><code>Longitud = 2 × PI × radio
+    <details>
+      <summary>Actividad 7 📐</summary>
+      <p>Diseñar una aplicación que calcule la <strong>longitud</strong> y el <strong>área de una circunferencia</strong>.<br>
+      Para ello, el usuario debe introducir el <strong>radio</strong> (que puede contener decimales).</p>
+      <pre><code>Longitud = 2 × PI × radio
 Área     = PI × radio × radio</code></pre>
+    </details>
 
-    <hr />
+    <details>
+      <summary>Actividad 8 🔞</summary>
+      <p>Realizar una aplicación que solicite al usuario su <strong>edad</strong> y le indique si es <strong>mayor de edad</strong>
+      (mediante un literal booleano: <code>true</code> o <code>false</code>).</p>
+    </details>
 
-    <h1>Actividad 8</h1>
-    <h2>🔞 Realizar una aplicación que solicite al usuario su <strong>edad</strong> y le indique si es <strong>mayor de edad</strong>
-      (mediante un literal booleano: <code>true</code> o <code>false</code>).
-    </h2>
+    <details>
+      <summary>Actividad 9 🔢</summary>
+      <p>Escribir un programa que pida un <strong>número al usuario</strong> e indique mediante un literal booleano
+      (<code>true</code> o <code>false</code>) si el número es <strong>par</strong>.</p>
+    </details>
 
-    <hr />
+    <details>
+      <summary>Actividad 10 🌦️</summary>
+      <p>Diseñar un algoritmo que nos indique si podemos <strong>salir a la calle</strong>.</p>
+      <p>Aspectos a considerar:</p>
+      <ul>
+        <li>Si <strong>está lloviendo</strong>.</li>
+        <li>Si hemos <strong>terminado nuestras tareas</strong>.</li>
+      </ul>
+      <p>👉 Solo podemos salir a la calle si <strong>no llueve</strong> y hemos finalizado las tareas.</p>
+      <p>Existe otra opción que permite salir: si el usuario <strong>necesita ir a la biblioteca</strong>.</p>
+      <p>El algoritmo debe solicitar (mediante booleanos) si llueve, si se han terminado las tareas y si se debe ir a la biblioteca, mostrando finalmente un literal booleano (<code>true</code> o <code>false</code>) que indique si puede salir.</p>
+    </details>
 
-    <h1>Actividad 9</h1>
-    <h2>🔢 Escribir un programa que pida un <strong>número al usuario</strong> e indique mediante un literal booleano
-      (<code>true</code> o <code>false</code>) si el número es <strong>par</strong>.
-    </h2>
-
-    <hr />
-
-    <h1>Actividad 10</h1>
-    <h2>🌦️ Diseñar un algoritmo que nos indique si podemos <strong>salir a la calle</strong>.</h2>
-    <p>Aspectos a considerar:</p>
-    <ul>
-      <li>Si <strong>está lloviendo</strong>.</li>
-      <li>Si hemos <strong>terminado nuestras tareas</strong>.</li>
-    </ul>
-    <p>👉 Solo podemos salir a la calle si <strong>no llueve</strong> y hemos finalizado las tareas.</p>
-    <p>Existe otra opción que permite salir: si el usuario <strong>necesita ir a la biblioteca</strong>.</p>
-    <p>El algoritmo debe solicitar (mediante booleanos) si llueve, si se han terminado las tareas y si se debe ir a la biblioteca, mostrando finalmente un literal booleano (<code>true</code> o <code>false</code>) que indique si puede salir.</p>
-
-    <hr />
-
-    <h1>Actividad 11</h1>
-    <h2>🍏🍐 Un frutero necesita calcular los <strong>beneficios anuales</strong> que obtiene de la venta de <strong>manzanas</strong> y <strong>peras</strong>.<br>
+    <details>
+      <summary>Actividad 11 🍏🍐</summary>
+      <p>Un frutero necesita calcular los <strong>beneficios anuales</strong> que obtiene de la venta de <strong>manzanas</strong> y <strong>peras</strong>.<br>
       La aplicación debe solicitar las <strong>ventas (en kilos)</strong> de cada semestre para cada fruta.<br>
-      Se mostrará el <strong>importe total</strong>, sabiendo que:
-    </h2>
-    <ul>
-      <li>El kilo de manzanas = <strong>2,35 €</strong></li>
-      <li>El kilo de peras = <strong>1,95 €</strong></li>
-    </ul>
+      Se mostrará el <strong>importe total</strong>, sabiendo que:</p>
+      <ul>
+        <li>El kilo de manzanas = <strong>2,35 €</strong></li>
+        <li>El kilo de peras = <strong>1,95 €</strong></li>
+      </ul>
+    </details>
 
-    <hr />
+    <details>
+      <summary>Actividad 12 ➕➖</summary>
+      <p>Escribir un programa que pida un <strong>número</strong> al usuario y muestre su <strong>valor absoluto</strong>.</p>
+    </details>
 
-    <h1>Actividad 12</h1>
-    <h2>➕➖ Escribir un programa que pida un <strong>número</strong> al usuario y muestre su <strong>valor absoluto</strong>.</h2>
+    <details>
+      <summary>Actividad 13 📊</summary>
+      <p>Escribir un programa que solicite las <strong>notas del primer, segundo y tercer trimestre</strong> (enteras).<br>
+      El programa debe mostrar la <strong>nota media del curso</strong> de dos formas:</p>
+      <ul>
+        <li>📋 Como en el boletín de calificaciones (<strong>solo la parte entera</strong>).</li>
+        <li>📚 Como en el expediente académico (<strong>con decimales</strong>).</li>
+      </ul>
+    </details>
 
-    <hr />
-
-    <h1>Actividad 13</h1>
-    <h2>📊 Escribir un programa que solicite las <strong>notas del primer, segundo y tercer trimestre</strong> (enteras).<br>
-      El programa debe mostrar la <strong>nota media del curso</strong> de dos formas:
-    </h2>
-    <ul>
-      <li>📋 Como en el boletín de calificaciones (<strong>solo la parte entera</strong>).</li>
-      <li>📚 Como en el expediente académico (<strong>con decimales</strong>).</li>
-    </ul>
-
-    <hr />
-
-    <h1>Actividad 14</h1>
-    <h2>🔢 Realizar un programa que pida como entrada un <strong>número decimal</strong> y lo muestre <strong>redondeado al entero más próximo</strong>.</h2>
+    <details>
+      <summary>Actividad 14 🔢</summary>
+      <p>Realizar un programa que pida como entrada un <strong>número decimal</strong> y lo muestre <strong>redondeado al entero más próximo</strong>.</p>
+    </details>
 
   </main>
 </body>
