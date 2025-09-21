@@ -5,64 +5,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EDD/Programación – Boletín 2. Condicionales</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 24px; background: #f7f9fc; }
-    .wrap { max-width: 900px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    h1, h2 { line-height: 1.25; margin: 0 0 .8rem; }
-    hr { border: 0; height: 1px; background: #ddd; margin: 16px 0 24px; }
-    .actividad { margin-bottom: 20px; padding: 12px 16px; border-left: 5px solid #283593; background: #f0f3fa; border-radius: 6px; }
-    .actividad h3 { margin: 0 0 8px; color: #283593; }
-    math { font-size: 1.1em; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #f7f9fc;
+      margin: 0;
+      padding: 24px;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      margin: 0 0 1rem;
+      text-align: center;
+      color: #283593;
+    }
+    details {
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #f0f3fa;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      list-style: none;
+      padding: 6px 0;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    summary::before {
+      content: "▶ ";
+      font-size: 0.9em;
+      color: #283593;
+    }
+    details[open] summary::before {
+      content: "▼ ";
+    }
+    math {
+      font-size: 1.1em;
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
     <h1>EDD/Programación</h1>
     <h2>Boletín 2. Condicionales</h2>
-    <hr>
 
-    <div class="actividad">
-      <h3>Actividad 1</h3>
+    <details>
+      <summary>Actividad 1</summary>
       Diseñar una aplicación que solicite al usuario un número e indique si es par o impar.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 2</h3>
+    <details>
+      <summary>Actividad 2</summary>
       Pedir dos números enteros y decir si son iguales o no.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 3</h3>
+    <details>
+      <summary>Actividad 3</summary>
       Solicitar dos números distintos y mostrar cuál es el mayor.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 4</h3>
+    <details>
+      <summary>Actividad 4</summary>
       Realizar de nuevo el ejercicio anterior considerando el caso de que los números introducidos sean iguales.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 5</h3>
+    <details>
+      <summary>Actividad 5</summary>
       Implementar un programa que pida por teclado un número decimal e indique si es un
       número casi-cero, que son aquellos, positivos o negativos, que se acercan a 0 por menos
       de 1 unidad, aunque curiosamente el 0 no se considera un número casi-cero. Ejemplos:
       0.3, –0.99 o 0.123. Y números que no se consideran casi-ceros son: 12.3, 0 o –1.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 6</h3>
+    <details>
+      <summary>Actividad 6</summary>
       Pedir dos números y mostrarlos ordenados de forma decreciente.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 7</h3>
+    <details>
+      <summary>Actividad 7</summary>
       Pedir tres números y mostrarlos ordenados de mayor a menor.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 8</h3>
+    <details>
+      <summary>Actividad 8</summary>
       Pedir los coeficientes de una ecuación de 2º grado, y mostrar sus soluciones reales. 
       Si no existen, debe indicarlo. Recordemos que las soluciones de una ecuación de segundo
-      grado, <math><msup><mi>a</mi><mn>2</mn></msup> + <mi>b</mi><mi>x</mi> + <mi>c</mi> = 0</math> son:
+      grado, <math><msup><mi>x</mi><mn>2</mn></msup> + <mi>b</mi><mi>x</mi> + <mi>c</mi> = 0</math> son:
       <br><br>
       <math display="block">
         <mi>x</mi>
@@ -80,56 +118,56 @@
           <mrow><mn>2</mn><mi>a</mi></mrow>
         </mfrac>
       </math>
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 9</h3>
+    <details>
+      <summary>Actividad 9</summary>
       Escribir una aplicación que indique cuántas cifras tiene un número entero introducido
       por teclado, que estará comprendido entre 0 y 99.999.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 10</h3>
+    <details>
+      <summary>Actividad 10</summary>
       Pedir un número entre 0 y 9.999, y decir si es capicúa.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 11</h3>
+    <details>
+      <summary>Actividad 11</summary>
       Pedir una nota de 0 a 10 y mostrarla de la forma: Insuficiente (0–4), Suficiente (5),
       Bien (6), Notable (7–8) y Sobresaliente (9–10).
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 12</h3>
+    <details>
+      <summary>Actividad 12</summary>
       Pedir el día, mes y año de una fecha e indicar si la fecha es correcta. Recordamos que
       existen meses con 28, 30 y 31 días. No consideraremos los años bisiestos.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 13</h3>
+    <details>
+      <summary>Actividad 13</summary>
       Escribir un programa que pida una hora de la forma: hora, minutos y segundos. El
       programa debe mostrar la hora un segundo más tarde. Un ejemplo:<br>
       <em>hora actual [10:41:59] → hora actual +1 segundo [10:42:00]</em>
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 14</h3>
+    <details>
+      <summary>Actividad 14</summary>
       Crear una aplicación que solicite al usuario una fecha (día, mes y año) y muestre la
       fecha correspondiente al día siguiente.
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 15</h3>
+    <details>
+      <summary>Actividad 15</summary>
       Idear un programa que solicite al usuario un número comprendido entre 1 y 7,
       correspondiente a un día de la semana. Se debe mostrar el nombre del día de la semana
       al que corresponde. Por ejemplo, el número 1 corresponde a «lunes» y el 6 a «sábado».
-    </div>
+    </details>
 
-    <div class="actividad">
-      <h3>Actividad 16</h3>
+    <details>
+      <summary>Actividad 16</summary>
       Solicitar un número comprendido entre 1 y 99. El programa debe mostrarlo escrito.
       Por ejemplo, para 56 mostrar: «cincuenta y seis».
-    </div>
+    </details>
   </main>
 </body>
 </html>
