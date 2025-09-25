@@ -1,0 +1,20 @@
+# Archivos de Eclipse
+*.launch
+.settings/
+.project
+.classpath
+
+# Archivos compilados
+bin/
+*.class
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de Git
+*.log
+
+# Carpetas generadas
+target/
+
