@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tarea práctica: GitHub + Java</title>
+  <style>
+    :root{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:#222}
+    body{max-width:900px;margin:28px auto;padding:20px;background:#f7f8fb;border-radius:12px}
+    header{display:flex;gap:12px;align-items:center}
+    h1{margin:0;font-size:1.6rem}
+    p.lead{margin:4px 0 18px;color:#444}
+    section{background:#fff;padding:18px;border-radius:10px;box-shadow:0 6px 20px rgba(13,38,76,0.05);margin-bottom:14px}
+    h2{margin-top:4px}
+    pre{background:#0b1220;color:#e6f0ff;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:#0b5fff;color:white;text-decoration:none;font-weight:600}
+    .small{font-size:0.9rem;color:#555}
+    .meta{font-size:0.9rem;color:#666;margin-bottom:8px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    .copy{float:right;background:#e9eefc;border:1px solid #d6e0ff;padding:6px;border-radius:6px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Tarea práctica: GitHub + Java</h1>
+      <p class="lead">Guía rápida y ejecutable para que los alumnos aprendan <strong>fork, SSH, clonación, commits y subir un proyecto Java</strong>.</p>
+      <div class="meta">Repositorio base: <a href="https://github.com/profeInformatica101/ejerciciosJAVA" target="_blank">profeInformatica101/ejerciciosJAVA</a></div>
+    </div>
+  </header>
+
+  <section>
+    <h2>1) Fork del repositorio</h2>
+    <ol>
+      <li>Ir al repositorio: <a href="https://github.com/profeInformatica101/ejerciciosJAVA" target="_blank">https://github.com/profeInformatica101/ejerciciosJAVA</a></li>
+      <li>Hacer clic en <strong>Fork</strong> (arriba a la derecha). Se creará una copia en tu cuenta.</li>
+      <li>Verificar que el repo aparece en tu perfil de GitHub.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>2) Configurar claves SSH y clonar</h2>
+    <p class="small">Generar clave SSH en local (ejemplo con <code>ed25519</code>) y añadir la clave pública en GitHub → Settings → SSH and GPG keys.</p>
+
+    <div class="grid">
+      <div>
+        <strong>Generar claves SSH</strong>
+        <pre><button class="copy" data-target="cmd-ssh">Copiar</button><code id="cmd-ssh">ssh-keygen -t ed25519 -C "tu_email@ejemplo.com"
+# Si pides ruta por defecto, pulsa Enter
+# Luego copia la clave pública (~/.ssh/id_ed25519.pub) y pégala en GitHub</code></pre>
+      </div>
+
+      <div>
+        <strong>Clonar el fork (usando SSH)</strong>
+        <pre><button class="copy" data-target="cmd-clone">Copiar</button><code id="cmd-clone">git clone git@github.com:TU_USUARIO/ejerciciosJAVA.git
+cd ejerciciosJAVA</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3) Editar README (añadir la chuleta de comandos)</h2>
+    <p class="small">Editar <code>README.md</code> en la raíz del repositorio para incluir la mini-chuleta con los comandos básicos.</p>
+
+    <pre><button class="copy" data-target="md-readme">Copiar</button><code id="md-readme">### Chuleta Git
+
+- `git status` → Ver estado del repositorio
+- `git add .` → Añadir cambios
+- `git commit -m "mensaje"` → Guardar cambios localmente
+- `git push` → Subir cambios al remoto
+- `git pull` → Traer cambios del remoto</code></pre>
+
+    <p class="small">Commit y push de ejemplo:</p>
+    <pre><button class="copy" data-target="cmd-readme">Copiar</button><code id="cmd-readme">git add README.md
+git commit -m "Añadida chuleta de comandos Git"
+git push origin main</code></pre>
+  </section>
+
+  <section>
+    <h2>4) Crear un proyecto Java sencillo</h2>
+    <p class="small">Dentro del repo crear la carpeta <code>MiProyectoJava</code> y añadir un <code>Main.java</code>:</p>
+
+    <pre><button class="copy" data-target="java-main">Copiar</button><code id="java-main">// MiProyectoJava/Main.java
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hola GitHub desde Java!");
+    }
+}</code></pre>
+
+    <p class="small">Añadir, commitear y pushear:</p>
+    <pre><button class="copy" data-target="cmd-java">Copiar</button><code id="cmd-java">git add MiProyectoJava/Main.java
+git commit -m "Primer proyecto Java añadido"
+git push origin main</code></pre>
+  </section>
+
+  <section>
+    <h2>5) Comprobación final</h2>
+    <ul>
+      <li>Mirar en GitHub: comprobar que el <code>README.md</code> está actualizado.</li>
+      <li>Comprobar que existe la carpeta <code>MiProyectoJava</code> con el <code>Main.java</code>.</li>
+      <li>Pedir a los alumnos que compartan el enlace a su repo fork como entregable.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Consejos para el/la profesor(a)</h2>
+    <ul>
+      <li>Revisar que los alumnos han añadido la clave SSH: en la máquina local pueden probar <code>ssh -T git@github.com</code>.</li>
+      <li>Si usan Windows y no tienen WSL, pueden seguir el cliente de Git para Windows o usar Git Bash.</li>
+      <li>Evaluación sencilla: 1 punto por README actualizado, 1 punto por proyecto Java subido, 1 punto por SSH funcionado (captura de pantalla o salida del comando).</li>
+    </ul>
+  </section>
+
+  <footer style="text-align:center;margin-top:10px;color:#777;font-size:0.9rem">
+    Plantilla generada automáticamente — puedes editar y adaptar para tus alumnos.
+  </footer>
+
+<script>
+  // Copiar a portapapeles para los botones
+  document.querySelectorAll('.copy').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-target');
+      const el = document.getElementById(id);
+      if(!el) return;
+      try{
+        await navigator.clipboard.writeText(el.textContent);
+        btn.textContent = 'Copiado ✓';
+        setTimeout(()=> btn.textContent='Copiar',1200);
+      }catch(e){
+        alert('No se pudo copiar. Selecciona y copia manualmente.');
+      }
+    })
+  })
+</script>
+</body>
+</html>
