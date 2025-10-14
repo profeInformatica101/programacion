@@ -44,7 +44,7 @@ public class Actividad10 {
         * #   Dos dígitos.                               #
         * #   Es capicúa si ambas cifras son iguales.    #
         * #   Ejemplo: 44 ✓ |  52 ✗ | 11 ✓ |  23 ✗ |     #
-        * ################################################
+        * ################################################ -*
         */
         else if (numero < 100) { // 2 cifras
             int unidades = numero % 10;
