@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Boletín 5 — Tablas (Java)</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+      body { background: #f8f9fa; }
+      .icon-wrap {
+        width: 2.25rem; height: 2.25rem;
+        display: inline-flex; align-items: center; justify-content: center;
+        border-radius: 0.75rem; background: #e9ecef; margin-right: .5rem;
+      }
+      .exercise-card { border: none; }
+      .accordion-button .subtitle { font-weight: 400; color: #6c757d; font-size: .95rem; }
+      code { color:chocolate; background: #f1f3f5; padding: .1rem .3rem; border-radius: .25rem; }
+      footer { color:#6c757d; }
+      .inner-acc .accordion-button { font-size: .95rem; }
+      .inner-acc .accordion-item { border-left: .25rem solid #ffc107; } /* border-warning */
+      .inner-acc .accordion-body { background: #f8f9fa; }
+    </style>
+  </head>
+  <body>
+    <div class="container py-4">
+      <header class="mb-4">
+        <h1 class="h3 mb-1">Boletín 5 · Tablas (Java)</h1>
+        <p class="text-muted mb-0">Unidad 5 — Ejercicios con arrays unidimensionales, bidimensionales y funciones auxiliares.</p>
+      </header>
+
+      <div class="accordion accordion-flush" id="accordionEjercicios">
+
+        <!-- 1 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+              <span class="icon-wrap me-2"><i class="bi bi-card-list"></i></span>
+              <span><strong>Ejercicio 1:</strong> <span class="subtitle">Lee 5 decimales y muéstralos en el mismo orden.</span></span>
+            </button>
+          </h2>
+          <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Diseñar un programa que solicite al usuario que introduzca 5 números decimales por teclado y, a continuación, muestre los números en el mismo orden en que se introdujeron.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc1">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading1">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse1" aria-expanded="false" aria-controls="innerCollapse1">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse1" class="accordion-collapse collapse" aria-labelledby="innerHeading1" data-bs-parent="#innerAcc1">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Crea <code>double[] t = new double[5]</code>.</li>
+                        <li>Bucle <code>for (int i = 0; i &lt; 5; i++)</code>: pedir y leer cada número en <code>t[i]</code>.</li>
+                        <li>Segundo bucle de <code>i = 0</code> a <code>4</code> para mostrar <code>t[i]</code> en el mismo orden.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading2">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+              <span class="icon-wrap me-2"><i class="bi bi-arrow-down-up"></i></span>
+              <span><strong>Ejercicio 2:</strong> <span class="subtitle">Lee n enteros y muéstralos en orden inverso.</span></span>
+            </button>
+          </h2>
+          <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Escribir una aplicación que solicite al usuario cuántos números desea introducir. A continuación, se leerá esa cantidad de números enteros y, por último, se mostrarán en el orden inverso al introducido.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc2">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading2">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse2" aria-expanded="false" aria-controls="innerCollapse2">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse2" class="accordion-collapse collapse" aria-labelledby="innerHeading2" data-bs-parent="#innerAcc2">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Pedir <code>n</code> y crear <code>int[] tabla = new int[n]</code>.</li>
+                        <li>Rellenar con un bucle leyendo del teclado.</li>
+                        <li>Mostrar con un bucle desde <code>i = tabla.length - 1</code> hasta <code>0</code>.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading3">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+              <span class="icon-wrap me-2"><i class="bi bi-emoji-neutral"></i></span>
+              <span><strong>Ejercicio 3:</strong> <span class="subtitle">Medias de positivos/negativos y cuenta ceros.</span></span>
+            </button>
+          </h2>
+          <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Introducir por teclado un número <em>n</em>; a continuación solicitar al usuario que teclee <em>n</em> números. Calcular la media de los números positivos, la media de los negativos y contar el número de ceros introducidos.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc3">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading3">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse3" aria-expanded="false" aria-controls="innerCollapse3">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse3" class="accordion-collapse collapse" aria-labelledby="innerHeading3" data-bs-parent="#innerAcc3">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Rellena la tabla como en el ejercicio 2.</li>
+                        <li>Implementa <code>double mediaPositivos(int[] t)</code> y <code>double mediaNegativos(int[] t)</code> con acumulador y contador.</li>
+                        <li>Implementa <code>int cuentaCeros(int[] t)</code> que recorra y cuente los ceros.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading4">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+              <span class="icon-wrap me-2"><i class="bi bi-trash3"></i></span>
+              <span><strong>Ejercicio 4:</strong> <span class="subtitle">Eliminar por índice en tu lista de números favoritos.</span></span>
+            </button>
+          </h2>
+          <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Implementar un programa que inicialice una tabla con tus números favoritos. Pedir al usuario el índice de un elemento que será eliminado. Continuar eliminando elementos hasta que el índice introducido sea negativo o no existan más elementos que borrar. Validar siempre que el índice es válido.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc4">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading4">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse4" aria-expanded="false" aria-controls="innerCollapse4">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse4" class="accordion-collapse collapse" aria-labelledby="innerHeading4" data-bs-parent="#innerAcc4">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Muestra la tabla y pide <code>pos</code>.</li>
+                        <li>Mientras <code>pos &gt;= 0</code> y la tabla tenga elementos:
+                          <ul>
+                            <li>Si <code>pos &gt;= tabla.length</code>, mostrar error.</li>
+                            <li>Si es válida, llama a <code>borrarElemento(int[] t, int pos)</code> que intercambia con el último y devuelve <code>Arrays.copyOf(t, t.length-1)</code>.</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading5">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+              <span class="icon-wrap me-2"><i class="bi bi-safe2"></i></span>
+              <span><strong>Ejercicio 5:</strong> <span class="subtitle">Juego: la cámara secreta (dígitos 1–5, longitud variable).</span></span>
+            </button>
+          </h2>
+          <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Desarrollar el juego de la cámara secreta. El jugador elige la longitud de la combinación (dígitos del 1 al 5). La aplicación genera aleatoriamente la combinación y, en cada intento del usuario, muestra para cada dígito si es mayor, menor o igual que el correspondiente de la combinación secreta.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc5">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse5" aria-expanded="false" aria-controls="innerCollapse5">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse5" class="accordion-collapse collapse" aria-labelledby="innerHeading5" data-bs-parent="#innerAcc5">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Pedir tamaño y crear <code>int[] combinacion</code>; rellenar con aleatorios 1..5.</li>
+                        <li>Usar bucle <code>while (fallos != 0)</code>:
+                          <ul>
+                            <li>Poner <code>fallos = 0</code> y recorrer posiciones pidiendo intento usuario.</li>
+                            <li>Comparar y decir si es mayor/menor/igual. Si no es igual, <code>fallos++</code>.</li>
+                          </ul>
+                        </li>
+                        <li>Al salir, felicitar por acertar.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading6">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+              <span class="icon-wrap me-2"><i class="bi bi-trophy"></i></span>
+              <span><strong>Ejercicio 6:</strong> <span class="subtitle">Campeonato de programación: ordena puntuaciones (5 + hasta 3 exhibición).</span></span>
+            </button>
+          </h2>
+          <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Diseñar una aplicación que lea las puntuaciones (enteros) de 5 programadores y las muestre ordenadas. Después pueden añadirse hasta 3 programadores de exhibición; su puntuación se introduce igual, usando <code>-1</code> para indicar que no hay más. Mostrar finalmente todos los puntos ordenados.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc6">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading6">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse6" aria-expanded="false" aria-controls="innerCollapse6">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse6" class="accordion-collapse collapse" aria-labelledby="innerHeading6" data-bs-parent="#innerAcc6">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Crea <code>int[] puntos = new int[5]</code>, rellena y <code>Arrays.sort(puntos)</code>.</li>
+                        <li>Lee <em>exhibición</em> hasta 3 veces o hasta introducir <code>-1</code>:
+                          <ul>
+                            <li>Amplía con <code>puntos = Arrays.copyOf(puntos, puntos.length+1)</code> y coloca al final.</li>
+                          </ul>
+                        </li>
+                        <li>Ordena de nuevo y muestra.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading7">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7" aria-expanded="false" aria-controls="collapse7">
+              <span class="icon-wrap me-2"><i class="bi bi-shuffle"></i></span>
+              <span><strong>Ejercicio 7:</strong> <span class="subtitle">Fusiona dos listas ya ordenadas (6 + 6 → 12 ordenados).</span></span>
+            </button>
+          </h2>
+          <div id="collapse7" class="accordion-collapse collapse" aria-labelledby="heading7" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Leer una serie de 6 enteros, guardarlos y mostrarlos ordenados. Repetir con otra serie de 6. A continuación, fusionar ambas tablas en una tercera de forma que los 12 números sigan ordenados, sin volver a ordenar.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc7">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading7">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse7" aria-expanded="false" aria-controls="innerCollapse7">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse7" class="accordion-collapse collapse" aria-labelledby="innerHeading7" data-bs-parent="#innerAcc7">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Rellena <code>t1</code> y <code>t2</code>, ordénalas con <code>Arrays.sort()</code>.</li>
+                        <li>Crea <code>t3</code> con tamaño <code>t1.length + t2.length</code>.</li>
+                        <li>Usa índices <code>i1, i2, i3</code> y un bucle mientras <code>i3 &lt; t3.length</code> para intercalar el menor de <code>t1[i1]</code> y <code>t2[i2]</code>, cuidando límites.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading8">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+              <span class="icon-wrap me-2"><i class="bi bi-x-octagon"></i></span>
+              <span><strong>Ejercicio 8:</strong> <span class="subtitle"><code>sinRepetidos(t)</code>: elimina duplicados y devuelve nuevo array.</span></span>
+            </button>
+          </h2>
+          <div id="collapse8" class="accordion-collapse collapse" aria-labelledby="heading8" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Implementar la función <code>int[] sinRepetidos(int t[])</code> que construye y devuelve una tabla con los elementos de <code>t</code> eliminando los repetidos. El tamaño del nuevo array debe ajustarse a los elementos únicos.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc8">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading8">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse8" aria-expanded="false" aria-controls="innerCollapse8">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse8" class="accordion-collapse collapse" aria-labelledby="innerHeading8" data-bs-parent="#innerAcc8">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Crea <code>int[] res</code> con 1 elemento: copia <code>t[0]</code>.</li>
+                        <li>Para cada <code>t[i]</code> desde <code>i=1</code>, comprueba si ya está en <code>res</code> (bucle o función <em>contiene</em>).</li>
+                        <li>Si no está, inserta con función <code>insertar(res, valor)</code> que haga <code>Arrays.copyOf(res, res.length+1)</code> y ponga al final.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading9">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
+              <span class="icon-wrap me-2"><i class="bi bi-mortarboard"></i></span>
+              <span><strong>Ejercicio 9:</strong> <span class="subtitle">Notas de un grupo: medias por trimestre y media del alumno pos.</span></span>
+            </button>
+          </h2>
+          <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="heading9" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Leer las notas (enteros) del 1.º, 2.º y 3.º trimestre de un grupo de 5 alumnos. Mostrar la nota media del grupo en cada trimestre y la media del alumno que está en la posición <em>pos</em> (leída por teclado).
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc9">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading9">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse9" aria-expanded="false" aria-controls="innerCollapse9">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse9" class="accordion-collapse collapse" aria-labelledby="innerHeading9" data-bs-parent="#innerAcc9">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li><em>Resuelto en clase.</em> Sugerencia: usa <code>int[5][3]</code> (filas alumnos, columnas trimestres) y calcula medias por fila y por columna.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading10">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse10" aria-expanded="false" aria-controls="collapse10">
+              <span class="icon-wrap me-2"><i class="bi bi-diagram-3"></i></span>
+              <span><strong>Ejercicio 10:</strong> <span class="subtitle">Separa pares e impares en dos tablas.</span></span>
+            </button>
+          </h2>
+          <div id="collapse10" class="accordion-collapse collapse" aria-labelledby="heading10" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Leer y almacenar <em>n</em> números enteros en una tabla. Construir otras dos tablas con los elementos pares e impares de la primera, respectivamente.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc10">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading10">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse10" aria-expanded="false" aria-controls="innerCollapse10">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse10" class="accordion-collapse collapse" aria-labelledby="innerHeading10" data-bs-parent="#innerAcc10">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Cuenta primero cuántos pares hay (<code>cuentaPares</code>).</li>
+                        <li>Crea <code>valoresPares</code> con tamaño <code>cuentaPares</code> y <code>valoresImpares</code> con <code>n - cuentaPares</code>.</li>
+                        <li>Recorre de nuevo y vuelca en la tabla correspondiente usando índices separados.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading11">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse11" aria-expanded="false" aria-controls="collapse11">
+              <span class="icon-wrap me-2"><i class="bi bi-grid-3x3-gap"></i></span>
+              <span><strong>Ejercicio 11:</strong> <span class="subtitle">¿Es mágica una matriz 4×4?</span></span>
+            </button>
+          </h2>
+          <div id="collapse11" class="accordion-collapse collapse" aria-labelledby="heading11" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Solicitar los elementos de una matriz de tamaño 4×4. Determinar si es una matriz mágica (la suma de cada fila y de cada columna es la misma).
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc11">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading11">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse11" aria-expanded="false" aria-controls="innerCollapse11">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse11" class="accordion-collapse collapse" aria-labelledby="innerHeading11" data-bs-parent="#innerAcc11">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Crea <code>int[][] m = new int[4][4]</code> y <code>leerMatriz(m)</code>.</li>
+                        <li><code>int suma = sumaFila(m, 0)</code>; <code>boolean magica = true</code>.</li>
+                        <li>Comprueba todas las filas con <code>sumaFila</code> y todas las columnas con <code>sumaColumna</code>; si alguna difiere, <code>magica=false</code>.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading12">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12" aria-expanded="false" aria-controls="collapse12">
+              <span class="icon-wrap me-2"><i class="bi bi-table"></i></span>
+              <span><strong>Ejercicio 12:</strong> <span class="subtitle">Rellena una 5×5 con <code>n + m</code> y muéstrala.</span></span>
+            </button>
+          </h2>
+          <div id="collapse12" class="accordion-collapse collapse" aria-labelledby="heading12" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Crear una tabla bidimensional de tamaño 5×5 y rellenarla de manera que la posición <code>[n, m]</code> contenga <code>n + m</code>. Mostrar su contenido.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc12">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading12">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse12" aria-expanded="false" aria-controls="innerCollapse12">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse12" class="accordion-collapse collapse" aria-labelledby="innerHeading12" data-bs-parent="#innerAcc12">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Usa dos bucles anidados (filas/columnas) y asigna <code>matriz[f][c] = f + c</code>.</li>
+                        <li>Crea <code>mostrarMatriz(int[][])</code> que imprime con <code>System.out.print()</code> y salta línea por fila.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading13">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse13" aria-expanded="false" aria-controls="collapse13">
+              <span class="icon-wrap me-2"><i class="bi bi-arrow-up"></i></span>
+              <span><strong>Ejercicio 13:</strong> <span class="subtitle">Sobrecarga <code>maximo()</code>: máximo en un array de enteros.</span></span>
+            </button>
+          </h2>
+          <div id="collapse13" class="accordion-collapse collapse" aria-labelledby="heading13" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Sobrecargar la función <code>maximo()</code> para que calcule el máximo de una tabla de enteros.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc13">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading13">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse13" aria-expanded="false" aria-controls="innerCollapse13">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse13" class="accordion-collapse collapse" aria-labelledby="innerHeading13" data-bs-parent="#innerAcc13">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Implementa <code>int maximo(int[] t)</code> con <code>int max = Integer.MIN_VALUE;</code></li>
+                        <li>Recorre y si <code>t[i] &gt; max</code>, asigna.</li>
+                        <li>Devuelve <code>max</code>.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading14">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse14" aria-expanded="false" aria-controls="collapse14">
+              <span class="icon-wrap me-2"><i class="bi bi-ticket-detailed"></i></span>
+              <span><strong>Ejercicio 14:</strong> <span class="subtitle">Primitiva: aciertos entre apuesta y combinación ganadora.</span></span>
+            </button>
+          </h2>
+          <div id="collapse14" class="accordion-collapse collapse" aria-labelledby="heading14" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Definir una función que reciba dos tablas: la primera con los 6 números de una apuesta de la primitiva y la segunda con los 6 números de la combinación ganadora. La función devolverá el número de aciertos.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc14">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading14">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse14" aria-expanded="false" aria-controls="innerCollapse14">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse14" class="accordion-collapse collapse" aria-labelledby="innerHeading14" data-bs-parent="#innerAcc14">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li>Usa variable <code>aciertos = 0</code>.</li>
+                        <li>Para cada valor en <code>apuesta</code>, búscalo en <code>ganadora</code>; si aparece, <code>aciertos++</code>.</li>
+                        <li>Devuelve <code>aciertos</code>.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="accordion-item exercise-card">
+          <h2 class="accordion-header" id="heading15">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse15" aria-expanded="false" aria-controls="collapse15">
+              <span class="icon-wrap me-2"><i class="bi bi-funnel"></i></span>
+              <span><strong>Ejercicio 15:</strong> <span class="subtitle"><code>rellenaPares(t)</code>: rellena con pares e indica impares descartados.</span></span>
+            </button>
+          </h2>
+          <div id="collapse15" class="accordion-collapse collapse" aria-labelledby="heading15" data-bs-parent="#accordionEjercicios">
+            <div class="accordion-body">
+              Escribir la función <code>rellenaPares()</code> a la que se le pasa una tabla que debe rellenarse leyendo por teclado números hasta que esté llena, guardando solo los pares e ignorando los impares. La función devolverá la cantidad de impares desechados.
+
+              <div class="accordion accordion-flush inner-acc mt-3 bg-light rounded" id="innerAcc15">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="innerHeading15">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#innerCollapse15" aria-expanded="false" aria-controls="innerCollapse15">
+                      <i class="bi bi-lightbulb me-2"></i> Indicaciones para resolverlo
+                    </button>
+                  </h2>
+                  <div id="innerCollapse15" class="accordion-collapse collapse" aria-labelledby="innerHeading15" data-bs-parent="#innerAcc15">
+                    <div class="accordion-body small">
+                      <ul class="mb-0 ps-3">
+                        <li><em>Resuelto en clase.</em> Lee hasta completar el array; si el valor es par lo insertas, si es impar incrementas un contador y lo omites. Devuelve el contador.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="mt-5 small">
+        <hr>
+        <p>Plantilla creada con Bootstrap 5.</p>
+      </footer>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
