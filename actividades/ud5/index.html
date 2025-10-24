@@ -30,6 +30,116 @@
         <h1 class="h3 mb-1">Boletín 5 · Tablas (Java)</h1>
         <p class="text-muted mb-0">Unidad 5 — Ejercicios con arrays unidimensionales, bidimensionales y funciones auxiliares.</p>
       </header>
+<!-- =======================
+     RECURSOS · Arrays (API)
+======================== -->
+<section class="my-5" id="recursos">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
+        <div>
+          <h2 class="h5 mb-1">
+            <i class="bi bi-box-arrow-up-right me-2"></i>Documentación oficial · <code>java.util.Arrays</code>
+          </h2>
+          <p class="text-secondary mb-3">
+            Utilidades para trabajar con arrays en Java: ordenación, búsqueda, copias, comparación, relleno, etc.
+          </p>
+          <a class="btn btn-primary" 
+             href="https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html" 
+             target="_blank" rel="noopener">
+            Ver API de Arrays
+          </a>
+          <a class="btn btn-outline-secondary ms-2" 
+             href="https://docs.oracle.com/javase/8/docs/api/java/lang/System.html#arraycopy-java.lang.Object-int-java.lang.Object-int-int-" 
+             target="_blank" rel="noopener">
+            <code>System.arraycopy</code>
+          </a>
+        </div>
+        <div class="text-end">
+          <span class="badge rounded-pill text-bg-light me-1"><i class="bi bi-diagram-3 me-1"></i> Arrays 1D/2D</span>
+          <span class="badge rounded-pill text-bg-light"><i class="bi bi-graph-up-arrow me-1"></i> Nivel: base–medio</span>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="row g-4">
+        <div class="col-md-6">
+          <h3 class="h6 text-uppercase text-secondary mb-2">Métodos clave</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-start">
+              <div>
+                <code>Arrays.sort(t)</code>
+                <div class="small text-secondary">Ordenación ascendente in-place.</div>
+              </div>
+              <span class="badge text-bg-warning-subtle text-warning-emphasis">Ej. 6, 7</span>
+            </li>
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-start">
+              <div>
+                <code>Arrays.copyOf(t, n)</code>
+                <div class="small text-secondary">Crea una copia con nuevo tamaño.</div>
+              </div>
+              <span class="badge text-bg-warning-subtle text-warning-emphasis">Ej. 4, 6, 8</span>
+            </li>
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-start">
+              <div>
+                <code>Arrays.equals(a, b)</code>
+                <div class="small text-secondary">Compara contenido elemento a elemento.</div>
+              </div>
+              <span class="badge text-bg-warning-subtle text-warning-emphasis">Ej. 14 (validaciones)</span>
+            </li>
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-start">
+              <div>
+                <code>Arrays.fill(t, v)</code>
+                <div class="small text-secondary">Inicializa todo el array con un valor.</div>
+              </div>
+              <span class="badge text-bg-warning-subtle text-warning-emphasis">Apoyo general</span>
+            </li>
+            <li class="list-group-item px-0 d-flex justify-content-between align-items-start">
+              <div>
+                <code>System.arraycopy(src, sPos, dst, dPos, len)</code>
+                <div class="small text-secondary">Copias parciales de alto rendimiento.</div>
+              </div>
+              <span class="badge text-bg-warning-subtle text-warning-emphasis">Ej. 4, 7 (alternativa)</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h3 class="h6 text-uppercase text-secondary mb-2">Cómo se conectan con los ejercicios</h3>
+          <div class="small">
+            <p class="mb-2">
+              <span class="fw-semibold">Ej. 6</span> (Campeonato): usa <code>Arrays.sort</code> para ordenar y 
+              <code>Arrays.copyOf</code> al añadir participantes de exhibición.
+            </p>
+            <p class="mb-2">
+              <span class="fw-semibold">Ej. 7</span> (Fusión ordenada): ordena cada lista con <code>Arrays.sort</code> y 
+              fusiona en un tercer array; opcionalmente, apóyate en <code>System.arraycopy</code> para los restos.
+            </p>
+            <p class="mb-2">
+              <span class="fw-semibold">Ej. 4</span> (Eliminar por índice): reconstruye la tabla con 
+              <code>Arrays.copyOf</code> tras quitar el elemento.
+            </p>
+            <p class="mb-2">
+              <span class="fw-semibold">Ej. 8</span> (Sin repetidos): crea el array de únicos creciendo con 
+              <code>Arrays.copyOf</code>.
+            </p>
+            <p class="mb-0">
+              <span class="fw-semibold">Ej. 14</span> (Primitiva): puedes comparar y validar con 
+              <code>Arrays.equals</code> y ordenar para facilitar búsquedas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info mt-4 mb-0" role="alert">
+        <i class="bi bi-info-circle me-2"></i>
+        Consejo: cuando el tamaño cambie frecuentemente (p. ej., insertar/eliminar), valora usar <code>ArrayList&lt;Integer&gt;</code>;
+        para estos ejercicios se pide practicar con arrays puros.
+      </div>
+    </div>
+  </div>
+</section>
 
       <div class="accordion accordion-flush" id="accordionEjercicios">
 
