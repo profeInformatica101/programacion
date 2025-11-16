@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tema 6 - Cadenas de caracteres</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+  <style>
+    code{color:blue;}
+</style>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <!-- Título -->
+    <h1 class="mb-2">
+      <i class="bi bi-card-text"></i> Tema 6. Cadenas de caracteres
+    </h1>
+
+    <!-- Migas de pan -->
+    <nav class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <i class="bi bi-book"></i> Programación en Java
+        </li>
+        <li class="breadcrumb-item active">
+          Tema 6 · Cadenas de caracteres
+        </li>
+      </ol>
+    </nav>
+
+
+    <!-- Acordeón principal -->
+    <div class="accordion" id="accordionTema6">
+      <!-- 1. Introducción -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingIntro">
+          <button class="accordion-button" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseIntro"
+                  aria-expanded="true"
+                  aria-controls="collapseIntro">
+            <i class="bi bi-info-circle me-2"></i> 1. Introducción
+          </button>
+        </h2>
+        <div id="collapseIntro" class="accordion-collapse collapse show"
+             aria-labelledby="headingIntro" data-bs-parent="#accordionTema6">
+          <div class="accordion-body">
+            <p>
+              Una cadena es una secuencia de caracteres. Las cadenas sirven
+              principalmente para mostrar, almacenar y leer texto. Pueden contener
+              cualquier tipo de caracteres, incluyendo dígitos numéricos y signos
+              de puntuación.
+            </p>
+            <p>
+              En Java los valores de tipo cadena se delimitan por comillas dobles,
+              por ejemplo: <code>"Hola mundo"</code>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. La clase String -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingString">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseString"
+                  aria-expanded="false"
+                  aria-controls="collapseString">
+            <i class="bi bi-journal-code me-2"></i> 2. La clase String
+          </button>
+        </h2>
+        <div id="collapseString" class="accordion-collapse collapse"
+             aria-labelledby="headingString" data-bs-parent="#accordionTema6">
+          <div class="accordion-body">
+            <p>
+              En Java, las cadenas se representan mediante objetos de la clase
+              <strong>String</strong>. Esta clase tiene una característica especial:
+              para crear un objeto no es necesario usar <code>new()</code>; basta
+              con escribir la cadena entre comillas y el compilador llama
+              automáticamente al constructor de <code>String</code>.
+            </p>
+            <p>
+              El operador <code>+</code> concatena cadenas, igual que el método
+              <code>concat()</code>.
+            </p>
+            <p>
+              Al ser una clase, las variables de tipo <code>String</code> son por
+              referencia. Si no se inicializan contienen <code>null</code>.
+            </p>
+            <p>
+              Para comparar cadenas se debe usar <code>equals()</code>. El operador
+              <code>==</code> comprueba si dos variables apuntan al mismo objeto
+              en memoria. El método <code>equalsIgnoreCase()</code> permite
+              comparar ignorando mayúsculas y minúsculas.
+            </p>
+            <p>
+              Los objetos de tipo <strong>String</strong> son inmutables: cada
+              operación que «modifica» una cadena genera en realidad un nuevo
+              objeto. Para realizar muchas modificaciones se recomienda usar
+              <code>StringBuffer</code> o <code>StringBuilder</code>, que sí
+              permiten cambiar el contenido.
+            </p>
+            <p>Algunos métodos útiles son:</p>
+            <ul>
+              <li><code>length()</code>: devuelve el número de caracteres.</li>
+              <li><code>charAt(int index)</code>: devuelve el carácter de una posición.</li>
+              <li><code>toCharArray()</code>: devuelve un array de caracteres con el contenido de la cadena.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Manejo de cadenas: métodos de String -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingMetodos">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseMetodos"
+                  aria-expanded="false"
+                  aria-controls="collapseMetodos">
+            <i class="bi bi-tools me-2"></i> 3. Manejo de cadenas. Métodos de la clase String
+          </button>
+        </h2>
+        <div id="collapseMetodos" class="accordion-collapse collapse"
+             aria-labelledby="headingMetodos" data-bs-parent="#accordionTema6">
+          <div class="accordion-body">
+            <p>Métodos frecuentes de <code>String</code>:</p>
+            <ul>
+              <li>
+                <span class="badge bg-primary me-1">Acceso</span>
+                <strong>Caracteres individuales:</strong>
+                <code>charAt(int index)</code>
+              </li>
+              <li>
+                <span class="badge bg-success me-1">Comparación</span>
+                <strong>Comparar cadenas:</strong>
+                <code>equals()</code>, <code>equalsIgnoreCase()</code>,
+                <code>compareTo()</code>, <code>compareToIgnoreCase()</code>
+              </li>
+              <li>
+                <span class="badge bg-info text-dark me-1">Búsqueda</span>
+                <strong>Buscar subcadenas o caracteres:</strong>
+                <code>indexOf()</code>, <code>lastIndexOf()</code>,
+                <code>contains()</code>
+              </li>
+              <li>
+                <span class="badge bg-secondary me-1">Extracción</span>
+                <strong>Extraer subcadenas:</strong> <code>substring()</code>
+              </li>
+              <li>
+                <span class="badge bg-warning text-dark me-1">Reemplazo</span>
+                <strong>Reemplazar subcadenas:</strong>
+                <code>replace()</code>, <code>replaceAll()</code>,
+                <code>replaceFirst()</code>
+              </li>
+              <li>
+                <span class="badge bg-dark me-1">Formato</span>
+                <strong>Mayúsculas / minúsculas:</strong>
+                <code>toUpperCase()</code>, <code>toLowerCase()</code>
+              </li>
+              <li>
+                <span class="badge bg-primary me-1">División</span>
+                <strong>Dividir una cadena con un separador:</strong>
+                <code>split(String regex)</code>
+              </li>
+              <li>
+                <span class="badge bg-success me-1">Limpieza</span>
+                <strong>Quitar espacios al inicio y al final:</strong>
+                <code>trim()</code>
+              </li>
+            </ul>
+
+            <!-- Errores típicos / Tips -->
+            <div class="alert alert-warning d-flex align-items-start mt-3" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <div>
+                <strong>Error típico:</strong> usar <code>==</code> para comparar cadenas.
+                <br>
+                Recuerda: <code>==</code> compara referencias, mientras que
+                <code>equals()</code> compara el contenido de las cadenas.
+              </div>
+            </div>
+
+            <div class="alert alert-info d-flex align-items-start" role="alert">
+              <i class="bi bi-lightbulb-fill me-2"></i>
+              <div>
+                <strong>Tip:</strong> Si vas a modificar una cadena dentro de un
+                bucle (por ejemplo, concatenando muchas veces), considera usar
+                <code>StringBuilder</code> para mejorar el rendimiento.
+              </div>
+            </div>
+
+            <p class="mt-3">
+              Además, la clase <code>String</code> dispone del método estático
+              <code>valueOf()</code>, sobrecargado para aceptar parámetros de todos
+              los tipos Java y devolver una cadena con una representación textual
+              del valor recibido.
+            </p>
+            <p>
+              Para más información detallada, consulta la documentación oficial:
+              <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html"
+                 target="_blank" class="link-primary">
+                <i class="bi bi-link-45deg"></i> API oficial de <code>String</code>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Ejemplos prácticos -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingEjemplos">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseEjemplos"
+                  aria-expanded="false"
+                  aria-controls="collapseEjemplos">
+            <i class="bi bi-code-square me-2"></i> 4. Ejemplos prácticos
+          </button>
+        </h2>
+        <div id="collapseEjemplos" class="accordion-collapse collapse"
+             aria-labelledby="headingEjemplos" data-bs-parent="#accordionTema6">
+          <div class="accordion-body">
+            <p>Algunos ejemplos básicos de uso de <code>String</code> en Java:</p>
+
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">
+                      <i class="bi bi-lightbulb"></i> Descripción
+                    </th>
+                    <th scope="col">
+                      <i class="bi bi-code-slash"></i> Código Java
+                    </th>
+                    <th scope="col">
+                      <i class="bi bi-eye"></i> Resultado / Solución
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Ejemplo 1: Concatenación -->
+                  <tr>
+                    <td>Concatenación de cadenas</td>
+                    <td>
+                      <pre class="mb-0"><code>
+String nombre = "Ana";
+String saludo = "Hola " + nombre;
+System.out.println(saludo);
+                      </code></pre>
+                    </td>
+                    <td><code>Hola Ana</code></td>
+                  </tr>
+
+                  <!-- Ejemplo 2: length() -->
+                  <tr>
+                    <td>Longitud de una cadena con <code>length()</code></td>
+                    <td>
+                      <pre class="mb-0"><code>
+String texto = "Java";
+int n = texto.length();
+System.out.println(n);
+                      </code></pre>
+                    </td>
+                    <td><code>4</code></td>
+                  </tr>
+
+                  <!-- Ejemplo 3: charAt() -->
+                  <tr>
+                    <td>Acceso a un carácter concreto con <code>charAt()</code></td>
+                    <td>
+                      <pre class="mb-0"><code>
+String mensaje = "Hola";
+char c = mensaje.charAt(1);
+System.out.println(c);
+                      </code></pre>
+                    </td>
+                    <td><code>o</code> (los índices empiezan en 0)</td>
+                  </tr>
+
+                  <!-- Ejemplo 4: equals vs equalsIgnoreCase -->
+                  <tr>
+                    <td>Comparar cadenas correctamente</td>
+                    <td>
+                      <pre class="mb-0"><code>
+String a = "java";
+String b = "JAVA";
+System.out.println(a.equals(b));
+System.out.println(a.equalsIgnoreCase(b));
+                      </code></pre>
+                    </td>
+                    <td>
+                      <code>false</code><br>
+                      <code>true</code>
+                    </td>
+                  </tr>
+
+                  <!-- Ejemplo 5: trim() -->
+                  <tr>
+                    <td>Eliminar espacios en los extremos con <code>trim()</code></td>
+                    <td>
+                      <pre class="mb-0"><code>
+String entrada = "  hola  ";
+String limpia = entrada.trim();
+System.out.println(limpia);
+                      </code></pre>
+                    </td>
+                    <td><code>hola</code></td>
+                  </tr>
+
+                  <!-- Ejemplo 6: split() -->
+                  <tr>
+                    <td>Dividir una cadena con <code>split()</code></td>
+                    <td>
+                      <pre class="mb-0"><code>
+String datos = "uno,dos,tres";
+String[] partes = datos.split(",");
+System.out.println(partes[0]);
+                      </code></pre>
+                    </td>
+                    <td><code>uno</code></td>
+                  </tr>
+
+                  <!-- Ejemplo 7: substring() con mini-reto -->
+                  <tr>
+                    <td>Uso de <code>substring()</code> (mini-reto)</td>
+                    <td>
+                      <pre class="mb-0"><code>
+String s = "programar";
+String sub = s.substring(0, 4);
+System.out.println(sub);
+                      </code></pre>
+                    </td>
+                    <td>
+                      <p class="mb-1">¿Qué se mostrará por pantalla?</p>
+                      <button class="btn btn-sm btn-outline-primary"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#solSubstring"
+                              aria-expanded="false"
+                              aria-controls="solSubstring">
+                        Ver solución
+                      </button>
+                      <div class="collapse mt-1" id="solSubstring">
+                        <code>prog</code>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-4 text-center text-muted small">
+      <p class="mb-1">
+        Basado en Java SE 8 –
+        <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html"
+           target="_blank">
+          Referencia oficial de la API de <code>String</code>
+        </a>
+      </p>
+      <p class="mb-0">
+        <i class="bi bi-mortarboard"></i> Material didáctico sobre cadenas de caracteres en Java
+      </p>
+    </footer>
+  </div>
+
+  <!-- Bootstrap JS (necesario para acordeón, colapsables, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
