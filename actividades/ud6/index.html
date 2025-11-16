@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boletín 6 - Cadenas</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+  <style>
+    code { color: blue; }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <!-- Título -->
+    <h1 class="mb-2">
+      <i class="bi bi-list-check"></i> Boletín 6. Cadenas
+    </h1>
+
+    <!-- Migas de pan -->
+    <nav class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <i class="bi bi-mortarboard"></i> EDD / Programación
+        </li>
+        <li class="breadcrumb-item active">
+          Boletín 6 · Cadenas
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Acordeón principal del boletín -->
+    <div class="accordion" id="accordionBoletin6">
+
+      <!-- Ejercicio 1 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE1">
+          <button class="accordion-button" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE1"
+                  aria-expanded="true"
+                  aria-controls="collapseE1">
+            <i class="bi bi-123 me-2"></i> Ejercicio 1. Palabra más corta
+          </button>
+        </h2>
+        <div id="collapseE1" class="accordion-collapse collapse show"
+             aria-labelledby="headingE1" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Introducir por teclado dos palabras e indicar cuál de ellas es la más corta, es decir, la
+              que contiene menos caracteres.
+            </p>
+
+            <!-- Acordeón interno de pistas -->
+            <div class="accordion mt-2" id="accordionHintE1">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE1">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE1"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE1">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE1" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE1" data-bs-parent="#accordionHintE1">
+                  <div class="accordion-body">
+                    Lee dos cadenas y calcula su longitud. Compara ambas longitudes
+                    y muestra la palabra asociada a la menor de ellas.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 2 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE2">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE2"
+                  aria-expanded="false"
+                  aria-controls="collapseE2">
+            <i class="bi bi-key me-2"></i> Ejercicio 2. Juego "acierta la contraseña"
+          </button>
+        </h2>
+        <div id="collapseE2" class="accordion-collapse collapse"
+             aria-labelledby="headingE2" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Diseñar el juego acierta la contraseña. La mecánica del juego es la siguiente: el primer jugador introduce la contraseña; a continuación, el segundo jugador debe teclear
+              palabras hasta que la acierte. Realizar dos versiones; en la primera las únicas pistas
+              que se proporcionan son el número de caracteres y cuáles son el primer y el último
+              carácter de la contraseña. En la segunda versión se facilita el juego indicando si la
+              palabra introducida es mayor o menor, alfabéticamente, que la contraseña.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE2">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE2">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE2"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE2">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE2" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE2" data-bs-parent="#accordionHintE2">
+                  <div class="accordion-body">
+                    Usa un bucle que pida intentos al segundo jugador hasta que
+                    coincidan con la contraseña. Para las pistas, trabaja con la longitud
+                    y con los caracteres extremo. En la segunda versión, compara
+                    alfabéticamente cada intento con la contraseña para indicar si está
+                    “por encima” o “por debajo”.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 3 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE3">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE3"
+                  aria-expanded="false"
+                  aria-controls="collapseE3">
+            <i class="bi bi-chat-text me-2"></i> Ejercicio 3. Frase hasta "fin"
+          </button>
+        </h2>
+        <div id="collapseE3" class="accordion-collapse collapse"
+             aria-labelledby="headingE3" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Introducir por teclado una frase palabra a palabra, y mostrar la frase completa separando las palabras introducidas con espacios en blanco. Terminar de leer la frase
+              cuando alguna de las palabras introducidas sea la cadena «fin» escrita con cualquier
+              combinación de mayúsculas/minúsculas. La cadena «fin» no aparecerá en la frase final.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE3">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE3">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE3"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE3">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE3" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE3" data-bs-parent="#accordionHintE3">
+                  <div class="accordion-body">
+                    Piensa en un bucle que lea palabras una a una y las vaya uniendo
+                    a una cadena acumuladora. Detén el bucle cuando la palabra
+                    introducida coincida con “fin”, ignorando el uso de mayúsculas y
+                    minúsculas, y no incluyas esa palabra final en la frase resultante.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 4 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE4">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE4"
+                  aria-expanded="false"
+                  aria-controls="collapseE4">
+            <i class="bi bi-body-text me-2"></i> Ejercicio 4. Espacios en blanco
+          </button>
+        </h2>
+        <div id="collapseE4" class="accordion-collapse collapse"
+             aria-labelledby="headingE4" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Diseñar una aplicación que pida al usuario que introduzca una frase por teclado e
+              indique cuántos espacios en blanco tiene.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE4">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE4">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE4"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE4">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE4" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE4" data-bs-parent="#accordionHintE4">
+                  <div class="accordion-body">
+                    Recorre la frase carácter a carácter y cuenta cuántas veces
+                    aparece el espacio en blanco. Al finalizar, muestra el contador
+                    de espacios acumulado.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 5 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE5">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE5"
+                  aria-expanded="false"
+                  aria-controls="collapseE5">
+            <i class="bi bi-person-lines-fill me-2"></i> Ejercicio 5. Eliminar vocales del nombre
+          </button>
+        </h2>
+        <div id="collapseE5" class="accordion-collapse collapse"
+             aria-labelledby="headingE5" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Pedir el nombre completo (nombre y apellidos) al usuario. El programa debe eliminar
+              cualquier vocal del nombre. Por ejemplo, “Álvaro Pérez” se mostrará “lvr Prz”. Solo se
+              eliminan las vocales (mayúsculas, minúsculas y acentuadas). El resto de caracteres no
+              se modifican.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE5">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE5">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE5"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE5">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE5" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE5" data-bs-parent="#accordionHintE5">
+                  <div class="accordion-body">
+                    Define el conjunto de todas las vocales que quieres eliminar,
+                    incluyendo versiones acentuadas. Recorre el nombre carácter a
+                    carácter y construye una nueva cadena solo con aquellos
+                    caracteres que no pertenezcan a ese conjunto.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 6 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE6">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE6"
+                  aria-expanded="false"
+                  aria-controls="collapseE6">
+            <i class="bi bi-arrow-repeat me-2"></i> Ejercicio 6. Cadena invertida
+          </button>
+        </h2>
+        <div id="collapseE6" class="accordion-collapse collapse"
+             aria-labelledby="headingE6" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Diseñar una función a la que se le pase una cadena de caracteres y la devuelva invertida.
+              Un ejemplo, la cadena “Hola mundo” quedaría “odnum aloH”
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE6">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE6">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE6"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE6">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE6" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE6" data-bs-parent="#accordionHintE6">
+                  <div class="accordion-body">
+                    Piensa en recorrer la cadena desde el último carácter hasta el
+                    primero y, a medida que avanzas, ir construyendo una nueva
+                    cadena. También puedes considerar estructuras que ya permitan
+                    invertir el orden de los caracteres de manera directa.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 7 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE7">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE7"
+                  aria-expanded="false"
+                  aria-controls="collapseE7">
+            <i class="bi bi-search me-2"></i> Ejercicio 7. Buscar palabra en una frase
+          </button>
+        </h2>
+        <div id="collapseE7" class="accordion-collapse collapse"
+             aria-labelledby="headingE7" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Diseñar un programa que solicite al usuario una frase y una palabra. A continuación
+              buscará cuántas veces aparece la palabra en la frase.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE7">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE7">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE7"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE7">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE7" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE7" data-bs-parent="#accordionHintE7">
+                  <div class="accordion-body">
+                    Puedes recorrer la frase buscando la posición en la que aparece
+                    la palabra. Cada vez que la encuentres, incrementa un contador y
+                    continúa la búsqueda desde la posición siguiente para no contar
+                    siempre la misma aparición.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 8 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE8">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE8"
+                  aria-expanded="false"
+                  aria-controls="collapseE8">
+            <i class="bi bi-arrow-left-right me-2"></i> Ejercicio 8. Frase palíndroma
+          </button>
+        </h2>
+        <div id="collapseE8" class="accordion-collapse collapse"
+             aria-labelledby="headingE8" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Realizar un programa que lea una frase del teclado y nos indique si es palíndroma, es
+              decir, que la frase sea igual leyendo de izquierda a derecha, que de derecha a izquierda,
+              sin tener en cuenta los espacios. Un ejemplo de frase palíndroma es: Dábale arroz a la
+              zorra el abad.
+            </p>
+            <p>
+              Las vocales con tilde hacen que un algoritmo tome una frase palíndroma como si no lo
+              fuese. Por esto, supondremos que el usuario introduce la frase sin tildes.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE8">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE8">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE8"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE8">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE8" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE8" data-bs-parent="#accordionHintE8">
+                  <div class="accordion-body">
+                    Elimina los espacios de la frase y pasa todo a un mismo formato
+                    (por ejemplo, solo minúsculas). Después, compara esa nueva
+                    cadena con su versión invertida. Si ambas coinciden, la frase es
+                    palíndroma.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 9 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE9">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE9"
+                  aria-expanded="false"
+                  aria-controls="collapseE9">
+            <i class="bi bi-translate me-2"></i> Ejercicio 9. Idioma de Javalandia
+          </button>
+        </h2>
+        <div id="collapseE9" class="accordion-collapse collapse"
+             aria-labelledby="headingE9" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Los habitantes de Javalandia tienen un idioma algo extraño; cuando hablan siempre
+              comienzan sus frases con “Javalín, javalón”, para después hacer una pausa más o menos
+              larga (la pausa se representa mediante espacios en blanco o tabuladores) y a continuación expresan el mensaje. Existe un dialecto que no comienza sus frases con la muletilla
+              anterior, pero siempre las terminan con un silencio, más o menos prolongado y la coletilla “javalén, len, len”. Se pide diseñar un traductor que, en primer lugar, nos diga
+              si la frase introducida está escrita en el idioma de Javalandia (en cualquiera de sus
+              dialectos), y en caso afirmativo, nos muestre solo el mensaje sin muletillas.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE9">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE9">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE9"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE9">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE9" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE9" data-bs-parent="#accordionHintE9">
+                  <div class="accordion-body">
+                    Comprueba si la frase comienza por la muletilla inicial o
+                    termina por la muletilla final. Según el caso, recorta esa parte
+                    y elimina también los espacios o tabuladores que actúan como
+                    pausa para quedarte solo con el mensaje central.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 10 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE10">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE10"
+                  aria-expanded="false"
+                  aria-controls="collapseE10">
+            <i class="bi bi-shield-lock me-2"></i> Ejercicio 10. Codificador
+          </button>
+        </h2>
+        <div id="collapseE10" class="accordion-collapse collapse"
+             aria-labelledby="headingE10" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Disponemos de la siguiente relación de letras:
+            </p>
+            <p>
+              1<br>
+              conjunto 1: e i k m p q r s t u v<br>
+              conjunto 2: p v i u m t e r k q s
+            </p>
+            <p>
+              mediante la cual es posible codificar un texto, convirtiendo cada letra del conjunto 1, en
+              su correspondiente del conjunto 2. El resto de las letras no se modifican. Los conjuntos
+              se utilizan tanto para codificar mayúsculas como minúsculas, mostrando siempre la
+              codificación en minúsculas.
+            </p>
+            <p>
+              Un ejemplo: la palabra «PaquiTo» se codifica como «matqvko».
+            </p>
+            <p>
+              Se pide realizar un programa codificador, en el que se implemente la función,<br>
+              <code>char codifica(char conjunto1[],char conjunto2[], char c)</code><br>
+              que devuelve el carácter c codificado según los conjuntos 1 y 2 que se le pasan.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE10">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE10">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE10"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE10">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE10" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE10" data-bs-parent="#accordionHintE10">
+                  <div class="accordion-body">
+                    Para cada carácter del texto, busca su posición dentro del primer
+                    conjunto de letras. Si lo encuentras, sustitúyelo por la letra que
+                    ocupa la misma posición en el segundo conjunto. Si no está, deja
+                    el carácter tal como está y recuerda unificar en minúsculas la
+                    salida.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 11 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE11">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE11"
+                  aria-expanded="false"
+                  aria-controls="collapseE11">
+            <i class="bi bi-unlock me-2"></i> Ejercicio 11. Descodificador
+          </button>
+        </h2>
+        <div id="collapseE11" class="accordion-collapse collapse"
+             aria-labelledby="headingE11" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Realizar un programa descodificador.
+              La solución es tan sencilla como utilizar la función diseñada en el ejercicio anterior
+              intercambiando los conjuntos entre sí.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE11">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE11">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE11"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE11">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE11" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE11" data-bs-parent="#accordionHintE11">
+                  <div class="accordion-body">
+                    Utiliza la misma lógica de sustitución que en la codificación,
+                    pero ahora buscando primero en el segundo conjunto para
+                    obtener la letra correspondiente del primero. De esta manera
+                    deshaces el proceso anterior.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 12 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE12">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE12"
+                  aria-expanded="false"
+                  aria-controls="collapseE12">
+            <i class="bi bi-shuffle me-2"></i> Ejercicio 12. Anagramas
+          </button>
+        </h2>
+        <div id="collapseE12" class="accordion-collapse collapse"
+             aria-labelledby="headingE12" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Un anagrama es un palabra, o frase, que resulta de la transposición de otra palabra o
+              frase. Ejemplos de anagramas para la palabra roma son: amor, ramo o mora. Construir
+              un programa que solicite al usuario dos palabras e indique si son anagramas una de
+              otra.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE12">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE12">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE12"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE12">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE12" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE12" data-bs-parent="#accordionHintE12">
+                  <div class="accordion-body">
+                    Asegúrate primero de que ambas palabras tienen la misma
+                    longitud. Normaliza el formato (por ejemplo, solo minúsculas) y
+                    trabaja con las letras ordenadas. Si las dos secuencias ordenadas
+                    coinciden, se trata de anagramas.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 13 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE13">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE13"
+                  aria-expanded="false"
+                  aria-controls="collapseE13">
+            <i class="bi bi-bar-chart-line me-2"></i> Ejercicio 13. Frecuencia de letras
+          </button>
+        </h2>
+        <div id="collapseE13" class="accordion-collapse collapse"
+             aria-labelledby="headingE13" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Diseñar un algoritmo que lea del teclado una frase e indique, para la letras que aparecen
+              en la frase, cuántas veces se repite cada una. Se consideran iguales las letras mayúsculas
+              y las minúsculas para realizar la cuenta. Un ejemplo sería:
+            </p>
+            <p>
+              Frase : En un lugar de la Mancha .<br>
+              Resultado :<br>
+              a : 4 veces<br>
+              d : 1 vez<br>
+              e : 2 veces<br>
+              . . .
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE13">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE13">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE13"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE13">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE13" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE13" data-bs-parent="#accordionHintE13">
+                  <div class="accordion-body">
+                    Pasa la frase a un mismo formato (por ejemplo, minúsculas) y
+                    recórrela carácter a carácter. Para cada letra, incrementa un
+                    contador asociado a esa letra. Luego recorre la estructura donde
+                    guardas los contadores y muestra solo las letras que hayan
+                    aparecido.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 14 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE14">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE14"
+                  aria-expanded="false"
+                  aria-controls="collapseE14">
+            <i class="bi bi-joystick me-2"></i> Ejercicio 14. Juego del anagrama
+          </button>
+        </h2>
+        <div id="collapseE14" class="accordion-collapse collapse"
+             aria-labelledby="headingE14" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Implementar el juego del anagrama, que consiste en que un jugador escribe una palabra
+              o frase, y la aplicación muestra un anagrama (transposición de los caracteres) del texto
+              introducido generado al azar. A continuación otro jugador tiene que acertar cuál es el
+              texto original. La aplicación no debe permitir que el texto introducido por el jugador 1
+              sea la cadena vacía. Por ejemplo, si el jugador 1 escribe “teclado”, la aplicación muestra
+              como pista un anagrama al azar: “etcloda”.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE14">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE14">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE14"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE14">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE14" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE14" data-bs-parent="#accordionHintE14">
+                  <div class="accordion-body">
+                    Comprueba que el texto introducido no esté vacío. Después,
+                    crea una versión en la que el orden de los caracteres se mezcle de
+                    forma aleatoria. Muestra esa versión como pista y permite que el
+                    segundo jugador vaya introduciendo sus intentos.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 15 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingE15">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseE15"
+                  aria-expanded="false"
+                  aria-controls="collapseE15">
+            <i class="bi bi-puzzle me-2"></i> Ejercicio 15. Coincidencias con el original
+          </button>
+        </h2>
+        <div id="collapseE15" class="accordion-collapse collapse"
+             aria-labelledby="headingE15" data-bs-parent="#accordionBoletin6">
+          <div class="accordion-body">
+            <p>
+              Modificar el ejercicio anterior para que el programa indique al jugador 2, en cada
+              intento, cuántas letras coinciden con el texto original.
+            </p>
+
+            <div class="accordion mt-2" id="accordionHintE15">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingHintE15">
+                  <button class="accordion-button collapsed" type="button"
+                          data-bs-toggle="collapse"
+                          data-bs-target="#collapseHintE15"
+                          aria-expanded="false"
+                          aria-controls="collapseHintE15">
+                    Pista
+                  </button>
+                </h2>
+                <div id="collapseHintE15" class="accordion-collapse collapse"
+                     aria-labelledby="headingHintE15" data-bs-parent="#accordionHintE15">
+                  <div class="accordion-body">
+                    Cada vez que el jugador 2 proponga una respuesta, compara el
+                    texto con el original carácter a carácter en la misma posición.
+                    Cuenta cuántas letras coinciden y comunica ese número como
+                    pista para que pueda ir acercándose a la solución.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- Fin accordionBoletin6 -->
+
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -17,7 +17,7 @@
   />
   <style>
     code{color:blue;}
-</style>
+  </style>
 </head>
 <body class="bg-light">
   <div class="container py-4">
@@ -37,7 +37,6 @@
         </li>
       </ol>
     </nav>
-
 
     <!-- Acordeón principal -->
     <div class="accordion" id="accordionTema6">
@@ -364,6 +363,152 @@ System.out.println(sub);
           </div>
         </div>
       </div>
+
+      <!-- 5. StringBuilder: referencia y ejemplos -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingStringBuilder">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseStringBuilder"
+                  aria-expanded="false"
+                  aria-controls="collapseStringBuilder">
+            <i class="bi bi-hammer me-2"></i> 5. StringBuilder: cadenas modificables y ejemplos
+          </button>
+        </h2>
+        <div id="collapseStringBuilder" class="accordion-collapse collapse"
+             aria-labelledby="headingStringBuilder" data-bs-parent="#accordionTema6">
+          <div class="accordion-body">
+            <p>
+              <code>StringBuilder</code> es una clase de Java que permite trabajar
+              con cadenas modificables (mutables). A diferencia de <code>String</code>,
+              las operaciones como <code>append()</code>, <code>insert()</code> o
+              <code>delete()</code> modifican el mismo objeto sin crear nuevas cadenas
+              en memoria.
+            </p>
+            <p>
+              Es especialmente útil cuando realizamos muchas concatenaciones dentro
+              de un bucle, ya que mejora el rendimiento frente al uso repetido del
+              operador <code>+</code> con <code>String</code>.
+            </p>
+
+            <p>Constructores más habituales:</p>
+            <ul>
+              <li><code>new StringBuilder()</code>: crea un buffer vacío.</li>
+              <li><code>new StringBuilder(String str)</code>: crea un buffer inicializado con <code>str</code>.</li>
+              <li><code>new StringBuilder(int capacity)</code>: crea un buffer con capacidad inicial indicada.</li>
+            </ul>
+
+            <p>Métodos frecuentes de <code>StringBuilder</code>:</p>
+            <ul>
+              <li><code>append(x)</code>: añade al final (cadenas, números, etc.).</li>
+              <li><code>insert(int offset, x)</code>: inserta en una posición.</li>
+              <li><code>delete(int start, int end)</code>: elimina un rango de caracteres.</li>
+              <li><code>replace(int start, int end, String str)</code>: sustituye un tramo.</li>
+              <li><code>reverse()</code>: invierte el contenido.</li>
+              <li><code>toString()</code>: devuelve un <code>String</code> con el contenido actual.</li>
+            </ul>
+
+            <div class="alert alert-info d-flex align-items-start" role="alert">
+              <i class="bi bi-lightning-charge-fill me-2"></i>
+              <div>
+                <strong>Rendimiento:</strong> Para muchas concatenaciones (por ejemplo,
+                construir una cadena dentro de un bucle), <code>StringBuilder</code>
+                suele ser más eficiente que usar <code>String</code> con <code>+</code>.
+              </div>
+            </div>
+
+            <p>Ejemplos básicos de uso de <code>StringBuilder</code>:</p>
+
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col"><i class="bi bi-lightbulb"></i> Descripción</th>
+                    <th scope="col"><i class="bi bi-code-slash"></i> Código Java</th>
+                    <th scope="col"><i class="bi bi-eye"></i> Resultado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Ejemplo 1: append -->
+                  <tr>
+                    <td>Construir una cadena con <code>append()</code></td>
+                    <td>
+                      <pre class="mb-0"><code>
+StringBuilder sb = new StringBuilder();
+sb.append("Hola");
+sb.append(" ");
+sb.append("mundo");
+System.out.println(sb.toString());
+                      </code></pre>
+                    </td>
+                    <td><code>Hola mundo</code></td>
+                  </tr>
+
+                  <!-- Ejemplo 2: insert -->
+                  <tr>
+                    <td>Insertar texto en medio de la cadena</td>
+                    <td>
+                      <pre class="mb-0"><code>
+StringBuilder sb = new StringBuilder("Hola mundo");
+sb.insert(5, "Java ");
+System.out.println(sb.toString());
+                      </code></pre>
+                    </td>
+                    <td><code>Hola Java mundo</code></td>
+                  </tr>
+
+                  <!-- Ejemplo 3: delete -->
+                  <tr>
+                    <td>Eliminar parte de la cadena con <code>delete()</code></td>
+                    <td>
+                      <pre class="mb-0"><code>
+StringBuilder sb = new StringBuilder("123-456-789");
+sb.delete(3, 4); // elimina el guion
+System.out.println(sb.toString());
+                      </code></pre>
+                    </td>
+                    <td><code>123456-789</code></td>
+                  </tr>
+
+                  <!-- Ejemplo 4: reverse (mini-reto) -->
+                  <tr>
+                    <td>Invertir una cadena con <code>reverse()</code> (mini-reto)</td>
+                    <td>
+                      <pre class="mb-0"><code>
+StringBuilder sb = new StringBuilder("programa");
+sb.reverse();
+System.out.println(sb.toString());
+                      </code></pre>
+                    </td>
+                    <td>
+                      <p class="mb-1">¿Qué se mostrará por pantalla?</p>
+                      <button class="btn btn-sm btn-outline-primary"
+                              type="button"
+                              data-bs-toggle="collapse"
+                              data-bs-target="#solReverseSB"
+                              aria-expanded="false"
+                              aria-controls="solReverseSB">
+                        Ver solución
+                      </button>
+                      <div class="collapse mt-1" id="solReverseSB">
+                        <code>amargorp</code>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="mt-3">
+              Más información en la documentación oficial:
+              <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html"
+                 target="_blank" class="link-primary">
+                <i class="bi bi-link-45deg"></i> API oficial de <code>StringBuilder</code>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Footer -->
@@ -373,6 +518,11 @@ System.out.println(sub);
         <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html"
            target="_blank">
           Referencia oficial de la API de <code>String</code>
+        </a>
+        ·
+        <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html"
+           target="_blank">
+          Referencia oficial de la API de <code>StringBuilder</code>
         </a>
       </p>
       <p class="mb-0">
