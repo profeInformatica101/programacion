@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Programación – Boletín 7: Clases</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  >
+  <style>
+    code { color:black; background-color: yellow;   font-size: 25px;}
+    body {
+      background: #f5f7fb;
+    }
+    .card-boletin {
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    .badge-section {
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+    }
+    .accordion-button::after {
+      transform-origin: center;
+    }
+    .accordion-button:not(.collapsed)::after {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-5">
+    <!-- CABECERA -->
+    <header class="mb-4 text-center">
+      <p class="text-uppercase text-secondary mb-1 badge-section">Programación · Unidad 7</p>
+      <h1 class="fw-bold mb-2">
+        Boletín 7 · <span class="text-primary">Clases</span>
+      </h1>
+      <p class="text-muted">
+        Ejercicios de diseño e implementación de clases, visibilidad, relaciones entre objetos y estructuras de datos.
+      </p>
+    </header>
+
+    <div class="card card-boletin bg-white border-0">
+      <div class="card-body p-4 p-md-5">
+
+        <!-- SECCIÓN 1: CUENTAS Y BANCOS -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2">
+              <i class="bi bi-bank me-1"></i> Cuentas y bancos
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionCuentas">
+
+            <!-- Ejercicio 1 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading1">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej1"
+                        aria-expanded="false" aria-controls="ej1">
+                  <i class="bi bi-wallet2 me-2 text-primary"></i>
+                  1. Clase <code>CuentaCorriente</code> básica
+                </button>
+              </h2>
+              <div id="ej1" class="accordion-collapse collapse"
+                   aria-labelledby="heading1" data-bs-parent="#accordionCuentas">
+                <div class="accordion-body">
+                  <p>Diseñar la clase <strong>CuentaCorriente</strong>, sabiendo que los datos necesarios son:</p>
+                  <ul>
+                    <li><code>saldo</code></li>
+                    <li><code>límite de descubierto</code></li>
+                    <li><code>nombre</code> y <code>DNI</code> del titular</li>
+                  </ul>
+                  <p>Operaciones:</p>
+                  <ul>
+                    <li><strong>Crear la cuenta</strong>: se necesita nombre y DNI del titular. El saldo inicial será 0 y el límite de descubierto será de <strong>−50€</strong>.</li>
+                    <li><strong>Sacar dinero</strong>: solo se podrá sacar hasta el límite de descubierto. El método debe indicar si la operación ha sido posible.</li>
+                    <li><strong>Ingresar dinero</strong>: incrementa el saldo.</li>
+                    <li><strong>Mostrar información</strong>: muestra todos los datos de la cuenta corriente.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 2 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej2"
+                        aria-expanded="false" aria-controls="ej2">
+                  <i class="bi bi-plus-square-dotted me-2 text-primary"></i>
+                  2. Sobrecarga de constructores en <code>CuentaCorriente</code>
+                </button>
+              </h2>
+              <div id="ej2" class="accordion-collapse collapse"
+                   aria-labelledby="heading2" data-bs-parent="#accordionCuentas">
+                <div class="accordion-body">
+                  <p>En la clase <code>CuentaCorriente</code>, sobrecargar los constructores para permitir:</p>
+                  <ul>
+                    <li>Crear objetos <strong>solo con el saldo inicial</strong>; no serán necesarios los datos del titular. El límite de descubierto será por defecto <strong>0€</strong>.</li>
+                    <li>Crear objetos con <strong>saldo inicial</strong>, <strong>límite de descubierto</strong> y <strong>DNI del titular</strong>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 3 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading3">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej3"
+                        aria-expanded="false" aria-controls="ej3">
+                  <i class="bi bi-play-circle me-2 text-primary"></i>
+                  3. Programa de prueba para <code>CuentaCorriente</code>
+                </button>
+              </h2>
+              <div id="ej3" class="accordion-collapse collapse"
+                   aria-labelledby="heading3" data-bs-parent="#accordionCuentas">
+                <div class="accordion-body">
+                  <p>Escribir un programa que compruebe el funcionamiento de todos los métodos de
+                    <code>CuentaCorriente</code>, incluidos los constructores sobrecargados.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 4 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading4">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej4"
+                        aria-expanded="false" aria-controls="ej4">
+                  <i class="bi bi-eye-slash me-2 text-primary"></i>
+                  4. Visibilidad de clase y atributos
+                </button>
+              </h2>
+              <div id="ej4" class="accordion-collapse collapse"
+                   aria-labelledby="heading4" data-bs-parent="#accordionCuentas">
+                <div class="accordion-body">
+                  <p>Modificar la visibilidad de la clase <code>CuentaCorriente</code> para que sea visible desde clases externas y la visibilidad de sus atributos para que:</p>
+                  <ul>
+                    <li><code>saldo</code> y <code>limite</code> no sean visibles desde otras clases.</li>
+                    <li><code>nombre</code> sea público para cualquier clase.</li>
+                    <li><code>dni</code> solo sea visible por clases del mismo paquete (clases vecinas).</li>
+                  </ul>
+                  <p>Escribir un programa que compruebe la visibilidad de los atributos.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 5 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading5">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej5"
+                        aria-expanded="false" aria-controls="ej5">
+                  <i class="bi bi-building-columns me-2 text-primary"></i>
+                  5. Atributo estático: nombre del banco
+                </button>
+              </h2>
+              <div id="ej5" class="accordion-collapse collapse"
+                   aria-labelledby="heading5" data-bs-parent="#accordionCuentas">
+                <div class="accordion-body">
+                  <p>Añadir a <code>CuentaCorriente</code> un atributo (estático) que almacene el nombre del banco al que pertenecen todas las cuentas (es único).</p>
+                  <p>Diseñar un método que permita modificar el nombre del banco.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 7 (Banco + relación con CuentaCorriente) -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading7">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej7"
+                        aria-expanded="false" aria-controls="ej7">
+                  <i class="bi bi-diagram-3 me-2 text-primary"></i>
+                  7. Clase <code>Banco</code> y vínculo con <code>CuentaCorriente</code>
+                </button>
+              </h2>
+              <div id="ej7" class="accordion-collapse collapse"
+                   aria-labelledby="heading7" data-bs-parent="#accordionCuentas">
+                <div class="accordion-body">
+                  <p>Diseñar la clase <strong>Banco</strong> con:</p>
+                  <ul>
+                    <li><strong>nombre</strong> (obligatorio, no modificable);</li>
+                    <li><strong>capital</strong> y <strong>dirección central</strong>, modificables;</li>
+                    <li>capital por defecto: <strong>5.2 millones de euros</strong> si no se especifica.</li>
+                  </ul>
+                  <p>Modificar <code>CuentaCorriente</code> para que cada cuenta esté vinculada a un objeto
+                    <code>Banco</code> (o a ninguno). Escribir los métodos necesarios para gestionar el banco al que
+                    pertenece la cuenta.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 2: MANEJO DE TEXTO Y OTROS DISPOSITIVOS -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-success-subtle text-success border border-success-subtle me-2">
+              <i class="bi bi-type me-1"></i> Texto, dispositivos y hogar
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionTextoDispositivos">
+
+            <!-- Ejercicio 6 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading6">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej6"
+                        aria-expanded="false" aria-controls="ej6">
+                  <i class="bi bi-fonts me-2 text-success"></i>
+                  6. Clase <code>Texto</code>
+                </button>
+              </h2>
+              <div id="ej6" class="accordion-collapse collapse"
+                   aria-labelledby="heading6" data-bs-parent="#accordionTextoDispositivos">
+                <div class="accordion-body">
+                  <p>Diseñar la clase <strong>Texto</strong> que gestione una cadena de caracteres:</p>
+                  <ul>
+                    <li>La longitud máxima se especifica en el constructor.</li>
+                    <li>Permite añadir un carácter al principio o al final si hay espacio disponible.</li>
+                    <li>Permite añadir una cadena al principio o al final sin rebasar el tamaño máximo.</li>
+                    <li>Debe poder indicar cuántas vocales (mayúsculas y minúsculas) contiene el texto.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 8 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading8">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej8"
+                        aria-expanded="false" aria-controls="ej8">
+                  <i class="bi bi-broadcast-pin me-2 text-success"></i>
+                  8. Sintonizador digital de emisoras FM
+                </button>
+              </h2>
+              <div id="ej8" class="accordion-collapse collapse"
+                   aria-labelledby="heading8" data-bs-parent="#accordionTextoDispositivos">
+                <div class="accordion-body">
+                  <p>Definir una clase que controle un <strong>sintonizador digital FM</strong> con:</p>
+                  <ul>
+                    <li>Métodos <code>up</code> y <code>down</code> que suben/bajan 0.5 MHz.</li>
+                    <li>Método <code>display</code> que muestra la frecuencia actual.</li>
+                    <li>Rango de frecuencias entre <strong>80 MHz</strong> y <strong>108 MHz</strong>.</li>
+                    <li>Frecuencia inicial: <strong>80 MHz</strong>.</li>
+                    <li>Si se sobrepasa un límite, se pasa al extremo contrario.</li>
+                  </ul>
+                  <p>Escribir un programa principal para probarlo.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 9 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading9">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej9"
+                        aria-expanded="false" aria-controls="ej9">
+                  <i class="bi bi-lightbulb me-2 text-success"></i>
+                  9. Clase <code>Bombilla</code> y fusible general
+                </button>
+              </h2>
+              <div id="ej9" class="accordion-collapse collapse"
+                   aria-labelledby="heading9" data-bs-parent="#accordionTextoDispositivos">
+                <div class="accordion-body">
+                  <p>Modelar una casa con muchas bombillas. La clase <strong>Bombilla</strong> debe:</p>
+                  <ul>
+                    <li>Tener una variable privada que indique si está encendida/apagada.</li>
+                    <li>Tener un método que devuelva el estado de una bombilla.</li>
+                    <li>Incorporar un <strong>interruptor general</strong> (fusible): si se apaga, todas las bombillas quedan apagadas.</li>
+                    <li>Al restaurar el fusible, cada bombilla vuelve al estado que tenía antes.</li>
+                    <li>Una bombilla responde que está encendida solo si:
+                      <ul>
+                        <li>su interruptor particular está activado y</li>
+                        <li>el interruptor general permite el paso de corriente.</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 3: EMPRESA FERROVIARIA Y GEOMETRÍA/TIEMPO -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-warning-subtle text-warning border border-warning-subtle me-2">
+              <i class="bi bi-train-front me-1"></i> Modelos de dominio
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionDominio">
+
+            <!-- Ejercicio 10 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading10">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej10"
+                        aria-expanded="false" aria-controls="ej10">
+                  <i class="bi bi-train-front me-2 text-warning"></i>
+                  10. Empresa ferroviaria: paquetes y clases
+                </button>
+              </h2>
+              <div id="ej10" class="accordion-collapse collapse"
+                   aria-labelledby="heading10" data-bs-parent="#accordionDominio">
+                <div class="accordion-body">
+                  <p>Definir paquetes y clases (solo atributos y constructores) para gestionar una empresa ferroviaria con dos grandes grupos:</p>
+                  <ul>
+                    <li><strong>Personal</strong>: Maquinista, Mecanico, JefeEstacion (todas de uso público).</li>
+                    <li><strong>Maquinaria</strong>: Tren, Locomotora y Vagon.</li>
+                  </ul>
+                  <p>Restricciones principales:</p>
+                  <ul>
+                    <li>De cada tipo de personal se guardan los datos especificados (nombre, DNI, teléfono, rango, especialidad…).</li>
+                    <li>Vagones: capacidad máxima, capacidad actual y tipo de mercancía.</li>
+                    <li>Locomotoras: matrícula, potencia, antigüedad y mecánico asignado.</li>
+                    <li>Trenes: una locomotora + hasta 5 vagones + maquinista responsable.</li>
+                    <li>Desde clases externas solo se pueden construir objetos <strong>Tren</strong> y <strong>Locomotora</strong>.
+                      La clase <strong>Vagon</strong> será visible solo por sus clases vecinas.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 11 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading11">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej11"
+                        aria-expanded="false" aria-controls="ej11">
+                  <i class="bi bi-clock-history me-2 text-warning"></i>
+                  11. Clase <code>Hora</code>
+                </button>
+              </h2>
+              <div id="ej11" class="accordion-collapse collapse"
+                   aria-labelledby="heading11" data-bs-parent="#accordionDominio">
+                <div class="accordion-body">
+                  <p>Escribir un programa que lea por teclado una hora y un número <em>n</em> (segundos). Se mostrará:</p>
+                  <ul>
+                    <li>La hora introducida.</li>
+                    <li>Las <strong>n</strong> horas siguientes, separadas por un segundo.</li>
+                  </ul>
+                  <p>Para ello diseñar la clase <strong>Hora</strong> con atributos:
+                    <code>hora</code>, <code>minuto</code>, <code>segundo</code>, controlados mediante métodos <code>set/get</code>.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 20 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading20">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej20"
+                        aria-expanded="false" aria-controls="ej20">
+                  <i class="bi bi-calendar-event me-2 text-warning"></i>
+                  20. Clase <code>Calendario</code>
+                </button>
+              </h2>
+              <div id="ej20" class="accordion-collapse collapse"
+                   aria-labelledby="heading20" data-bs-parent="#accordionDominio">
+                <div class="accordion-body">
+                  <p>Diseñar la clase <strong>Calendario</strong> que representa una fecha (<code>año</code>, <code>mes</code>, <code>día</code>) y dispone de:</p>
+                  <ul>
+                    <li>Constructor que valide la fecha.</li>
+                    <li><code>void incrementarDia(int cantidad)</code></li>
+                    <li><code>void incrementarMes(int cantidad)</code></li>
+                    <li><code>void incrementarAño(int cantidad)</code> (no se admite año 0).</li>
+                    <li><code>void mostrar()</code> para mostrar la fecha.</li>
+                    <li><code>boolean iguales(Calendario otraFecha)</code> para comparar fechas.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 21 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading21">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej21"
+                        aria-expanded="false" aria-controls="ej21">
+                  <i class="bi bi-geo-alt me-2 text-warning"></i>
+                  21. Clase <code>Punto</code> (2D)
+                </button>
+              </h2>
+              <div id="ej21" class="accordion-collapse collapse"
+                   aria-labelledby="heading21" data-bs-parent="#accordionDominio">
+                <div class="accordion-body">
+                  <p>Definir la clase <strong>Punto</strong> en 2D con atributos <code>x</code> e <code>y</code> y los métodos:</p>
+                  <ul>
+                    <li><code>Punto(double x, double y)</code></li>
+                    <li><code>void desplaza(double dx)</code>: desplaza solo la componente x.</li>
+                    <li><code>void desplaza(double dx, double dy)</code>: desplaza x e y.</li>
+                    <li><code>double distanciaEuclidea(Punto otro)</code>:</li>
+                    <li><code>void muestra()</code>: muestra la información del punto.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 4: ESTRUCTURAS DE DATOS -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-info-subtle text-info border border-info-subtle me-2">
+              <i class="bi bi-diagram-3-fill me-1"></i> Estructuras dinámicas de datos
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionEstructuras">
+
+            <!-- Ejercicio 12 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading12">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej12"
+                        aria-expanded="false" aria-controls="ej12">
+                  <i class="bi bi-list-ol me-2 text-info"></i>
+                  12. Clase <code>Lista</code> (Integer)
+                </button>
+              </h2>
+              <div id="ej12" class="accordion-collapse collapse"
+                   aria-labelledby="heading12" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Implementar la clase <strong>Lista</strong> de números <code>Integer</code> almacenados en una tabla redimensionable.</p>
+                  <p>Métodos principales:</p>
+                  <ul>
+                    <li>Constructor por defecto (capacidad 10) y otro con tamaño inicial.</li>
+                    <li>Obtener número de elementos insertados.</li>
+                    <li>Insertar al final, al principio o en un índice concreto.</li>
+                    <li>Añadir al final los elementos de otra lista.</li>
+                    <li>Eliminar elemento por índice.</li>
+                    <li>Obtener elemento por índice.</li>
+                    <li>Buscar número (devuelve índice o −1).</li>
+                    <li>Representar la lista como cadena de caracteres.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 13 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading13">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej13"
+                        aria-expanded="false" aria-controls="ej13">
+                  <i class="bi bi-stack me-2 text-info"></i>
+                  13. Clase <code>PilaTabla</code>
+                </button>
+              </h2>
+              <div id="ej13" class="accordion-collapse collapse"
+                   aria-labelledby="heading13" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Implementar la clase <strong>PilaTabla</strong> para números <code>Integer</code> usando una tabla interna.</p>
+                  <p>Debe permitir al menos las operaciones fundamentales:</p>
+                  <ul>
+                    <li><strong>apilar()</strong></li>
+                    <li><strong>desapilar()</strong></li>
+                    <li>consultar la cima</li>
+                    <li>comprobar si está vacía</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 14 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading14">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej14"
+                        aria-expanded="false" aria-controls="ej14">
+                  <i class="bi bi-stack-overflow me-2 text-info"></i>
+                  14. Clase <code>PilaLista</code>
+                </button>
+              </h2>
+              <div id="ej14" class="accordion-collapse collapse"
+                   aria-labelledby="heading14" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Repetir el ejercicio anterior implementando la pila con un objeto de la clase
+                    <code>Lista</code> (Ejercicio 12) en vez de con una tabla.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 15 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading15">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej15"
+                        aria-expanded="false" aria-controls="ej15">
+                  <i class="bi bi-arrow-left-right me-2 text-info"></i>
+                  15. Clase <code>ColaTabla</code>
+                </button>
+              </h2>
+              <div id="ej15" class="accordion-collapse collapse"
+                   aria-labelledby="heading15" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Implementar la clase <strong>ColaTabla</strong> para números <code>Integer</code> usando una tabla:</p>
+                  <ul>
+                    <li>Los elementos se <strong>encolan</strong> al final y se <strong>desencolan</strong> al principio.</li>
+                    <li>Gestionar índices de primero y último de la cola.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 16 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading16">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej16"
+                        aria-expanded="false" aria-controls="ej16">
+                  <i class="bi bi-arrow-repeat me-2 text-info"></i>
+                  16. Cola basada en <code>Lista</code>
+                </button>
+              </h2>
+              <div id="ej16" class="accordion-collapse collapse"
+                   aria-labelledby="heading16" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Repetir el ejercicio de <code>ColaTabla</code>, pero usando una <code>Lista</code> para guardar los elementos encolados.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 17 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading17">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej17"
+                        aria-expanded="false" aria-controls="ej17">
+                  <i class="bi bi-braces-asterisk me-2 text-info"></i>
+                  17. Clase <code>Conjunto</code>
+                </button>
+              </h2>
+              <div id="ej17" class="accordion-collapse collapse"
+                   aria-labelledby="heading17" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Implementar la clase <strong>Conjunto</strong> usando una <code>Lista</code> de <code>Integer</code>:</p>
+                  <ul>
+                    <li>Constructores (por defecto y con tamaño inicial).</li>
+                    <li>Obtener número de elementos.</li>
+                    <li>Insertar número (si ya existe, no se inserta).</li>
+                    <li>Añadir los elementos de otro conjunto.</li>
+                    <li>Eliminar un elemento concreto.</li>
+                    <li>Eliminar todos los elementos que estén en otro conjunto.</li>
+                    <li>Comprobar si un número pertenece al conjunto.</li>
+                    <li>Representar el conjunto como cadena.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 18 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading18">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej18"
+                        aria-expanded="false" aria-controls="ej18">
+                  <i class="bi bi-calculator me-2 text-info"></i>
+                  18. Operaciones estáticas sobre conjuntos
+                </button>
+              </h2>
+              <div id="ej18" class="accordion-collapse collapse"
+                   aria-labelledby="heading18" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Añadir a <strong>Conjunto</strong> los métodos estáticos:</p>
+                  <ul>
+                    <li><code>static boolean incluido(Conjunto c1, Conjunto c2)</code></li>
+                    <li><code>static Conjunto union(Conjunto c1, Conjunto c2)</code></li>
+                    <li><code>static Conjunto interseccion(Conjunto c1, Conjunto c2)</code></li>
+                    <li><code>static Conjunto diferencia(Conjunto c1, Conjunto c2)</code></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 5: APLICACIÓN FRONTERA -->
+        <section>
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle me-2">
+              <i class="bi bi-people-fill me-1"></i> Aplicación de gestión
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionApp">
+
+            <!-- Ejercicio 19 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading19">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej19"
+                        aria-expanded="false" aria-controls="ej19">
+                  <i class="bi bi-passport me-2 text-danger"></i>
+                  19. Aplicación de control fronterizo
+                </button>
+              </h2>
+              <div id="ej19" class="accordion-collapse collapse"
+                   aria-labelledby="heading19" data-bs-parent="#accordionApp">
+                <div class="accordion-body">
+                  <p>En un puesto fronterizo se recoge diariamente información del tránsito de personas (DNI y nombre completo).</p>
+                  <p>Diseñar una aplicación con el siguiente menú:</p>
+                  <ol>
+                    <li>Paso de frontera.</li>
+                    <li>Mostrar todas las personas.</li>
+                    <li>Búsqueda por nombre.</li>
+                    <li>Búsqueda por DNI.</li>
+                    <li>Salir.</li>
+                  </ol>
+                  <p>Cada opción realizará las acciones descritas, utilizando una o varias clases de apoyo para almacenar y gestionar los datos de las personas.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (con Popper) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+  </script>
+</body>
+</html>
