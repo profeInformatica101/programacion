@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tema 8 · Herencia (Java) — Resumen</title>
+
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root { scroll-behavior: smooth; }
+    body { background: #f8fafc; }
+
+    .hero {
+      background: radial-gradient(1200px 400px at 10% 10%, rgba(13,110,253,.12), transparent),
+                  radial-gradient(1200px 400px at 90% 10%, rgba(32,201,151,.12), transparent);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+
+    .kbd-like {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .95rem;
+    }
+
+    .badge-soft {
+      background: rgba(13,110,253,.10);
+      color: #0d6efd;
+      border: 1px solid rgba(13,110,253,.25);
+    }
+
+    .card-soft {
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(2,6,23,.06);
+    }
+
+    .toc a { text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .back-to-top {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 999;
+      display: none;
+    }
+
+    .link-muted { color: #475569; }
+    .link-muted:hover { color: #0f172a; }
+
+    /* Code block */
+    pre.code {
+      background: #0b1220;
+      color: #e5e7eb;
+      border-radius: 14px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,.10);
+      margin-bottom: 0;
+      position: relative;
+    }
+    pre.code code { color: inherit; }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border-radius: 999px;
+    }
+
+    /* Lightweight syntax highlighting */
+    .hl-kw { color: #93c5fd; font-weight: 600; }   /* keywords */
+    .hl-ty { color: #a7f3d0; font-weight: 600; }   /* types / classes */
+    .hl-st { color: #fcd34d; }                     /* strings */
+    .hl-co { color: #94a3b8; font-style: italic; }  /* comments */
+    .hl-nu { color: #fca5a5; }                     /* numbers */
+    .hl-an { color: #c4b5fd; }                     /* annotations */
+    .hl-op { color: #e2e8f0; }                     /* operators-ish */
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .25rem .6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.75);
+      font-size: .875rem;
+    }
+  </style>
+</head>
+
+<body data-bs-spy="scroll" data-bs-target="#toc" data-bs-root-margin="0px 0px -70%" tabindex="0">
+
+  <!-- Hero -->
+  <header class="hero py-5">
+    <div class="container">
+      <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-3 justify-content-between">
+        <div>
+          <span class="badge badge-soft rounded-pill mb-2">Programación · Java · POO</span>
+          <h1 class="display-6 fw-bold mb-2">Tema 8 · Herencia</h1>
+          <p class="lead mb-0 text-secondary">
+            Resumen práctico, con errores típicos, ejemplos y repaso rápido para examen.
+          </p>
+
+          <div class="mt-3 d-flex flex-wrap gap-2">
+            <span class="pill">✅ Reutilización</span>
+            <span class="pill">✅ Polimorfismo</span>
+            <span class="pill">✅ Diseño “is-a”</span>
+            <span class="pill">⚠️ Cast seguro</span>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <a class="btn btn-primary" href="#contenido">Ir al contenido</a>
+          <button class="btn btn-outline-secondary" id="btnPrint" type="button">Imprimir</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-4" id="contenido">
+    <div class="row g-4">
+
+      <!-- TOC -->
+      <aside class="col-12 col-lg-4">
+        <div class="card card-soft sticky-top" style="top: 16px;">
+          <div class="card-body">
+            <h2 class="h5 fw-semibold mb-3">Índice</h2>
+
+            <nav id="toc" class="toc nav nav-pills flex-column gap-1">
+              <a class="nav-link" href="#intro">1. Para qué sirve</a>
+              <a class="nav-link" href="#java">2. Herencia en Java</a>
+              <a class="nav-link" href="#quehereda">3. ¿Qué se hereda y qué no?</a>
+              <a class="nav-link" href="#visibilidad">4. Visibilidad, override y super</a>
+              <a class="nav-link" href="#constructores">5. Constructores</a>
+              <a class="nav-link" href="#polimorfismo">6. Polimorfismo e instanceof</a>
+              <a class="nav-link" href="#abstractas">7. Abstract y final</a>
+              <a class="nav-link" href="#errores">8. Errores comunes (con código)</a>
+              <a class="nav-link" href="#faq">9. FAQ</a>
+              <a class="nav-link" href="#examen">10. Puntos clave para examen</a>
+              <a class="nav-link" href="#enlaces">Enlaces oficiales</a>
+            </nav>
+
+            <hr class="my-3">
+
+            <div class="small text-secondary">
+              Regla rápida: “<strong>X es un Y</strong>” → herencia. “<strong>X tiene un Y</strong>” → composición.
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <section class="col-12 col-lg-8">
+        <div class="accordion" id="accTema">
+
+          <!-- 1 -->
+          <article class="accordion-item card-soft mb-3" id="intro">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1" aria-expanded="true">
+                1. Para qué sirve
+              </button>
+            </h2>
+            <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <p>
+                  La herencia sirve para modelar una relación <strong>is-a</strong> (es-un), reutilizar lógica común y permitir
+                  <strong>polimorfismo</strong> (mismo tipo base, comportamientos distintos).
+                  Si la usas solo para “compartir código”, suele ser mejor composición.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2 -->
+          <article class="accordion-item card-soft mb-3" id="java">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                2. Herencia en Java
+              </button>
+            </h2>
+            <div id="c2" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <p>En Java se expresa con <span class="kbd-like">extends</span>:</p>
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">public class SubClase extends SuperClase {
+  // ...
+}</code></pre>
+                <img src="img/img2.png">
+                
+ <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">public class Estudiante extends Persona {
+  // ...
+}</code></pre>
+                <div class="alert alert-info mt-3 mb-0">
+                  Java permite heredar de <strong>una única clase</strong>. Para “múltiples capacidades”, se usan <strong>interfaces</strong>.
+                </div>
+
+                <p class="mt-3 mb-0">
+                  Si no se indica <span class="kbd-like">extends</span>, la clase hereda de
+                  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" target="_blank" rel="noopener">Object</a>.
+                  Métodos clave:
+                  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" target="_blank" rel="noopener">toString()</a>,
+                  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" target="_blank" rel="noopener">equals()</a>,
+                  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" target="_blank" rel="noopener">hashCode()</a>.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 3 -->
+          <article class="accordion-item card-soft mb-3" id="quehereda">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3a">
+                3. ¿Qué se hereda y qué no?
+              </button>
+            </h2>
+            <div id="c3a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                      <tr>
+                        <th>Elemento</th>
+                        <th>¿Se hereda?</th>
+                        <th>Idea práctica</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Miembros <span class="kbd-like">public</span></td><td>✅</td><td>Accesibles siempre.</td></tr>
+                      <tr><td>Miembros <span class="kbd-like">protected</span></td><td>✅</td><td>Accesibles en subclases.</td></tr>
+                      <tr><td>Acceso por defecto</td><td>✅/⚠️</td><td>Solo mismo paquete.</td></tr>
+                      <tr><td>Miembros <span class="kbd-like">private</span></td><td>✅/❌</td><td>Existen, pero no son accesibles directamente.</td></tr>
+                      <tr><td>Constructores</td><td>❌</td><td>No se heredan; se encadenan con <span class="kbd-like">super(...)</span>.</td></tr>
+                      <tr><td>Miembros <span class="kbd-like">static</span></td><td>⚠️</td><td>No hay polimorfismo: se ocultan.</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 4 -->
+          <article class="accordion-item card-soft mb-3" id="visibilidad">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4a">
+                4. Visibilidad, override y super
+              </button>
+            </h2>
+            <div id="c4a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <p>
+                  La sobreescritura (override) redefine el comportamiento en la subclase.
+                  Usa <span class="kbd-like">@Override</span> para que el compilador te proteja.
+                </p>
+
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">@Override
+public String toString() {
+  return super.toString() + " | extra";
+}</code></pre>
+
+                <div class="alert alert-warning mt-3 mb-0">
+                  Si un método está sobreescrito, al invocarlo se ejecuta el del <strong>objeto real</strong> (polimorfismo dinámico).
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 5 -->
+          <article class="accordion-item card-soft mb-3" id="constructores">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c5a">
+                5. Constructores
+              </button>
+            </h2>
+            <div id="c5a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <p>
+                  Un constructor de subclase llama primero al constructor de la superclase:
+                  <span class="kbd-like">super(...)</span> va en la primera línea.
+                </p>
+                <img src="img/img5.png">
+
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">public class Hija extends Padre {
+  public Hija(int x) {
+    super(x);       // primero
+    // luego lo propio
+  }
+}</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6 -->
+          <article class="accordion-item card-soft mb-3" id="polimorfismo">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c6a">
+                6. Polimorfismo, casting e instanceof
+              </button>
+            </h2>
+            <div id="c6a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">Persona p = new Estudiante();   // upcasting implícito
+// p.metodo() ejecuta el método real del objeto Estudiante si está sobreescrito</code></pre>
+
+                <p class="mt-3">Downcasting seguro:</p>
+
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">if (p instanceof Estudiante) {
+  Estudiante e = (Estudiante) p;
+}</code></pre>
+              </div>
+            </div>
+          </article>
+
+          <!-- 7 -->
+          <article class="accordion-item card-soft mb-3" id="abstractas">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c7a">
+                7. Abstract y final
+              </button>
+            </h2>
+            <div id="c7a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">public abstract class Empleado {
+  public abstract double calcularNomina();
+}</code></pre>
+
+                <ul class="mt-3 mb-0">
+                  <li><span class="kbd-like">abstract</span>: no se instancia.</li>
+                  <li><span class="kbd-like">final</span> en clase: no se puede extender.</li>
+                  <li><span class="kbd-like">final</span> en método: no se puede sobreescribir.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- 8 -->
+          <article class="accordion-item card-soft mb-3" id="errores">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c8a">
+                8. Errores comunes (con ejemplos de código)
+              </button>
+            </h2>
+            <div id="c8a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+
+                <div class="alert alert-secondary">
+                  Fallos típicos: aparecen una y otra vez y tienen solución clara.
+                </div>
+
+                <h3 class="h6 fw-semibold">Error 1: Confundir override con overload</h3>
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">class Padre {
+  public void imprimir(int x) { }
+}
+
+class Hija extends Padre {
+  // NO sobreescribe: firma distinta => overload
+  public void imprimir(String x) { }
+}</code></pre>
+                <div class="mt-2 small text-secondary">
+                  Pista: usa <span class="kbd-like">@Override</span>. Si no compila, no estabas sobreescribiendo.
+                </div>
+
+                <hr class="my-4">
+
+                <h3 class="h6 fw-semibold">Error 2: Downcasting sin comprobar instanceof</h3>
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">Persona p = new Persona();
+
+// Rompe en runtime: ClassCastException
+Estudiante e = (Estudiante) p;</code></pre>
+                <div class="mt-2 small text-secondary">
+                  Solución:
+                  <span class="kbd-like">if (p instanceof Estudiante) { ... }</span>
+                </div>
+
+                <hr class="my-4">
+
+                <h3 class="h6 fw-semibold">Error 3: No hay super() sin parámetros</h3>
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">class Padre {
+  public Padre(int x) { }
+}
+
+class Hija extends Padre {
+  // ERROR: no existe super() vacío
+  public Hija() { }
+}</code></pre>
+                <div class="mt-2 small text-secondary">
+                  Solución: llama a <span class="kbd-like">super(…)</span> en la primera línea o define un constructor vacío en la superclase.
+                </div>
+
+                <hr class="my-4">
+
+                <h3 class="h6 fw-semibold">Error 4: equals() sin hashCode()</h3>
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">@Override
+public boolean equals(Object o) {
+  if (this == o) return true;
+  if (!(o instanceof Empleado)) return false;
+  Empleado e = (Empleado) o;
+  return this.id.equals(e.id);
+}
+
+@Override
+public int hashCode() {
+  return id.hashCode();
+}</code></pre>
+
+                <hr class="my-4">
+
+                <h3 class="h6 fw-semibold">Error 5: static no es polimórfico</h3>
+                <pre class="code" data-copy><button class="btn btn-sm btn-outline-light copy-btn" type="button">Copiar</button><code class="language-java">class A { static void m(){ System.out.println("A"); } }
+class B extends A { static void m(){ System.out.println("B"); } }
+
+A ref = new B();
+ref.m(); // imprime "A"</code></pre>
+
+              </div>
+            </div>
+          </article>
+
+          <!-- 9 FAQ -->
+          <article class="accordion-item card-soft mb-3" id="faq">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c9a">
+                9. FAQ (preguntas rápidas)
+              </button>
+            </h2>
+            <div id="c9a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <div class="accordion" id="accFaq">
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                        ¿Los constructores se heredan?
+                      </button>
+                    </h2>
+                    <div id="f1" class="accordion-collapse collapse" data-bs-parent="#accFaq">
+                      <div class="accordion-body">
+                        No. Se encadenan con <span class="kbd-like">super(...)</span>.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                        ¿Qué decide qué método se ejecuta?
+                      </button>
+                    </h2>
+                    <div id="f2" class="accordion-collapse collapse" data-bs-parent="#accFaq">
+                      <div class="accordion-body">
+                        Para métodos de instancia sobreescritos: el <strong>tipo real del objeto</strong>.
+                        Para <span class="kbd-like">static</span>: el tipo de la referencia.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                        ¿Cuándo usar protected?
+                      </button>
+                    </h2>
+                    <div id="f3" class="accordion-collapse collapse" data-bs-parent="#accFaq">
+                      <div class="accordion-body">
+                        Cuando forma parte del contrato de herencia. Si es para saltarse encapsulación, revisa el diseño.
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 10 Examen -->
+          <article class="accordion-item card-soft mb-3" id="examen">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c10a">
+                10. Puntos clave para examen (checklist)
+              </button>
+            </h2>
+            <div id="c10a" class="accordion-collapse collapse" data-bs-parent="#accTema">
+              <div class="accordion-body">
+                <ul class="mb-0">
+                  <li><strong>is-a</strong> vs <strong>has-a</strong>.</li>
+                  <li><span class="kbd-like">extends</span> + herencia simple en Java.</li>
+                  <li><span class="kbd-like">super(...)</span> primera línea; si no hay super() → error.</li>
+                  <li><strong>override</strong>: misma firma + <span class="kbd-like">@Override</span>.</li>
+                  <li><strong>polimorfismo</strong>: método ejecutado depende del objeto real.</li>
+                  <li><strong>casting</strong>: downcasting solo con <span class="kbd-like">instanceof</span>.</li>
+                  <li><span class="kbd-like">abstract</span> no se instancia; obliga a implementar.</li>
+                  <li><span class="kbd-like">final</span>: no heredar / no sobreescribir.</li>
+                  <li><span class="kbd-like">equals</span> ↔ <span class="kbd-like">hashCode</span> coherentes.</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- Links -->
+          <article class="card card-soft" id="enlaces">
+            <div class="card-body">
+              <h2 class="h5 fw-semibold mb-3">Enlaces oficiales recomendados</h2>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <ul class="mb-0">
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html">API: java.lang.Object</a></li>
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()">API: Object.toString()</a></li>
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)">API: Object.equals(Object)</a></li>
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()">API: Object.hashCode()</a></li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <ul class="mb-0">
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.4">JLS: Herencia (extends)</a></li>
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.20.2">JLS: instanceof</a></li>
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.1">JLS: Override</a></li>
+                    <li><a class="link-muted" target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.1.2">JLS: abstract y final</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mt-3 small text-secondary">
+                Nota: enlaces a Java SE 21. Si usas otra versión, cambia “21” por la tuya.
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <footer class="mt-4 text-center text-secondary small">
+          <div>© Material didáctico · Tema 8: Herencia (Java)</div>
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <button class="btn btn-primary back-to-top" id="backToTop" type="button" aria-label="Volver arriba">
+    ↑
+  </button>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Botón imprimir
+    document.getElementById('btnPrint').addEventListener('click', () => window.print());
+
+    // Botón volver arriba
+    const backToTop = document.getElementById('backToTop');
+    const toggleBackToTop = () => {
+      backToTop.style.display = (window.scrollY > 500) ? 'inline-flex' : 'none';
+    };
+    window.addEventListener('scroll', toggleBackToTop, { passive: true });
+    toggleBackToTop();
+    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // UX: al abrir un acordeón desde el índice, expandir su panel si está cerrado
+    document.querySelectorAll('#toc a.nav-link').forEach(a => {
+      a.addEventListener('click', () => {
+        const targetId = a.getAttribute('href');
+        const target = document.querySelector(targetId);
+        if (!target) return;
+
+        const collapse = target.querySelector('.accordion-collapse');
+        if (collapse) bootstrap.Collapse.getOrCreateInstance(collapse, { toggle: false }).show();
+      });
+    });
+
+    // Copiar código (si el navegador lo permite)
+    document.querySelectorAll('pre[data-copy]').forEach(pre => {
+      const btn = pre.querySelector('.copy-btn');
+      const code = pre.querySelector('code');
+      if (!btn || !code) return;
+
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(code.textContent);
+          btn.textContent = 'Copiado';
+          setTimeout(() => btn.textContent = 'Copiar', 1200);
+        } catch {
+          btn.textContent = 'No permitido';
+          setTimeout(() => btn.textContent = 'Copiar', 1200);
+        }
+      });
+    });
+
+    // Highlight seguro: tokenización simple sobre texto escapado, sin re-procesar HTML
+    function escapeHtml(s) {
+      return s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    }
+
+    function tokenizeJava(raw) {
+      const tokens = [];
+      const s = raw;
+      let i = 0;
+
+      while (i < s.length) {
+        const ch = s[i];
+
+        // Line comment //
+        if (ch === '/' && s[i + 1] === '/') {
+          let j = i + 2;
+          while (j < s.length && s[j] !== '\n') j++;
+          tokens.push({ type: 'co', text: s.slice(i, j) });
+          i = j;
+          continue;
+        }
+
+        // Block comment /* ... */
+        if (ch === '/' && s[i + 1] === '*') {
+          let j = i + 2;
+          while (j < s.length && !(s[j] === '*' && s[j + 1] === '/')) j++;
+          j = Math.min(j + 2, s.length);
+          tokens.push({ type: 'co', text: s.slice(i, j) });
+          i = j;
+          continue;
+        }
+
+        // String "..."
+        if (ch === '"') {
+          let j = i + 1;
+          while (j < s.length) {
+            if (s[j] === '\\') { j += 2; continue; }
+            if (s[j] === '"') { j++; break; }
+            j++;
+          }
+          tokens.push({ type: 'st', text: s.slice(i, j) });
+          i = j;
+          continue;
+        }
+
+        // Annotation @Something
+        if (ch === '@') {
+          let j = i + 1;
+          while (j < s.length && /[\w$]/.test(s[j])) j++;
+          tokens.push({ type: 'an', text: s.slice(i, j) });
+          i = j;
+          continue;
+        }
+
+        // Number
+        if (/\d/.test(ch)) {
+          let j = i + 1;
+          while (j < s.length && /[\d.]/.test(s[j])) j++;
+          tokens.push({ type: 'nu', text: s.slice(i, j) });
+          i = j;
+          continue;
+        }
+
+        // Word (identifier/keyword/type)
+        if (/[A-Za-z_$]/.test(ch)) {
+          let j = i + 1;
+          while (j < s.length && /[A-Za-z0-9_$]/.test(s[j])) j++;
+          tokens.push({ type: 'wd', text: s.slice(i, j) });
+          i = j;
+          continue;
+        }
+
+        // Other char
+        tokens.push({ type: 'ot', text: ch });
+        i++;
+      }
+      return tokens;
+    }
+
+    const KEYWORDS = new Set([
+      'class','public','private','protected','static','final','abstract','extends','implements',
+      'return','new','if','else','for','while','do','switch','case','break','continue','this','super',
+      'try','catch','throw','throws','instanceof','null','true','false','void','interface',
+      'package','import'
+    ]);
+
+    const COMMON_TYPES = new Set([
+      'String','Object','List','ArrayList','HashMap','HashSet','Map','Set',
+      'Integer','Double','Boolean','Long','Short','Byte','Character','Float'
+    ]);
+
+    function renderHighlighted(raw) {
+      const tokens = tokenizeJava(raw);
+      let out = '';
+      for (const t of tokens) {
+        const safe = escapeHtml(t.text);
+        if (t.type === 'co') out += `<span class="hl-co">${safe}</span>`;
+        else if (t.type === 'st') out += `<span class="hl-st">${safe}</span>`;
+        else if (t.type === 'an') out += `<span class="hl-an">${safe}</span>`;
+        else if (t.type === 'nu') out += `<span class="hl-nu">${safe}</span>`;
+        else if (t.type === 'wd') {
+          if (KEYWORDS.has(t.text)) out += `<span class="hl-kw">${safe}</span>`;
+          else if (COMMON_TYPES.has(t.text)) out += `<span class="hl-ty">${safe}</span>`;
+          else out += safe;
+        } else {
+          out += safe;
+        }
+      }
+      return out;
+    }
+
+    document.querySelectorAll('code.language-java').forEach(codeEl => {
+      const raw = codeEl.textContent;     // texto plano
+      codeEl.innerHTML = renderHighlighted(raw); // HTML seguro generado desde texto
+    });
+  </script>
+</body>
+</html>
