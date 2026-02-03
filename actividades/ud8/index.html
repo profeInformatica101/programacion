@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Programación – Boletín 8: Herencia</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <!-- Bootstrap Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  >
+  <style>
+    code { color:black; background-color: yellow; font-size: 25px; }
+    body { background: #f5f7fb; }
+    .card-boletin {
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+    .badge-section {
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+    }
+    .accordion-button::after { transform-origin: center; }
+    .accordion-button:not(.collapsed)::after { transform: rotate(180deg); }
+  </style>
+</head>
+<body>
+
+  <div class="container py-5">
+    <!-- CABECERA -->
+    <header class="mb-4 text-center">
+      <p class="text-uppercase text-secondary mb-1 badge-section">Programación · Unidad 8</p>
+      <h1 class="fw-bold mb-2">
+        Boletín 8 · <span class="text-primary">Herencia</span>
+      </h1>
+      <p class="text-muted">
+        Ejercicios de herencia, sobreescritura, abstracción, enumerados y reutilización de estructuras de datos.
+      </p>
+    </header>
+
+    <div class="card card-boletin bg-white border-0">
+      <div class="card-body p-4 p-md-5">
+
+        <!-- SECCIÓN 1: TIEMPO Y HERENCIA -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2">
+              <i class="bi bi-clock me-1"></i> Tiempo y herencia
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionTiempo">
+
+            <!-- Ejercicio 1 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading1">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej1"
+                        aria-expanded="false" aria-controls="ej1">
+                  <i class="bi bi-clock-history me-2 text-primary"></i>
+                  1. Clase <code>Hora</code>
+                </button>
+              </h2>
+
+              <div id="ej1" class="accordion-collapse collapse"
+                   aria-labelledby="heading1" data-bs-parent="#accordionTiempo">
+                <img src="img/HerenciaHora.png">
+                <div class="accordion-body">
+                  <p>Diseñar la clase <strong>Hora</strong> que representa un instante de tiempo compuesto por una hora (de <strong>0 a 23</strong>) y los minutos.</p>
+                  <p>Dispone de los métodos:</p>
+                  <ul>
+                    <li><code>Hora(hora, minuto)</code>: construye un objeto con los datos pasados como parámetros.</li>
+                    <li><code>inc()</code>: incrementa la hora en <strong>un minuto</strong>.</li>
+                    <li><code>setMinutos(valor)</code>: asigna un valor, si tiene sentido, a los minutos.</li>
+                    <li><code>setHora(valor)</code>: asigna un valor, si tiene sentido, a la hora.</li>
+                    <li><code>toString()</code>: devuelve un <code>String</code> con la representación del reloj.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 2 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej2"
+                        aria-expanded="false" aria-controls="ej2">
+                  <i class="bi bi-alarm me-2 text-primary"></i>
+                  2. Clase <code>Hora12</code>
+                </button>
+              </h2>
+              <div id="ej2" class="accordion-collapse collapse"
+                   aria-labelledby="heading2" data-bs-parent="#accordionTiempo">
+                <div class="accordion-body">
+                  <p>Escribir la clase <strong>Hora12</strong>, similar a <code>Hora</code>, con la diferencia de que:</p>
+                  <ul>
+                    <li>Las horas solo pueden tomar un valor entre <strong>1 y 12</strong>.</li>
+                    <li>Se distingue mañana/tarde mediante <strong>“am”</strong> y <strong>“pm”</strong>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 3 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading3">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej3"
+                        aria-expanded="false" aria-controls="ej3">
+                  <i class="bi bi-stopwatch me-2 text-primary"></i>
+                  3. Clase <code>HoraExacta</code> (hereda de <code>Hora</code>)
+                </button>
+              </h2>
+              <div id="ej3" class="accordion-collapse collapse"
+                   aria-labelledby="heading3" data-bs-parent="#accordionTiempo">
+                <div class="accordion-body">
+                  <p>A partir de la clase <code>Hora</code> implementar la clase <strong>HoraExacta</strong>, que incluye en la hora los segundos.</p>
+                  <p>Además de los métodos visibles de <code>Hora</code> dispondrá de:</p>
+                  <ul>
+                    <li><code>HoraExacta(hora, minuto, segundo)</code>: construye un objeto con los datos pasados como parámetros.</li>
+                    <li><code>setSegundo(valor)</code>: asigna, cuando es posible, el valor indicado a los segundos.</li>
+                    <li><code>inc()</code>: incrementa la hora en <strong>un segundo</strong>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 4 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading4">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej4"
+                        aria-expanded="false" aria-controls="ej4">
+                  <i class="bi bi-check2-circle me-2 text-primary"></i>
+                  4. Comparación de <code>HoraExacta</code>
+                </button>
+              </h2>
+              <div id="ej4" class="accordion-collapse collapse"
+                   aria-labelledby="heading4" data-bs-parent="#accordionTiempo">
+                <div class="accordion-body">
+                  <p>Añadir a la clase <code>HoraExacta</code> un método que compare si dos horas (la invocante y otra pasada como parámetro) son:</p>
+                  <ul>
+                    <li><strong>iguales</strong> o</li>
+                    <li><strong>distintas</strong>.</li>
+                  </ul>
+                  <p>El método debe recibir una hora como parámetro y devolver el resultado de la comparación.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 2: INSTRUMENTOS (ABSTRACCIÓN Y ENUM) -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-success-subtle text-success border border-success-subtle me-2">
+              <i class="bi bi-music-note-beamed me-1"></i> Instrumentos y abstracción
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionInstrumentos">
+
+            <!-- Ejercicio 5 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading5">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej5"
+                        aria-expanded="false" aria-controls="ej5">
+                  <i class="bi bi-braces-asterisk me-2 text-success"></i>
+                  5. Clase abstracta <code>Instrumento</code> + <code>enum</code> de notas
+                </button>
+              </h2>
+              <div id="ej5" class="accordion-collapse collapse"
+                   aria-labelledby="heading5" data-bs-parent="#accordionInstrumentos">
+                <div class="accordion-body">
+                  <img src="img/Notas.png">
+                  <p>Crear la clase <strong>Instrumento</strong> (abstracta) que almacena un máximo de <strong>100</strong> notas musicales.</p>
+                  <ul>
+                    <li>Mientras haya sitio, se pueden añadir notas al final con <code>add()</code>.</li>
+                    <li>Dispone del método abstracto <code>interpretar()</code>, que en cada subclase mostrará por consola las notas según las interprete.</li>
+                    <li>Utilizar <strong>enumerados</strong> para definir las notas musicales.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 6 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading6">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej6"
+                        aria-expanded="false" aria-controls="ej6">
+                  <i class="bi bi-music-note me-2 text-success"></i>
+                  6. Clases <code>Piano</code> y <code>Campana</code>
+                </button>
+              </h2>
+              <div id="ej6" class="accordion-collapse collapse"
+                   aria-labelledby="heading6" data-bs-parent="#accordionInstrumentos">
+                <div class="accordion-body">
+                  <p>Crear las clases <strong>Piano</strong> y <strong>Campana</strong> que heredan de <code>Instrumento</code>.</p>
+                  <ul>
+                    <li>Implementar <code>interpretar()</code> en cada clase con su “estilo” de salida.</li>
+                    <li>Probar que ambas clases pueden almacenar notas y luego interpretarlas.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 3: CAJAS Y MENSAJERÍA -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-warning-subtle text-warning border border-warning-subtle me-2">
+              <i class="bi bi-box-seam me-1"></i> Cajas y mensajería
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionCajas">
+
+            <!-- Ejercicio 7 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading7">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej7"
+                        aria-expanded="false" aria-controls="ej7">
+                  <i class="bi bi-truck me-2 text-warning"></i>
+                  7. Clase <code>Caja</code> (inmutable + unidades)
+                </button>
+              </h2>
+              <div id="ej7" class="accordion-collapse collapse"
+                   aria-labelledby="heading7" data-bs-parent="#accordionCajas">
+                <div class="accordion-body">
+                  <p>Las empresas de transportes embalan sus mercancías en cajas con el tamaño adecuado. Una caja se crea con un ancho, un alto y un fondo y, una vez creada, se mantiene <strong>inmutable</strong>.</p>
+                  <p>Cada caja lleva una etiqueta con información útil (destinatario, dirección, etc.). Se pide implementar la clase <strong>Caja</strong> con los métodos:</p>
+                  <ul>
+                    <li><code>Caja(int ancho, int alto, int fondo, Unidades u)</code>: construye una caja con las dimensiones especificadas, que pueden estar en <code>"cm"</code> o <code>"m"</code>.</li>
+                    <li><code>double getVolumen()</code>: devuelve el volumen de la caja en <strong>metros cúbicos</strong>.</li>
+                    <li><code>String toString()</code>: devuelve una cadena con la representación de la caja.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 8 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading8">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej8"
+                        aria-expanded="false" aria-controls="ej8">
+                  <i class="bi bi-bicycle me-2 text-warning"></i>
+                  8. Clase <code>CajaCarton</code> (hereda de <code>Caja</code>)
+                </button>
+              </h2>
+              <div id="ej8" class="accordion-collapse collapse"
+                   aria-labelledby="heading8" data-bs-parent="#accordionCajas">
+                <div class="accordion-body">
+                  <p>La empresa de mensajería <strong>BiciExpress</strong> reparte en bicicleta y solo utiliza <strong>cajas de cartón</strong>.</p>
+                  <p>Por privacidad, las etiquetas con texto se sustituyen por una etiqueta con un <strong>número</strong> (cliente, dirección, etc.).</p>
+                  <p>Se pide implementar, a partir de <code>Caja</code>, la clase <strong>CajaCarton</strong> con estas características:</p>
+                  <ul>
+                    <li>El volumen se calcula como el <strong>80%</strong> del volumen real.</li>
+                    <li>Las medidas siempre están en <strong>centímetros</strong>.</li>
+                    <li>La empresa necesita saber la <strong>superficie total de cartón</strong> utilizada para construir todas las cajas enviadas.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 4: ESTRUCTURAS (HERENCIA) -->
+        <section class="mb-4">
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-info-subtle text-info border border-info-subtle me-2">
+              <i class="bi bi-diagram-3-fill me-1"></i> Estructuras de datos por herencia
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionEstructuras">
+
+            <!-- Ejercicio 9 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading9">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej9"
+                        aria-expanded="false" aria-controls="ej9">
+                  <i class="bi bi-card-text me-2 text-info"></i>
+                  9. Modificar <code>Lista</code>: <code>mostrar()</code> → <code>toString()</code>
+                </button>
+              </h2>
+              <div id="ej9" class="accordion-collapse collapse"
+                   aria-labelledby="heading9" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Modificar la clase <code>Lista</code> del ejercicio 7.12 sustituyendo el método <code>mostrar()</code> por el método <code>toString()</code>.</p>
+
+                  <!-- NUEVO: EJERCICIO 7 (RELACIONADO CON LISTA) -->
+                  <hr class="my-3">
+                  <p class="mb-2"><strong>Ejercicio 7 (recordatorio del boletín anterior):</strong></p>
+                  <p>Parte de una clase <code>Lista</code> que almacena números <code>Integer</code> en una estructura redimensionable, con operaciones típicas como:</p>
+                  <ul>
+                    <li>Insertar al principio, al final o en una posición.</li>
+                    <li>Eliminar por índice.</li>
+                    <li>Buscar un elemento y obtener su índice.</li>
+                    <li>Un método <code>mostrar()</code> que devolvía o mostraba la lista.</li>
+                  </ul>
+                  <p><strong>Ahora</strong> debes sustituir <code>mostrar()</code> por <code>toString()</code> para que la lista se pueda imprimir directamente, por ejemplo:</p>
+                  <ul>
+                    <li><code>System.out.println(miLista);</code></li>
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 10 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading10">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej10"
+                        aria-expanded="false" aria-controls="ej10">
+                  <i class="bi bi-stack me-2 text-info"></i>
+                  10. Clase <code>Pila</code> hereda de <code>Lista</code>
+                </button>
+              </h2>
+              <div id="ej10" class="accordion-collapse collapse"
+                   aria-labelledby="heading10" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Implementar la clase <strong>Pila</strong> heredando de <code>Lista</code> (la implementada en el ejercicio anterior).</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 11 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading11">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej11"
+                        aria-expanded="false" aria-controls="ej11">
+                  <i class="bi bi-arrow-left-right me-2 text-info"></i>
+                  11. Clase <code>Cola</code> hereda de <code>Lista</code>
+                </button>
+              </h2>
+              <div id="ej11" class="accordion-collapse collapse"
+                   aria-labelledby="heading11" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Escribir la clase <strong>Cola</strong> heredando de la clase <code>Lista</code>.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 12 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading12">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej12"
+                        aria-expanded="false" aria-controls="ej12">
+                  <i class="bi bi-braces me-2 text-info"></i>
+                  12. Clase <code>Conjunto</code> hereda de <code>Lista</code>
+                </button>
+              </h2>
+              <div id="ej12" class="accordion-collapse collapse"
+                   aria-labelledby="heading12" data-bs-parent="#accordionEstructuras">
+                <div class="accordion-body">
+                  <p>Diseñar la clase <strong>Conjunto</strong> heredando de <code>Lista</code>.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECCIÓN 5: GEOMETRÍA Y CALENDARIO (HERENCIA) -->
+        <section>
+          <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle me-2">
+              <i class="bi bi-bounding-box-circles me-1"></i> Geometría y calendario
+            </span>
+          </div>
+
+          <div class="accordion accordion-flush" id="accordionGeometria">
+
+            <!-- Ejercicio 13 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading13">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej13"
+                        aria-expanded="false" aria-controls="ej13">
+                  <i class="bi bi-box me-2 text-danger"></i>
+                  13. Clase <code>Punto3D</code> (hereda de <code>Punto</code>)
+                </button>
+              </h2>
+              <div id="ej13" class="accordion-collapse collapse"
+                   aria-labelledby="heading13" data-bs-parent="#accordionGeometria">
+                <div class="accordion-body">
+                  <p>A partir de la clase <code>Punto</code> (ejercicio propuesto 7.3), diseñar mediante herencia la clase <strong>Punto3D</strong> que representa un punto en tres dimensiones:</p>
+                  <ul>
+                    <li>Componentes <code>x</code>, <code>y</code> y <code>z</code>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ejercicio 14 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading14">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#ej14"
+                        aria-expanded="false" aria-controls="ej14">
+                  <i class="bi bi-calendar2-week me-2 text-danger"></i>
+                  14. Clase <code>CalendarioExacto</code> (hereda de <code>Calendario</code>)
+                </button>
+              </h2>
+              <div id="ej14" class="accordion-collapse collapse"
+                   aria-labelledby="heading14" data-bs-parent="#accordionGeometria">
+                <div class="accordion-body">
+                  <p>A partir de la clase <code>Calendario</code> (ejercicio propuesto 7.2), escribir la clase <strong>CalendarioExacto</strong> que determina un instante de tiempo exacto formado por:</p>
+                  <ul>
+                    <li><code>año</code>, <code>mes</code>, <code>día</code>, <code>hora</code> y <code>minuto</code>.</li>
+                  </ul>
+                  <p>Implementar los métodos:</p>
+                  <ul>
+                    <li><code>toString()</code></li>
+                    <li><code>equals()</code></li>
+                    <li>y aquellos necesarios para manejar correctamente la clase.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (con Popper) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+  </script>
+</body>
+</html>
