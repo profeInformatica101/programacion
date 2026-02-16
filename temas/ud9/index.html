@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tema 9 - Interfaces (Java)</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Bootstrap Icons -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    code { color: blue; }
+    pre code { color: inherit; }
+    .badge-soft {
+      background: rgba(13,110,253,.12);
+      color: #0d6efd;
+      border: 1px solid rgba(13,110,253,.25);
+    }
+    .toc a { text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+  </style>
+</head>
+
+<body class="bg-light">
+  <div class="container py-4">
+
+    <!-- Título -->
+    <h1 class="mb-2">
+      <i class="bi bi-diagram-3"></i> Tema 9. Interfaces (Java)
+    </h1>
+
+    <!-- Migas de pan -->
+    <nav class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <i class="bi bi-book"></i> Programación en Java
+        </li>
+        <li class="breadcrumb-item active">
+          Tema 9 · Interfaces
+        </li>
+      </ol>
+    </nav>
+
+    <!-- Mini TOC -->
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-2">
+          <i class="bi bi-list-task me-2"></i>
+          <strong>Contenido</strong>
+          <span class="badge badge-soft ms-2">resumen + ampliación Java 8+</span>
+        </div>
+        <div class="row toc g-2">
+          <div class="col-12 col-md-6">
+            <a href="#headingIntro"><i class="bi bi-info-circle me-1"></i> 1. Introducción</a><br>
+            <a href="#headingSintaxis"><i class="bi bi-braces me-1"></i> 2. Sintaxis e implementación</a><br>
+            <a href="#headingHerencia"><i class="bi bi-diagram-2 me-1"></i> 3. Herencia entre interfaces</a><br>
+            <a href="#headingMetodos"><i class="bi bi-tools me-1"></i> 4. Métodos: abstract, default, static</a>
+          </div>
+          <div class="col-12 col-md-6">
+            <a href="#headingFuncionales"><i class="bi bi-lightning-charge me-1"></i> 5. Interfaces funcionales y lambdas</a><br>
+            <a href="#headingComparable"><i class="bi bi-sort-alpha-down me-1"></i> 6. Orden natural: Comparable</a><br>
+            <a href="#headingComparator"><i class="bi bi-shuffle me-1"></i> 7. Órdenes alternativos: Comparator</a><br>
+            <a href="#headingClaves"><i class="bi bi-mortarboard me-1"></i> 8. Ideas clave + checklist</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acordeón principal -->
+    <div class="accordion" id="accordionTema9">
+      <!-- 1. Introducción -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingIntro">
+          <button class="accordion-button" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseIntro"
+                  aria-expanded="true"
+                  aria-controls="collapseIntro">
+            <i class="bi bi-info-circle me-2"></i> 1. Introducción
+          </button>
+        </h2>
+        <div id="collapseIntro" class="accordion-collapse collapse show"
+             aria-labelledby="headingIntro" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+         <img src="img/java-implementing-interface.png">
+
+            <p>
+              Una <strong>interfaz</strong> en Java define un <strong>tipo</strong> y un
+              <strong>contrato</strong> de comportamiento. Se parece a una clase, pero
+              su intención es declarativa: describe <em>qué</em> debe ofrecer una clase,
+              no necesariamente <em>cómo</em> lo hace.
+            </p>
+            <ul>
+              <li>Se declara con <code>interface</code> (en un archivo <code>.java</code>).</li>
+              <li>No se puede instanciar (no hay <code>new</code> sobre una interfaz).</li>
+              <li>Sus atributos son <strong>constantes</strong> (<code>public static final</code>).</li>
+              <li>Sus métodos son, por defecto, <strong>abstract</strong> y <strong>public</strong> (con ampliaciones desde Java 8).</li>
+              <li>Una clase puede implementar <strong>múltiples</strong> interfaces.</li>
+            </ul>
+
+            <div class="alert alert-info d-flex align-items-start" role="alert">
+              <i class="bi bi-lightbulb-fill me-2"></i>
+              <div>
+                <strong>Idea clave:</strong> implementar una interfaz significa
+                “heredar la <em>obligación</em> de implementar sus métodos”.
+              </div>
+            </div>
+
+            <p class="mb-0">
+              Referencia (tutorial oficial):
+              <a class="link-primary" target="_blank"
+                 href="https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html">
+                <i class="bi bi-link-45deg"></i> Creating Interfaces (Oracle)
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Sintaxis e implementación -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSintaxis">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseSintaxis"
+                  aria-expanded="false"
+                  aria-controls="collapseSintaxis">
+            <i class="bi bi-braces me-2"></i> 2. Sintaxis e implementación
+          </button>
+        </h2>
+        <div id="collapseSintaxis" class="accordion-collapse collapse"
+             aria-labelledby="headingSintaxis" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+              <img src="img/circulo.png">
+            <p>
+              Una interfaz declara métodos (normalmente abstractos). Una clase la implementa
+              con <code>implements</code> y debe proporcionar el código de esos métodos.
+            </p>
+
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col"><i class="bi bi-lightbulb"></i> Elemento</th>
+                    <th scope="col"><i class="bi bi-code-slash"></i> Ejemplo</th>
+                    <th scope="col"><i class="bi bi-eye"></i> Nota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Declaración de interfaz</td>
+                    <td>
+<pre class="mb-0"><code>public interface TieneArea {
+  double getArea();
+}</code></pre>
+                    </td>
+                    <td>Método abstracto (contrato).</td>
+                  </tr>
+                  <tr>
+                    <td>Clase que implementa</td>
+                    <td>
+<pre class="mb-0"><code>public class Circulo implements TieneArea {
+  private double radio;
+
+  public Circulo(double radio){ this.radio = radio; }
+
+  @Override
+  public double getArea(){
+    return Math.PI * radio * radio;
+  }
+}</code></pre>
+                    </td>
+                    <td>Si no implementa, debe ser <code>abstract</code>.</td>
+                  </tr>
+                  <tr>
+                    <td>Implementación múltiple</td>
+                    <td>
+<pre class="mb-0"><code>class X implements A, B, C { /* ... */ }</code></pre>
+                    </td>
+                    <td>Una clase puede implementar tantas interfaces como necesite.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="alert alert-warning d-flex align-items-start mt-3" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <div>
+                <strong>Ojo:</strong> “Implementar” no es “heredar de una clase”.
+                Las interfaces definen tipos y contratos, no un estado compartido.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Herencia entre interfaces -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingHerencia">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseHerencia"
+                  aria-expanded="false"
+                  aria-controls="collapseHerencia">
+            <i class="bi bi-diagram-2 me-2"></i> 3. Herencia entre interfaces
+          </button>
+        </h2>
+        <div id="collapseHerencia" class="accordion-collapse collapse"
+             aria-labelledby="headingHerencia" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+            <p>
+              Una interfaz puede <strong>extender</strong> otras interfaces con <code>extends</code>.
+              Esta herencia también es <strong>múltiple</strong>.
+            </p>
+
+<pre class="mb-2"><code>public interface A { }
+public interface B { }
+public interface C extends A, B { }</code></pre>
+
+            <div class="alert alert-info d-flex align-items-start" role="alert">
+              <i class="bi bi-diagram-3-fill me-2"></i>
+              <div>
+                <strong>Resultado:</strong> <code>C</code> hereda los miembros (métodos y constantes)
+                de <code>A</code> y <code>B</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Métodos: abstract, default y static -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingMetodos">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseMetodos"
+                  aria-expanded="false"
+                  aria-controls="collapseMetodos">
+            <i class="bi bi-tools me-2"></i> 4. Métodos en interfaces: abstract, default y static (Java 8+)
+          </button>
+        </h2>
+        <div id="collapseMetodos" class="accordion-collapse collapse"
+             aria-labelledby="headingMetodos" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+            <p>
+              Además de métodos abstractos, desde <strong>Java 8</strong> las interfaces pueden tener:
+            </p>
+            <ul>
+              <li><span class="badge bg-secondary me-1">abstract</span> contrato obligatorio.</li>
+              <li><span class="badge bg-primary me-1">default</span> método con implementación heredable.</li>
+              <li><span class="badge bg-dark me-1">static</span> método utilitario propio de la interfaz.</li>
+            </ul>
+
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <div class="card shadow-sm h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-check2-square me-1"></i> Método <code>default</code>
+                    </h5>
+                    <p class="mb-2">
+                      Útil para mantener compatibilidad en APIs: se añade funcionalidad sin obligar a reescribir
+                      todas las clases que ya implementaban la interfaz.
+                    </p>
+<pre class="mb-0"><code>public interface Coloreado {
+  Color getColor();
+
+  default Color getColorInverso() {
+    Color c = getColor();
+    return new Color(255 - c.getRed(),
+                     255 - c.getGreen(),
+                     255 - c.getBlue());
+  }
+}</code></pre>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-6">
+                <div class="card shadow-sm h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-gear me-1"></i> Método <code>static</code>
+                    </h5>
+                    <p class="mb-2">
+                      Se llama sobre la propia interfaz (no sobre objetos).
+                    </p>
+<pre class="mb-0"><code>public interface Utilidades {
+  static void saludar(){
+    System.out.println("Hola");
+  }
+}
+
+// Uso:
+Utilidades.saludar();</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mt-3 mb-0">
+              Referencias oficiales:
+              <a class="link-primary" target="_blank"
+                 href="https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html">
+                <i class="bi bi-link-45deg"></i> Default Methods (Oracle)
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Interfaces funcionales y lambdas -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFuncionales">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseFuncionales"
+                  aria-expanded="false"
+                  aria-controls="collapseFuncionales">
+            <i class="bi bi-lightning-charge me-2"></i> 5. Interfaces funcionales y expresiones lambda (Java 8+)
+          </button>
+        </h2>
+        <div id="collapseFuncionales" class="accordion-collapse collapse"
+             aria-labelledby="headingFuncionales" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+            <p>
+              Una <strong>interfaz funcional</strong> tiene <strong>un único método abstracto</strong>.
+              Se suele marcar con <code>@FunctionalInterface</code>.
+            </p>
+
+<pre class="mb-2"><code>@FunctionalInterface
+public interface Operacion {
+  int aplicar(int a, int b);
+}</code></pre>
+
+            <p>
+              Esto permite usar <strong>lambdas</strong>:
+            </p>
+
+<pre class="mb-2"><code>Operacion suma = (a, b) -> a + b;
+System.out.println(suma.aplicar(2, 3)); // 5</code></pre>
+
+            <div class="alert alert-info d-flex align-items-start" role="alert">
+              <i class="bi bi-info-circle-fill me-2"></i>
+              <div>
+                En la librería estándar hay muchas interfaces funcionales en
+                <code>java.util.function</code> (por ejemplo <code>Predicate</code>, <code>Function</code>, <code>Consumer</code>).
+              </div>
+            </div>
+
+            <p class="mb-0">
+              Referencias oficiales:
+              <a class="link-primary" target="_blank"
+                 href="https://docs.oracle.com/javase/8/docs/api/java/lang/FunctionalInterface.html">
+                <i class="bi bi-link-45deg"></i> @FunctionalInterface
+              </a>
+              ·
+              <a class="link-primary" target="_blank"
+                 href="https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">
+                <i class="bi bi-link-45deg"></i> java.util.function
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Comparable -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingComparable">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseComparable"
+                  aria-expanded="false"
+                  aria-controls="collapseComparable">
+            <i class="bi bi-sort-alpha-down me-2"></i> 6. Orden natural: Comparable
+          </button>
+        </h2>
+        <div id="collapseComparable" class="accordion-collapse collapse"
+             aria-labelledby="headingComparable" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+            <p>
+              <code>Comparable&lt;T&gt;</code> define el <strong>orden natural</strong> de una clase,
+              mediante el método <code>compareTo(T o)</code>.
+            </p>
+
+            <div class="alert alert-warning d-flex align-items-start" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              <div>
+                Usa <strong>genéricos</strong>: <code>Comparable&lt;Persona&gt;</code> (evita casts y errores).
+              </div>
+            </div>
+
+<pre class="mb-2"><code>public class Persona implements Comparable&lt;Persona&gt; {
+  private int edad;
+
+  @Override
+  public int compareTo(Persona otra) {
+    return this.edad - otra.edad; // orden por edad
+  }
+}</code></pre>
+
+            <p>Convención del resultado:</p>
+            <ul>
+              <li>negativo → <code>this</code> va antes</li>
+              <li>positivo → <code>this</code> va después</li>
+              <li>cero → equivalentes</li>
+            </ul>
+
+            <p>
+              Se usa en ordenaciones como:
+              <code>Arrays.sort()</code> y <code>Collections.sort()</code>.
+            </p>
+
+            <p class="mb-0">
+              Referencia oficial:
+              <a class="link-primary" target="_blank"
+                 href="https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html">
+                <i class="bi bi-link-45deg"></i> Comparable (Java SE 8)
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Comparator -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingComparator">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseComparator"
+                  aria-expanded="false"
+                  aria-controls="collapseComparator">
+            <i class="bi bi-shuffle me-2"></i> 7. Órdenes alternativos: Comparator
+          </button>
+        </h2>
+        <div id="collapseComparator" class="accordion-collapse collapse"
+             aria-labelledby="headingComparator" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+            <p>
+              <code>Comparator&lt;T&gt;</code> permite definir <strong>órdenes alternativos</strong>
+              sin modificar la clase.
+            </p>
+
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <div class="card shadow-sm h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-code-slash me-1"></i> Comparator con lambda
+                    </h5>
+<pre class="mb-0"><code>Comparator&lt;Persona&gt; porNombre =
+  (p1, p2) -> p1.getNombre()
+                .compareTo(p2.getNombre());</code></pre>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="card shadow-sm h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <i class="bi bi-magic me-1"></i> Comparator.comparing (Java 8+)
+                    </h5>
+<pre class="mb-0"><code>Comparator&lt;Persona&gt; porEdad =
+  Comparator.comparing(Persona::getEdad);
+
+Comparator&lt;Persona&gt; porEdadDesc =
+  Comparator.comparing(Persona::getEdad)
+            .reversed();</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="mt-3">
+              Para ordenar:
+            </p>
+<pre class="mb-2"><code>Arrays.sort(personas, porNombre);
+Collections.sort(lista, porEdadDesc);</code></pre>
+
+            <p class="mb-0">
+              Referencia oficial:
+              <a class="link-primary" target="_blank"
+                 href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html">
+                <i class="bi bi-link-45deg"></i> Comparator (Java SE 8)
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Ideas clave + checklist -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingClaves">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseClaves"
+                  aria-expanded="false"
+                  aria-controls="collapseClaves">
+            <i class="bi bi-mortarboard me-2"></i> 8. Ideas clave + checklist de examen
+          </button>
+        </h2>
+        <div id="collapseClaves" class="accordion-collapse collapse"
+             aria-labelledby="headingClaves" data-bs-parent="#accordionTema9">
+          <div class="accordion-body">
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <div class="card shadow-sm">
+                  <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-check2-circle me-1"></i> Ideas clave</h5>
+                    <ul class="mb-0">
+                      <li>Una interfaz define un <strong>contrato</strong>.</li>
+                      <li>No se instancia; se <strong>implementa</strong>.</li>
+                      <li>Una clase puede implementar <strong>múltiples</strong> interfaces.</li>
+                      <li><code>default</code> y <code>static</code> existen desde Java 8.</li>
+                      <li><code>Comparable</code> → orden natural.</li>
+                      <li><code>Comparator</code> → orden alternativo.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-lg-6">
+                <div class="card shadow-sm">
+                  <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-list-check me-1"></i> Checklist rápido</h5>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="c1">
+                      <label class="form-check-label" for="c1">
+                        Sé explicar por qué <code>implements</code> no es herencia de clase.
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="c2">
+                      <label class="form-check-label" for="c2">
+                        Distingo <code>compareTo</code> (natural) y <code>compare</code> (alternativo).
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="c3">
+                      <label class="form-check-label" for="c3">
+                        Sé qué aporta <code>default</code> (compatibilidad de API).
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="c4">
+                      <label class="form-check-label" for="c4">
+                        Sé crear un <code>Comparator</code> con <code>Comparator.comparing</code>.
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="c5">
+                      <label class="form-check-label" for="c5">
+                        Sé qué es una interfaz funcional y poner una lambda.
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-secondary d-flex align-items-start mt-3" role="alert">
+              <i class="bi bi-pen-fill me-2"></i>
+              <div>
+                <strong>Mini-pregunta típica:</strong>
+                ¿Por qué se recomienda <code>StringBuilder</code> para concatenaciones y, en cambio,
+                para ordenar colecciones se usan <code>Comparable</code>/<code>Comparator</code>?
+                <br>
+                (Pista: rendimiento vs. contrato de ordenación).
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-4 text-center text-muted small">
+      <p class="mb-1">
+        Basado en Java SE 8+ · Referencias:
+        <a target="_blank" href="https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html">
+          Crear interfaces
+        </a>
+        ·
+        <a target="_blank" href="https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html">
+          Default methods
+        </a>
+        ·
+        <a target="_blank" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html">
+          Comparable
+        </a>
+        ·
+        <a target="_blank" href="https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html">
+          Comparator
+        </a>
+        ·
+        <a target="_blank" href="https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html">
+          java.util.function
+        </a>
+      </p>
+      <p class="mb-0">
+        <i class="bi bi-mortarboard"></i> Material didáctico: Interfaces en Java
+      </p>
+    </footer>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
