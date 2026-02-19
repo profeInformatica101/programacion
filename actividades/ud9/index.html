@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programación (Java) – Boletín: Interfaces (POO)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.55;
+      margin: 0;
+      padding: 24px;
+      background: #f7f9fc;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+      color: #283593;
+    }
+    p.meta {
+      margin: 0;
+      color: #333;
+    }
+    details {
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #fff;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      list-style: none;
+      font-size: 1.05em;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: "▶ ";
+      font-size: 0.9em;
+      color: #283593;
+    }
+    details[open] summary::before { content: "▼ "; }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    pre {
+      background: #f6f8fa;
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+      border: 1px solid #e2e6ee;
+    }
+    ul { margin-top: 8px; }
+    .tag {
+      display: inline-block;
+      font-size: 0.85em;
+      border: 1px solid #d0d7de;
+      background: #f6f8fa;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-left: 8px;
+      color: #222;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Boletín de Ejercicios – Interfaces (POO) en Java</h1>
+      <p class="meta">
+        Objetivo: practicar <strong>interfaces</strong>, <strong>polimorfismo</strong>, <strong>default/static methods</strong>,
+        <strong>comparadores</strong> y <strong>composición</strong>.  
+        Recomendación: crea un paquete por actividad o un proyecto con subpaquetes.
+      </p>
+    </header>
+
+    <details>
+      <summary>Actividad 1 ✅ “Imprimible” (calentamiento) <span class="tag">interfaces básicas</span></summary>
+      <p>Crea una interfaz <code>Imprimible</code> con un método:</p>
+      <pre><code>String imprimir();</code></pre>
+      <p>Implementa <code>Imprimible</code> en dos clases:</p>
+      <ul>
+        <li><code>Factura</code> (id, cliente, importe)</li>
+        <li><code>Informe</code> (titulo, autor, paginas)</li>
+      </ul>
+      <p>Crea un <code>main</code> que guarde objetos en un <code>List&lt;Imprimible&gt;</code> e imprima <code>imprimir()</code> de todos.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 2 🎮 “Daño” en un mini-juego <span class="tag">polimorfismo</span></summary>
+      <p>Define una interfaz <code>Danable</code>:</p>
+      <pre><code>void recibirDanio(int puntos);</code></pre>
+      <p>Crea dos clases:</p>
+      <ul>
+        <li><code>Jugador</code> (vida, nombre)</li>
+        <li><code>Enemigo</code> (vida, tipo)</li>
+      </ul>
+      <p>Haz que ambas implementen la interfaz y que reduzcan su vida. En <code>main</code>, guarda varios <code>Danable</code> y aplica daño en bucle.</p>
+      <p>Extra: si la vida llega a 0, muestra un mensaje tipo “KO”.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 3 🔌 “Conectable” (simulación de dispositivos) <span class="tag">estado</span></summary>
+      <p>Interfaz <code>Conectable</code>:</p>
+      <pre><code>void conectar();
+void desconectar();
+boolean estaConectado();</code></pre>
+      <p>Implementa en <code>Wifi</code>, <code>Bluetooth</code> y <code>Cable</code> con un atributo de estado. Prueba en <code>main</code> una lista de <code>Conectable</code> conectando/desconectando y mostrando estado.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 4 💳 Pagos (estrategia) <span class="tag">Strategy</span></summary>
+      <p>Interfaz <code>MetodoPago</code>:</p>
+      <pre><code>boolean pagar(double importe);</code></pre>
+      <p>Implementa:</p>
+      <ul>
+        <li><code>Tarjeta</code> (saldo disponible, limite)</li>
+        <li><code>Bizum</code> (saldo, telefono)</li>
+        <li><code>Efectivo</code> (dinero en cartera)</li>
+      </ul>
+      <p>Crea una clase <code>Caja</code> con un método <code>cobrar(MetodoPago mp, double importe)</code> que delegue el pago y registre el resultado.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 5 🧾 “Descuentable” con métodos <code>default</code> <span class="tag">default methods</span></summary>
+      <p>Interfaz <code>Descuentable</code>:</p>
+      <pre><code>double precioBase();
+default double precioFinal(double porcentaje) {
+  return precioBase() * (1 - porcentaje / 100.0);
+}</code></pre>
+      <p>Crea <code>Producto</code> (nombre, precio) y <code>Servicio</code> (descripcion, tarifa) implementando <code>precioBase()</code>.</p>
+      <p>En <code>main</code>, muestra precios con y sin descuento usando polimorfismo (<code>List&lt;Descuentable&gt;</code>).</p>
+    </details>
+
+    <details>
+      <summary>Actividad 6 📦 Comparación de productos <span class="tag">Comparable</span></summary>
+      <p>Crea una clase <code>Producto</code> (codigo, nombre, precio). Implementa <code>Comparable&lt;Producto&gt;</code> para ordenar por <strong>precio ascendente</strong>.</p>
+      <p>En <code>main</code> crea una lista de productos, ordénala con <code>Collections.sort</code> y muéstrala.</p>
+      <p>Extra: si el precio empata, desempata por <code>nombre</code>.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 7 🏁 Ordenación con <code>Comparator</code> <span class="tag">Comparator</span></summary>
+      <p>Con la misma clase <code>Producto</code>, crea dos <code>Comparator</code>:</p>
+      <ul>
+        <li>Orden por <strong>nombre</strong> (A-Z)</li>
+        <li>Orden por <strong>precio descendente</strong></li>
+      </ul>
+      <p>Aplica ambos usando <code>list.sort(...)</code> y muestra el resultado.</p>
+      <p>Extra: permite elegir orden con un menú por consola (1/2/3).</p>
+    </details>
+
+    <details>
+      <summary>Actividad 8 🧠 “Validable” (reglas de negocio) <span class="tag">interfaces + excepciones</span></summary>
+      <p>Interfaz <code>Validable</code>:</p>
+      <pre><code>void validar() throws IllegalArgumentException;</code></pre>
+      <p>Crea:</p>
+      <ul>
+        <li><code>Usuario</code> (email, password)</li>
+        <li><code>Reserva</code> (fecha, numPersonas)</li>
+      </ul>
+      <p>Implementa <code>validar()</code> con reglas (ej.: email contiene “@”; password mínimo 8; numPersonas &gt; 0). En <code>main</code> valida una lista de <code>Validable</code> capturando excepciones y mostrando mensajes claros.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 9 🎵 “Reproducible” (interfaces y composición) <span class="tag">composición</span></summary>
+      <p>Interfaz <code>Reproducible</code>:</p>
+      <pre><code>void play();
+void pause();
+void stop();</code></pre>
+      <p>Crea clases <code>Cancion</code> y <code>Podcast</code> que implementen la interfaz. Crea una clase <code>Reproductor</code> que reciba un <code>Reproducible</code> y lo controle (play/pause/stop). Cambia de pista varias veces en <code>main</code>.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 10 🧩 Interfaces múltiples (roles) <span class="tag">multi-implements</span></summary>
+      <p>Define:</p>
+      <ul>
+        <li><code>interface Trabajador { void trabajar(); }</code></li>
+        <li><code>interface Estudiante { void estudiar(); }</code></li>
+      </ul>
+      <p>Crea clases:</p>
+      <ul>
+        <li><code>Persona</code> (nombre) – clase base</li>
+        <li><code>Becario</code> que extienda <code>Persona</code> e implemente <code>Trabajador</code> y <code>Estudiante</code></li>
+      </ul>
+      <p>En <code>main</code>, trata el objeto como <code>Trabajador</code> y como <code>Estudiante</code> (referencias distintas) y llama a los métodos.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 11 🗂️ Repositorio genérico (contrato) <span class="tag">genéricos</span></summary>
+      <p>Interfaz genérica <code>Repositorio&lt;T&gt;</code>:</p>
+      <pre><code>void add(T item);
+boolean remove(T item);
+T findById(String id);
+int size();</code></pre>
+      <p>Implementa <code>RepositorioMemoria&lt;T&gt;</code> usando una colección. Para poder hacer <code>findById</code>, define una interfaz:</p>
+      <pre><code>interface Identificable { String getId(); }</code></pre>
+      <p>y restringe el genérico: <code>RepositorioMemoria&lt;T extends Identificable&gt;</code>. Prueba con una clase <code>Alumno</code> o <code>Producto</code>.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 12 🧪 “Loggeable” con método <code>static</code> <span class="tag">static methods</span></summary>
+      <p>Crea interfaz <code>Loggeable</code> con:</p>
+      <pre><code>void log(String msg);
+
+static String now() {
+  return java.time.LocalDateTime.now().toString();
+}</code></pre>
+      <p>Implementa <code>log</code> en <code>ConsolaLogger</code> (imprime por consola con fecha). En <code>main</code>, registra eventos de varias clases usando <code>Loggeable</code>.</p>
+      <p>Extra: añade niveles <code>INFO/WARN/ERROR</code> (como texto) y formatea el mensaje.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 13 🧱 “ClonableSeguro” (copia sin liarla) <span class="tag">diseño</span></summary>
+      <p>Diseña una interfaz <code>Copiable&lt;T&gt;</code>:</p>
+      <pre><code>T copia();</code></pre>
+      <p>Crea una clase <code>Documento</code> (titulo, contenido, etiquetas: <code>List&lt;String&gt;</code>) que implemente <code>Copiable&lt;Documento&gt;</code>. La copia debe ser “profunda” para la lista de etiquetas.</p>
+      <p>En <code>main</code>, crea un documento, cópialo, modifica etiquetas en el original y comprueba que la copia no cambia.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 14 🧠 Proyecto mini: “Motor de reglas” <span class="tag">nivel pro</span></summary>
+      <p>Crea una interfaz <code>Regla&lt;T&gt;</code>:</p>
+      <pre><code>boolean cumple(T obj);
+String mensajeError();</code></pre>
+      <p>Crea una clase <code>Validador&lt;T&gt;</code> que contenga una lista de reglas y tenga:</p>
+      <pre><code>List&lt;String&gt; validar(T obj);</code></pre>
+      <p>Implementa varias reglas para <code>Usuario</code> (email válido, password fuerte, edad mínima, etc.). Si falla, devuelve lista de errores.</p>
+      <p>Extra: usa expresiones lambda para crear reglas rápidamente (si te apetece).</p>
+    </details>
+
+  </main>
+</body>
+</html>
