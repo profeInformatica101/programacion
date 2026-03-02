@@ -161,29 +161,73 @@ default double precioFinal(double porcentaje) {
       <p>En <code>main</code>, muestra precios con y sin descuento usando polimorfismo con <code>Descuentable[]</code>.</p>
     </details>
 
+
     <details>
-      <summary>Actividad 6 📦 Ordenación de productos (sin colecciones) <span class="tag">ordenación manual</span></summary>
-      <p>Crea una clase <code>Producto</code> (codigo, nombre, precio).</p>
-      <p>En <code>main</code> crea un array de productos (<code>Producto[]</code>), ordénalo por <strong>precio ascendente</strong> usando bucles (burbuja o selección) y muéstralo.</p>
-      <p>Extra: si el precio empata, desempata por <code>nombre</code>.</p>
-      <pre><code>// Idea (burbuja):
+  <summary>Actividad 6 📦 Ordenación de productos (con interfaz) <span class="tag">interfaces + ordenación manual</span></summary>
+
+  <p><strong>1) Crea la interfaz</strong> <code>Valorable</code>:</p>
+  <pre><code>double getPrecio();
+String getNombre();</code></pre>
+
+  <p><strong>2) Crea la clase</strong> <code>Producto</code> con atributos <code>codigo</code>, <code>nombre</code> y <code>precio</code>.</p>
+
+  <p><strong>3) Obligatorio:</strong> la clase <code>Producto</code> debe <strong>implementar la interfaz</strong> <code>Valorable</code>
+  (es decir, debe implementar los métodos <code>getPrecio()</code> y <code>getNombre()</code>).</p>
+
+  <p><strong>4) En main:</strong> crea un array de productos (<code>Producto[]</code>), trátalo como <code>Valorable[]</code>
+  y ordénalo por:</p>
+  <ul>
+    <li><strong>precio ascendente</strong></li>
+    <li><strong>extra:</strong> si el precio empata, desempata por <code>nombre</code> (A–Z)</li>
+  </ul>
+
+  <p>La ordenación debe hacerse <strong>con bucles</strong> (burbuja o selección) y <strong>sin colecciones</strong>.</p>
+
+  <pre><code>// Idea (burbuja):
 for (int i = 0; i &lt; productos.length - 1; i++) {
   for (int j = 0; j &lt; productos.length - 1 - i; j++) {
     // si productos[j] debe ir después de productos[j+1], intercambiar
   }
 }</code></pre>
-    </details>
 
-    <details>
-      <summary>Actividad 7 🏁 Ordenación alternativa (sin Comparator) <span class="tag">métodos de ordenación</span></summary>
-      <p>Con la misma clase <code>Producto</code>, crea dos métodos estáticos de ordenación:</p>
-      <ul>
-        <li><code>ordenarPorNombreAZ(Producto[] arr)</code></li>
-        <li><code>ordenarPorPrecioDesc(Producto[] arr)</code></li>
-      </ul>
-      <p>Aplica ambos y muestra el resultado.</p>
-      <p>Extra: permite elegir orden con un menú por consola (1/2/3).</p>
-    </details>
+  <p><strong>Extra (opcional):</strong> crea un método estático que reciba un <code>Valorable[]</code>:</p>
+  <pre><code>static void ordenarPorPrecioAscYNombre(Valorable[] arr) { ... }</code></pre>
+</details>
+
+<details>
+  <summary>Actividad 7 🏁 Ordenación alternativa (con interfaz) <span class="tag">polimorfismo + arrays</span></summary>
+
+  <p><strong>Interfaz a usar:</strong> reutiliza la interfaz <code>Valorable</code> de la actividad 6.</p>
+
+  <p><strong>Obligatorio:</strong> vuelve a usar un array de <code>Producto</code>, pero trabajando mediante el tipo <code>Valorable[]</code>
+  (polimorfismo).</p>
+
+  <p>Crea dos métodos estáticos de ordenación que reciban un <code>Valorable[]</code>:</p>
+  <ul>
+    <li><code>ordenarPorNombreAZ(Valorable[] arr)</code> (A–Z)</li>
+    <li><code>ordenarPorPrecioDesc(Valorable[] arr)</code> (mayor → menor)</li>
+  </ul>
+
+  <p>En <code>main</code>:</p>
+  <ul>
+    <li>Muestra el array original</li>
+    <li>Ordena por nombre A–Z y muestra</li>
+    <li>Ordena por precio descendente y muestra</li>
+  </ul>
+
+  <p><strong>Extra:</strong> permite elegir el orden desde un menú por consola (1/2/3):</p>
+  <ul>
+    <li>1: Nombre A–Z</li>
+    <li>2: Precio DESC</li>
+    <li>3: Ambos (mostrar ambos resultados)</li>
+  </ul>
+
+  <div class="note">
+    <strong>Regla:</strong> sigue sin permitirse <code>Comparator</code> ni <code>Collections</code>.
+    La comparación se hace “a mano” usando <code>getPrecio()</code> y <code>getNombre()</code> definidos en <code>Valorable</code>.
+  </div>
+</details>
+
 
     <details>
       <summary>Actividad 8 🧠 “Validable” (reglas de negocio) <span class="tag">interfaces + excepciones + arrays</span></summary>
