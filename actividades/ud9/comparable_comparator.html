@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Práctica Java — Comparable & Comparator (DAW/DAM)</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Icons (opcional) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #f6f8fc;
+      --text: #101828;
+      --muted: #475467;
+
+      --card: #ffffff;
+      --border: #d0d5dd;
+
+      --code-bg: #0b1220;
+      --code-text: #e8eefc;
+
+      --primary-soft: rgba(13,110,253,.10);
+      --success-soft: rgba(25,135,84,.12);
+      --warn-soft: rgba(255,193,7,.18);
+      --danger-soft: rgba(220,53,69,.12);
+    }
+
+    body{
+      background:
+        radial-gradient(1000px 600px at 15% 0%, rgba(13,110,253,.12), transparent 60%),
+        radial-gradient(900px 500px at 85% 0%, rgba(25,135,84,.10), transparent 55%),
+        var(--bg);
+      color: var(--text);
+    }
+
+    .soft-card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 28px rgba(16,24,40,.08);
+    }
+
+    .badge-soft{
+      background: #f2f4f7;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .muted{ color: var(--muted) !important; }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; }
+
+    pre{
+      background: var(--code-bg);
+      color: var(--code-text);
+      border: 1px solid rgba(16,24,40,.25);
+      border-radius: 12px;
+      padding: 14px;
+      overflow: auto;
+      margin: 0;
+    }
+    pre code{ color: var(--code-text); }
+
+    .callout{
+      border-left: 5px solid #0d6efd;
+      background: var(--primary-soft);
+      padding: 12px 14px;
+      border-radius: 12px;
+    }
+    .callout.success{ border-left-color:#198754; background: var(--success-soft); }
+    .callout.warn{ border-left-color:#ffc107; background: var(--warn-soft); }
+    .callout.danger{ border-left-color:#dc3545; background: var(--danger-soft); }
+
+    .btn-ghost{
+      border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
+    }
+    .btn-ghost:hover{ background:#f2f4f7; color: var(--text); }
+
+    .table-darkish{
+      --bs-table-bg: #ffffff;
+      --bs-table-striped-bg: #f2f4f7;
+      --bs-table-color: var(--text);
+      border-color: var(--border);
+    }
+    table thead th{
+      background: #f2f4f7 !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+    table td{ border-color: var(--border) !important; }
+
+    .accordion-button{
+      color: var(--text) !important;
+      background: #ffffff !important;
+    }
+    .accordion-button:not(.collapsed){
+      background: #f2f4f7 !important;
+      color: var(--text) !important;
+      box-shadow: none;
+    }
+    .accordion-item{
+      border-color: var(--border) !important;
+      border-radius: 12px !important;
+    }
+
+    .form-select, .form-control, .input-group-text{
+      background: #ffffff !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+    .form-select:focus, .form-control:focus{
+      box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
+      border-color: rgba(13,110,253,.45);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="container py-4">
+    <div class="soft-card p-4">
+      <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3">
+        <div>
+          <h1 class="h3 mb-2">Práctica basada en problemas: <span class="text-primary">Comparable</span> y <span class="text-success">Comparator</span> (Java)</h1>
+          <p class="mb-0 muted">
+            Módulo: <strong>Programación</strong> · Nivel: <strong>DAW/DAM</strong> · Enfoque: <strong>POO + ordenación + criterios múltiples</strong>.
+          </p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge badge-soft"><i class="bi bi-braces"></i> Java</span>
+          <span class="badge badge-soft"><i class="bi bi-shuffle"></i> Sorting</span>
+          <span class="badge badge-soft"><i class="bi bi-diagram-3"></i> Diseño limpio</span>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="row g-3">
+        <div class="col-lg-8">
+          <div class="callout">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="bi bi-bullseye"></i>
+              <strong>Objetivo didáctico</strong>
+            </div>
+            <div class="muted">
+              Implementar ordenaciones reales en un dominio concreto, entendiendo cuándo usar
+              <span class="mono">Comparable</span> (orden natural) y cuándo usar
+              <span class="mono">Comparator</span> (criterios alternativos), con desempates y datos nulos.
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="callout success">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="bi bi-box-arrow-in-down"></i>
+              <strong>Entrega</strong>
+            </div>
+            <div class="muted">
+              Repositorio con <span class="mono">/src</span> + <span class="mono">README.md</span> + <span class="mono">/test</span> (JUnit).
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container pb-5">
+    <div class="row g-4">
+      <!-- Izquierda -->
+      <div class="col-lg-8">
+        <div class="soft-card p-4 mb-4">
+          <h2 class="h5 mb-2"><i class="bi bi-flag"></i> Situación-problema</h2>
+          <p class="muted mb-3">
+            Un marketplace educativo vende <strong>Productos</strong>.
+            Debes implementar una ordenación por defecto (orden natural) y varias ordenaciones alternativas (comparators),
+            trabajando con <strong>tablas (arrays)</strong>.
+          </p>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="callout warn h-100">
+                <strong>Qué se pide</strong>
+                <div class="muted mt-1">
+                  <ul class="mt-2 mb-0">
+                    <li><strong>Comparable</strong>: un orden natural único.</li>
+                    <li><strong>Comparator</strong>: mínimo 4 criterios alternativos.</li>
+                    <li><strong>Catálogo</strong>: operaciones con <strong>tablas</strong>.</li>
+                    <li><strong>Pruebas</strong>: varios tests unitarios.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="callout danger h-100">
+                <strong>Casos borde</strong>
+                <div class="muted mt-1">
+                  <ul class="mt-2 mb-0">
+                    <li>Empates (mismo precio / rating / ventas).</li>
+                    <li><span class="mono">categoria</span> puede ser <span class="mono">null</span>.</li>
+                    <li>Desempates estables (sku).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="accordion" id="accReq">
+
+            <!-- Producto -->
+            <div class="accordion-item mb-2 overflow-hidden">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#req1">
+                  1) Clase Producto (Comparable)
+                </button>
+              </h2>
+              <div id="req1" class="accordion-collapse collapse" data-bs-parent="#accReq">
+                <div class="accordion-body">
+                  <div class="callout">
+                    <strong>Orden natural (Comparable)</strong>
+                    <div class="muted mt-1">
+                      <ul class="mt-2 mb-0">
+                        <li><strong>ventas desc</strong></li>
+                        <li>si empatan: <strong>rating desc</strong></li>
+                        <li>si empatan: <strong>nombre asc</strong> (ignoreCase)</li>
+                        <li>si empatan: <strong>sku asc</strong></li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="mt-3">
+                    <button class="btn btn-ghost btn-sm" data-copy="#snippetComparable">
+                      <i class="bi bi-clipboard"></i> Copiar plantilla Comparable
+                    </button>
+                    <div class="mt-2">
+                      <pre id="snippetComparable"><code>public class Producto implements Comparable&lt;Producto&gt; {
+
+  @Override
+  public int compareTo(Producto other) {
+    int c = Integer.compare(other.getVentas(), this.getVentas());
+    if (c != 0) return c;
+
+    c = Double.compare(other.getRating(), this.getRating());
+    if (c != 0) return c;
+
+    c = this.getNombre().compareToIgnoreCase(other.getNombre());
+    if (c != 0) return c;
+
+    return this.getSku().compareToIgnoreCase(other.getSku());
+  }
+}</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparators -->
+            <div class="accordion-item mb-2 overflow-hidden">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#req2">
+                  2) Comparadores (Comparator)
+                </button>
+              </h2>
+              <div id="req2" class="accordion-collapse collapse" data-bs-parent="#accReq">
+                <div class="accordion-body">
+                  <ul class="mb-3">
+                    <li>Precio asc (empate: nombre asc)</li>
+                    <li>Precio desc (empate: nombre asc)</li>
+                    <li>Stock asc (empate: ventas desc)</li>
+                    <li>Categoría asc (nulls last) y dentro: rating desc</li>
+                  </ul>
+
+                  <div class="mt-3">
+                    <button class="btn btn-ghost btn-sm" data-copy="#snippetComparator">
+                      <i class="bi bi-clipboard"></i> Copiar plantilla Comparator
+                    </button>
+                    <div class="mt-2">
+<pre id="snippetComparator"><code>import java.util.Comparator;
+
+public final class ComparadoresProducto {
+
+  private ComparadoresProducto() {}
+
+  public static final Comparator&lt;Producto&gt; POR_PRECIO_ASC =
+      Comparator.comparingDouble(Producto::getPrecio)
+                .thenComparing(p -&gt; p.getNombre().toLowerCase());
+
+  public static final Comparator&lt;Producto&gt; POR_PRECIO_DESC =
+      POR_PRECIO_ASC.reversed();
+
+  public static final Comparator&lt;Producto&gt; POR_STOCK_ASC =
+      Comparator.comparingInt(Producto::getStock)
+                .thenComparing(Comparator.comparingInt(Producto::getVentas).reversed());
+
+  public static final Comparator&lt;Producto&gt; POR_CATEGORIA_Y_RATING =
+      Comparator.comparing(Producto::getCategoria,
+                  Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER))
+                .thenComparing(Comparator.comparingDouble(Producto::getRating).reversed());
+}</code></pre>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Catálogo arrays -->
+            <div class="accordion-item overflow-hidden">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#req3">
+                  3) Catálogo con tablas (arrays)
+                </button>
+              </h2>
+              <div id="req3" class="accordion-collapse collapse" data-bs-parent="#accReq">
+                <div class="accordion-body">
+                  <div class="callout warn mb-3">
+                    <strong>Importante</strong>
+                    <div class="muted mt-1">
+                      El catálogo se guarda en <span class="mono">Producto[]</span>. Para ordenar, trabaja sobre una <strong>copia</strong>.
+                      La ordenación será <strong>manual</strong> (burbuja), usando <span class="mono">compareTo</span> o <span class="mono">Comparator</span>.
+                    </div>
+                  </div>
+
+                  <div class="mt-3">
+                    <button class="btn btn-ghost btn-sm" data-copy="#snippetCatalogoArray">
+                      <i class="bi bi-clipboard"></i> Copiar esqueleto Catálogo (arrays)
+                    </button>
+                    <div class="mt-2">
+<pre id="snippetCatalogoArray"><code>import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Objects;
+
+public class CatalogoArray {
+
+  private final Producto[] productos;
+
+  public CatalogoArray(Producto[] productos) {
+    this.productos = Arrays.copyOf(productos, productos.length);
+  }
+
+  public Producto[] copiar() {
+    return Arrays.copyOf(productos, productos.length);
+  }
+
+  public void ordenarOrdenNatural(Producto[] t) {
+    for (int i = 0; i &lt; t.length - 1; i++) {
+      for (int j = 0; j &lt; t.length - 1 - i; j++) {
+        if (t[j].compareTo(t[j + 1]) &gt; 0) {
+          Producto tmp = t[j];
+          t[j] = t[j + 1];
+          t[j + 1] = tmp;
+        }
+      }
+    }
+  }
+
+  public void ordenar(Producto[] t, Comparator&lt;Producto&gt; c) {
+    for (int i = 0; i &lt; t.length - 1; i++) {
+      for (int j = 0; j &lt; t.length - 1 - i; j++) {
+        if (c.compare(t[j], t[j + 1]) &gt; 0) {
+          Producto tmp = t[j];
+          t[j] = t[j + 1];
+          t[j + 1] = tmp;
+        }
+      }
+    }
+  }
+
+  public Producto[] filtrarPorCategoria(String cat) {
+    int count = 0;
+    for (Producto p : productos) {
+      if (Objects.equals(p.getCategoria(), cat)) count++;
+    }
+
+    Producto[] out = new Producto[count];
+    int k = 0;
+    for (Producto p : productos) {
+      if (Objects.equals(p.getCategoria(), cat)) {
+        out[k++] = p;
+      }
+    }
+    return out;
+  }
+
+  public Producto[] topN(int n, Comparator&lt;Producto&gt; c) {
+    Producto[] copia = copiar();
+    ordenar(copia, c);
+    int m = Math.min(n, copia.length);
+    return Arrays.copyOf(copia, m);
+  }
+}</code></pre>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Dataset + Playground -->
+        <div class="soft-card p-4">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <h2 class="h5 mb-0"><i class="bi bi-table"></i> Dataset para pruebas (simulador)</h2>
+            <div class="d-flex flex-wrap gap-2">
+              <button id="btnReset" class="btn btn-ghost btn-sm"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
+              <button id="btnShuffle" class="btn btn-ghost btn-sm"><i class="bi bi-shuffle"></i> Mezclar</button>
+              <button id="btnExport" class="btn btn-ghost btn-sm"><i class="bi bi-download"></i> Export CSV</button>
+            </div>
+          </div>
+
+          <p class="muted mt-2 mb-3">
+            Esto no ejecuta Java. Sirve para verificar visualmente el criterio de comparación.
+          </p>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label muted mb-1">Ordenación</label>
+              <select id="sortMode" class="form-select">
+                <option value="natural">Orden natural (Comparable): ventas desc → rating desc → nombre asc → sku asc</option>
+                <option value="precioAsc">Comparator: precio asc → nombre asc</option>
+                <option value="precioDesc">Comparator: precio desc → nombre asc</option>
+                <option value="stockAsc">Comparator: stock asc → ventas desc</option>
+                <option value="categoriaRating">Comparator: categoria asc (nulls last) → rating desc</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label muted mb-1">Filtro categoría (opcional)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-funnel"></i></span>
+                <input id="catFilter" class="form-control" placeholder="Ej: Libros / Hardware / Licencias">
+                <button id="btnApply" class="btn btn-ghost">Aplicar</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-striped table-darkish align-middle mb-0" id="dataTable">
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Nombre</th>
+                  <th>Categoría</th>
+                  <th class="text-end">Precio</th>
+                  <th class="text-end">Rating</th>
+                  <th class="text-end">Stock</th>
+                  <th class="text-end">Ventas</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <hr class="my-4">
+
+          <div class="callout success">
+            <strong>Mini-reto</strong>
+            <div class="muted mt-1">
+              Filtra <span class="mono">Libros</span> y ordena por <strong>precio desc</strong>.
+              Anota el primero y verifica que tu Java devuelve lo mismo.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Derecha: Pruebas unitarias -->
+      <div class="col-lg-4">
+        <div class="soft-card p-4">
+          <h2 class="h6 mb-2"><i class="bi bi-check2-square"></i> Pruebas unitarias (ejemplo)</h2>
+          <p class="muted mb-3">
+            Copia este archivo como <span class="mono">src/test/java/.../CatalogoArrayTest.java</span>.
+            Está pensado para JUnit 5.
+          </p>
+
+          <button class="btn btn-ghost btn-sm mb-2" data-copy="#snippetJUnitFull">
+            <i class="bi bi-clipboard"></i> Copiar tests completos
+          </button>
+
+<pre id="snippetJUnitFull"><code>import org.junit.jupiter.api.Test;
+
+import java.util.Comparator;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CatalogoArrayTest {
+
+  private static Producto p(String sku, String nombre, String cat,
+                            double precio, double rating, int stock, int ventas) {
+    return new Producto(sku, nombre, cat, precio, rating, stock, ventas);
+  }
+
+  private CatalogoArray catalogoBase() {
+    Producto[] base = new Producto[] {
+        p("LIB-001","Clean Code","Libros",34.95,4.7,3,210),
+        p("LIB-014","Effective Java","Libros",45.50,4.9,8,320),
+        p("HWD-210","Teclado Mecánico","Hardware",59.99,4.3,12,180),
+        p("LIC-777","IDE Pro (1 año)","Licencias",89.00,4.6,50,95),
+        p("HWD-011","Ratón Vertical","Hardware",29.90,4.2,2,140),
+        p("LIB-002","Refactoring","Libros",41.00,4.8,1,210),
+        p("ACC-100","Mochila Portátil",null,24.99,4.1,20,60),
+        p("HWD-099","Monitor 27&quot;","Hardware",159.00,4.5,4,75),
+        p("LIC-120","Antivirus EDU","Licencias",19.99,3.9,100,500),
+        p("LIB-099","Java Concurrency","Libros",39.90,4.4,6,120),
+        p("LIB-050","Algoritmos","Libros",39.90,4.4,6,120),
+        p("HWD-500","SSD 1TB","Hardware",89.00,4.6,0,95)
+    };
+    return new CatalogoArray(base);
+  }
+
+  @Test
+  void ordenarOrdenNatural_debePonerPrimero_elDeMasVentas() {
+    CatalogoArray c = catalogoBase();
+    Producto[] t = c.copiar();
+    c.ordenarOrdenNatural(t);
+
+    assertEquals("LIC-120", t[0].getSku(), "El de más ventas (500) debe ir primero");
+  }
+
+  @Test
+  void ordenarOrdenNatural_siEmpatanVentas_debeUsarRatingDesc() {
+    // Ventas empatan a 210: Clean Code (4.7) vs Refactoring (4.8)
+    CatalogoArray c = new CatalogoArray(new Producto[] {
+        p("LIB-001","Clean Code","Libros",34.95,4.7,3,210),
+        p("LIB-002","Refactoring","Libros",41.00,4.8,1,210)
+    });
+
+    Producto[] t = c.copiar();
+    c.ordenarOrdenNatural(t);
+
+    assertEquals("LIB-002", t[0].getSku(), "Con mismas ventas, mayor rating primero");
+  }
+
+  @Test
+  void ordenarOrdenNatural_siEmpatanVentasYRating_debeUsarNombreAsc() {
+    // Ventas 120 y rating 4.4: "Algoritmos" debe ir antes que "Java Concurrency"
+    CatalogoArray c = new CatalogoArray(new Producto[] {
+        p("LIB-099","Java Concurrency","Libros",39.90,4.4,6,120),
+        p("LIB-050","Algoritmos","Libros",39.90,4.4,6,120)
+    });
+
+    Producto[] t = c.copiar();
+    c.ordenarOrdenNatural(t);
+
+    assertEquals("LIB-050", t[0].getSku(), "Con empate, nombre A-Z");
+  }
+
+  @Test
+  void ordenarPrecioDesc_enLibros_debeDejarPrimero_EffectiveJava() {
+    CatalogoArray c = catalogoBase();
+    Producto[] libros = c.filtrarPorCategoria("Libros");
+
+    // Comparator equivalente al pedido (precio desc + nombre asc)
+    Comparator&lt;Producto&gt; porPrecioDesc =
+        Comparator.comparingDouble(Producto::getPrecio).reversed()
+                  .thenComparing(p -&gt; p.getNombre().toLowerCase());
+
+    c.ordenar(libros, porPrecioDesc);
+
+    assertEquals("LIB-014", libros[0].getSku(), "En Libros, el más caro debe ser Effective Java");
+  }
+
+  @Test
+  void ordenarCategoria_nullsLast_debeDejarNullAlFinal() {
+    CatalogoArray c = new CatalogoArray(new Producto[] {
+        p("A","A",null,1,1,1,1),
+        p("B","B","Hardware",1,1,1,1),
+        p("C","C","Libros",1,1,1,1)
+    });
+
+    Producto[] t = c.copiar();
+
+    Comparator&lt;Producto&gt; porCategoriaNullsLast =
+        Comparator.comparing(Producto::getCategoria,
+            Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER));
+
+    c.ordenar(t, porCategoriaNullsLast);
+
+    assertNull(t[t.length - 1].getCategoria(), "La categoría null debe quedar al final");
+  }
+
+  @Test
+  void topN_debeDevolverLongitudN_yOrdenado() {
+    CatalogoArray c = catalogoBase();
+
+    Comparator&lt;Producto&gt; porStockAsc =
+        Comparator.comparingInt(Producto::getStock)
+                  .thenComparing(Comparator.comparingInt(Producto::getVentas).reversed());
+
+    Producto[] top3 = c.topN(3, porStockAsc);
+
+    assertEquals(3, top3.length);
+    assertTrue(top3[0].getStock() &lt;= top3[1].getStock());
+    assertTrue(top3[1].getStock() &lt;= top3[2].getStock());
+  }
+}</code></pre>
+
+          <div class="callout warn mt-3">
+            <strong>Nota</strong>
+            <div class="muted mt-1">
+              Para que estos tests compilen, necesitas:
+              <span class="mono">Producto</span> con constructor y getters,
+              <span class="mono">CatalogoArray</span>, y (si lo prefieres) tu clase de comparadores.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="container pb-5">
+    <div class="text-center muted small">
+      Hecho para práctica de aula · Bootstrap + JS · Apto para proyector / impresión.
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const originalData = [
+      { sku:"LIB-001", nombre:"Clean Code",           categoria:"Libros",    precio:34.95, rating:4.7, stock:3,  ventas:210 },
+      { sku:"LIB-014", nombre:"Effective Java",       categoria:"Libros",    precio:45.50, rating:4.9, stock:8,  ventas:320 },
+      { sku:"HWD-210", nombre:"Teclado Mecánico",     categoria:"Hardware",  precio:59.99, rating:4.3, stock:12, ventas:180 },
+      { sku:"LIC-777", nombre:"IDE Pro (1 año)",      categoria:"Licencias", precio:89.00, rating:4.6, stock:50, ventas:95  },
+      { sku:"HWD-011", nombre:"Ratón Vertical",       categoria:"Hardware",  precio:29.90, rating:4.2, stock:2,  ventas:140 },
+      { sku:"LIB-002", nombre:"Refactoring",          categoria:"Libros",    precio:41.00, rating:4.8, stock:1,  ventas:210 },
+      { sku:"ACC-100", nombre:"Mochila Portátil",     categoria:null,        precio:24.99, rating:4.1, stock:20, ventas:60  },
+      { sku:"HWD-099", nombre:"Monitor 27\"",         categoria:"Hardware",  precio:159.00,rating:4.5, stock:4,  ventas:75  },
+      { sku:"LIC-120", nombre:"Antivirus EDU",        categoria:"Licencias", precio:19.99, rating:3.9, stock:100,ventas:500 },
+      { sku:"LIB-099", nombre:"Java Concurrency",     categoria:"Libros",    precio:39.90, rating:4.4, stock:6,  ventas:120 },
+      { sku:"LIB-050", nombre:"Algoritmos",           categoria:"Libros",    precio:39.90, rating:4.4, stock:6,  ventas:120 },
+      { sku:"HWD-500", nombre:"SSD 1TB",              categoria:"Hardware",  precio:89.00, rating:4.6, stock:0,  ventas:95  }
+    ];
+
+    let data = structuredClone(originalData);
+    const $ = (sel) => document.querySelector(sel);
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function renderTable(rows){
+      const tbody = $("#dataTable tbody");
+      tbody.innerHTML = "";
+      for(const r of rows){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="mono">${escapeHtml(r.sku)}</td>
+          <td>${escapeHtml(r.nombre)}</td>
+          <td class="muted">${r.categoria === null ? "<span class='badge badge-soft'>null</span>" : escapeHtml(r.categoria)}</td>
+          <td class="text-end mono">${r.precio.toFixed(2)} €</td>
+          <td class="text-end mono">${r.rating.toFixed(1)}</td>
+          <td class="text-end mono">${r.stock}</td>
+          <td class="text-end mono">${r.ventas}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function cmpNatural(a,b){
+      let c = (b.ventas - a.ventas); if(c !== 0) return c;
+      c = (b.rating - a.rating);     if(c !== 0) return c;
+      c = a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase()); if(c !== 0) return c;
+      return a.sku.toLowerCase().localeCompare(b.sku.toLowerCase());
+    }
+    function cmpPrecioAsc(a,b){
+      let c = a.precio - b.precio; if(c !== 0) return c;
+      return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase());
+    }
+    function cmpPrecioDesc(a,b){
+      let c = b.precio - a.precio; if(c !== 0) return c;
+      return a.nombre.toLowerCase().localeCompare(b.nombre.toLowerCase());
+    }
+    function cmpStockAsc(a,b){
+      let c = a.stock - b.stock; if(c !== 0) return c;
+      return (b.ventas - a.ventas);
+    }
+    function cmpCategoriaRating(a,b){
+      const ca = a.categoria, cb = b.categoria;
+      if(ca === null && cb !== null) return 1;
+      if(ca !== null && cb === null) return -1;
+      if(ca !== null && cb !== null){
+        const c = ca.toLowerCase().localeCompare(cb.toLowerCase());
+        if(c !== 0) return c;
+      }
+      return (b.rating - a.rating);
+    }
+
+    function apply(){
+      const mode = $("#sortMode").value;
+      const cat = $("#catFilter").value.trim();
+
+      let rows = [...data];
+      if(cat.length){
+        rows = rows.filter(r => (r.categoria ?? "") === cat);
+      }
+
+      const map = {
+        natural: cmpNatural,
+        precioAsc: cmpPrecioAsc,
+        precioDesc: cmpPrecioDesc,
+        stockAsc: cmpStockAsc,
+        categoriaRating: cmpCategoriaRating
+      };
+
+      rows.sort(map[mode]);
+      renderTable(rows);
+    }
+
+    function shuffle(){
+      for(let i=data.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [data[i], data[j]] = [data[j], data[i]];
+      }
+    }
+
+    function exportCSV(){
+      const headers = ["sku","nombre","categoria","precio","rating","stock","ventas"];
+      const rows = [headers.join(",")];
+      for(const r of data){
+        rows.push([
+          r.sku,
+          `"${String(r.nombre).replaceAll('"','""')}"`,
+          r.categoria === null ? "" : `"${String(r.categoria).replaceAll('"','""')}"`,
+          r.precio, r.rating, r.stock, r.ventas
+        ].join(","));
+      }
+      const blob = new Blob([rows.join("\n")], {type:"text/csv;charset=utf-8"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "dataset_productos.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-copy]");
+      if(!btn) return;
+      const el = document.querySelector(btn.getAttribute("data-copy"));
+      if(!el) return;
+      navigator.clipboard.writeText(el.innerText).then(()=>{
+        const old = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check2"></i> Copiado';
+        setTimeout(()=> btn.innerHTML = old, 900);
+      });
+    });
+
+    $("#btnApply").addEventListener("click", apply);
+    $("#sortMode").addEventListener("change", apply);
+    $("#btnShuffle").addEventListener("click", () => { shuffle(); apply(); });
+    $("#btnReset").addEventListener("click", () => { data = structuredClone(originalData); $("#catFilter").value=""; $("#sortMode").value="natural"; apply(); });
+    $("#btnExport").addEventListener("click", exportCSV);
+
+    apply();
+  </script>
+</body>
+</html>
