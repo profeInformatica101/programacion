@@ -24,6 +24,10 @@ import org.junit.jupiter.api.Test;
  * Reglas:
  *  - Prohibido usar colecciones (List/ArrayList/Streams) y sort de librerías.
  *  - Los mensajes de excepción se comprueban: deben coincidir EXACTOS.
+ *
+ * Nota técnica:
+ *  - Se evita el "delta" (1e-9) a propósito para no introducir tolerancias.
+ *    Si algún test falla por decimales, revisa el cálculo o usa valores que den exacto.
  */
 @DisplayName("MarketApp (TDD) - Interfaces + Comparable + Comparator (arrays)")
 class MarketAppTest {
@@ -45,13 +49,13 @@ class MarketAppTest {
     private Producto[] catalogoBase() {
         return new Producto[] {
             new Producto("LIC-120", "Antivirus EDU",      "Licencias", 19.99, 3.9, 100, 500, 0.10, 0.0),
-            new Producto("LIB-014", "Effective Java",     "Libros",    45.50, 4.9, 8,   320, 0.00, 3.5),
-            new Producto("LIB-001", "Clean Code",         "Libros",    34.95, 4.7, 3,   210, 0.05, 2.2),
-            new Producto("LIB-002", "Refactoring",        "Libros",    41.00, 4.8, 1,   210, 0.00, 2.2), // empate ventas con LIB-001
-            new Producto("HWD-011", "Ratón Vertical",     "Hardware",  29.90, 4.2, 2,   140, 0.00, 1.2),
-            new Producto("HWD-500", "SSD 1TB",            "Hardware",  89.00, 4.6, 0,    95, 0.12, 4.0), // empate ventas con LIC-777
-            new Producto("LIC-777", "IDE Pro (1 año)",    "Licencias", 89.00, 4.6, 50,   95, 0.00, 0.0), // empate precio+rating con HWD-500
-            new Producto("ACC-100", "Mochila Portátil",   null,        24.99, 4.1, 20,   60, 0.20, 3.5)  // categoria null
+            new Producto("LIB-014", "Effective Java",     "Libros",    45.50, 4.9,   8, 320, 0.00, 3.5),
+            new Producto("LIB-001", "Clean Code",         "Libros",    34.95, 4.7,   3, 210, 0.05, 2.2),
+            new Producto("LIB-002", "Refactoring",        "Libros",    41.00, 4.8,   1, 210, 0.00, 2.2), // empate ventas con LIB-001
+            new Producto("HWD-011", "Ratón Vertical",     "Hardware",  29.90, 4.2,   2, 140, 0.00, 1.2),
+            new Producto("HWD-500", "SSD 1TB",            "Hardware",  89.00, 4.6,   0,  95, 0.12, 4.0), // empate ventas con LIC-777
+            new Producto("LIC-777", "IDE Pro (1 año)",    "Licencias", 89.00, 4.6,  50,  95, 0.00, 0.0), // empate precio+rating con HWD-500
+            new Producto("ACC-100", "Mochila Portátil",   null,        24.99, 4.1,  20,  60, 0.20, 3.5)  // categoria null
         };
     }
 
@@ -83,12 +87,16 @@ class MarketAppTest {
     @DisplayName("precioFinal: aplica descuento (interface Descuentable) correctamente")
     void precioFinal_aplicaDescuento() {
         Producto p = new Producto("X-1", "X", "Libros", 100.0, 4.0, 1, 1, 0.10, 0.0);
+
+        double resEsperado = 90.0;
         double res = app.precioFinal(p, p.getPrecio());
-        assertEquals(90.0, res, 1e-9, "Con 10% debe quedar 90€");
+        assertEquals(resEsperado, res, "Con 10% debe quedar 90€");
 
         Producto p2 = new Producto("X-2", "Y", "Libros", 80.0, 4.0, 1, 1, 0.00, 0.0);
+
+        double resEsperado2 = 80.0;
         double res2 = app.precioFinal(p2, p2.getPrecio());
-        assertEquals(80.0, res2, 1e-9, "Con 0% el precio no cambia");
+        assertEquals(resEsperado2, res2, "Con 0% el precio no cambia");
     }
 
     // ==================================================
@@ -98,10 +106,13 @@ class MarketAppTest {
     @DisplayName("costeEnvio: calcula coste según peso (interface Enviable) y valida peso")
     void costeEnvio_basico_y_validacion() {
         Producto p = new Producto("X-3", "Algo", "Hardware", 10.0, 4.0, 1, 1, 0.0, 2.5);
+
+        double resEsperado = 2.99 + (2.5 * 1.20);
         double res = app.costeEnvio(p);
-        assertEquals(2.99 + 2.5 * 1.20, res, 1e-9);
+        assertEquals(resEsperado, res, "Coste de envío incorrecto");
 
         Producto inval = new Producto("X-4", "Inval", "Hardware", 10.0, 4.0, 1, 1, 0.0, 0.0);
+
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> app.costeEnvio(inval));
         assertEquals("peso invalido", ex.getMessage());
     }
@@ -146,7 +157,8 @@ class MarketAppTest {
         assertArrayEquals(copiaAntes, original, "No debe modificar la tabla original");
         assertNotSame(original, ordenado, "Debe devolver una nueva tabla");
 
-        assertEquals("LIC-120", ordenado[0].getSku(), "Más ventas primero (500)");
+        String resEsperado = "LIC-120";
+        assertEquals(resEsperado, ordenado[0].getSku(), "Más ventas primero (500)");
     }
 
     // =========================================
@@ -159,8 +171,11 @@ class MarketAppTest {
 
         Producto[] res = app.ordenar(t, ComparadoresProducto.POR_PRECIO_ASC);
 
-        assertEquals("LIC-120", res[0].getSku(), "19.99 debe ir primero");
-        assertEquals(19.99, res[0].getPrecio(), 1e-9);
+        String resEsperado = "LIC-120";
+        assertEquals(resEsperado, res[0].getSku(), "19.99 debe ir primero");
+
+        double resEsperadoPrecio = 19.99;
+        assertEquals(resEsperadoPrecio, res[0].getPrecio(), "El precio del primero debe ser 19.99");
     }
 
     // =========================================
@@ -185,11 +200,17 @@ class MarketAppTest {
         Producto[] t = catalogoBase();
 
         Producto[] libros = app.filtrarPorCategoria(t, "Libros");
-        assertEquals(3, libros.length, "En el dataset hay 3 libros");
+
+        int resEsperado = 3;
+        assertEquals(resEsperado, libros.length, "En el dataset hay 3 libros");
 
         Producto[] nullCat = app.filtrarPorCategoria(t, null);
-        assertEquals(1, nullCat.length, "Hay 1 producto con categoria null");
-        assertEquals("ACC-100", nullCat[0].getSku());
+
+        int resEsperadoNull = 1;
+        assertEquals(resEsperadoNull, nullCat.length, "Hay 1 producto con categoria null");
+
+        String resEsperadoSku = "ACC-100";
+        assertEquals(resEsperadoSku, nullCat[0].getSku());
     }
 
     // =========================================
@@ -201,11 +222,16 @@ class MarketAppTest {
         Producto[] t = catalogoBase();
 
         Producto[] top2 = app.topN(t, 2, ComparadoresProducto.POR_PRECIO_DESC);
-        assertEquals(2, top2.length);
-        assertTrue(top2[0].getPrecio() >= top2[1].getPrecio());
+
+        int resEsperado = 2;
+        assertEquals(resEsperado, top2.length);
+
+        assertTrue(top2[0].getPrecio() >= top2[1].getPrecio(), "Debe venir ordenado según el comparator");
 
         Producto[] topGrande = app.topN(t, 999, ComparadoresProducto.POR_PRECIO_ASC);
-        assertEquals(t.length, topGrande.length, "Si n es grande, devuelve todos");
+
+        int resEsperadoGrande = t.length;
+        assertEquals(resEsperadoGrande, topGrande.length, "Si n es grande, devuelve todos");
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> app.topN(t, 0, ComparadoresProducto.POR_PRECIO_ASC));
@@ -219,7 +245,10 @@ class MarketAppTest {
     @DisplayName("precioFinal: con 100% descuento debe dar 0.0")
     void precioFinal_descuentoTotal() {
         Producto p = new Producto("D-100", "Gratis", "Libros", 50.0, 4.0, 1, 1, 1.0, 1.0);
-        assertEquals(0.0, app.precioFinal(p, p.getPrecio()), 1e-9);
+
+        double resEsperado = 0.0;
+        double res = app.precioFinal(p, p.getPrecio());
+        assertEquals(resEsperado, res);
     }
 
     // =========================================
@@ -229,6 +258,7 @@ class MarketAppTest {
     @DisplayName("costeEnvio: peso negativo lanza excepción (mensaje comprobado)")
     void costeEnvio_pesoNegativo() {
         Producto p = new Producto("P-NEG", "PesoNeg", "Hardware", 10.0, 4.0, 1, 1, 0.0, -0.5);
+
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> app.costeEnvio(p));
         assertEquals("peso invalido", ex.getMessage());
     }
@@ -245,7 +275,9 @@ class MarketAppTest {
         };
 
         Producto[] res = app.ordenarNatural(t);
-        assertEquals("B", res[0].getSku(), "Con mismas ventas, mayor rating debe ir primero");
+
+        String resEsperado = "B";
+        assertEquals(resEsperado, res[0].getSku(), "Con mismas ventas, mayor rating debe ir primero");
     }
 
     // =========================================
@@ -260,7 +292,9 @@ class MarketAppTest {
         };
 
         Producto[] res = app.ordenarNatural(t);
-        assertEquals("SKU-2", res[0].getSku(), "abeja debe ir antes que Zorro (ignoreCase)");
+
+        String resEsperado = "SKU-2";
+        assertEquals(resEsperado, res[0].getSku(), "abeja debe ir antes que Zorro (ignoreCase)");
     }
 
     // =========================================
@@ -275,7 +309,9 @@ class MarketAppTest {
         };
 
         Producto[] res = app.ordenarNatural(t);
-        assertEquals("a-001", res[0].getSku(), "SKU a-001 debe ir antes que B-001 (ignoreCase)");
+
+        String resEsperado = "a-001";
+        assertEquals(resEsperado, res[0].getSku(), "SKU a-001 debe ir antes que B-001 (ignoreCase)");
     }
 
     // =========================================
@@ -290,7 +326,9 @@ class MarketAppTest {
         };
 
         Producto[] res = app.ordenar(t, ComparadoresProducto.POR_PRECIO_DESC);
-        assertEquals("X2", res[0].getSku(), "Con mismo precio, Alpha debe ir antes que Beta");
+
+        String resEsperado = "X2";
+        assertEquals(resEsperado, res[0].getSku(), "Con mismo precio, Alpha debe ir antes que Beta");
     }
 
     // =========================================
@@ -306,8 +344,11 @@ class MarketAppTest {
         };
 
         Producto[] res = app.ordenar(t, ComparadoresProducto.POR_CATEGORIA_Y_RATING);
+
         assertNull(res[res.length - 1].getCategoria(), "El null debe quedar al final aunque tenga rating 5.0");
-        assertEquals("N-1", res[res.length - 1].getSku());
+
+        String resEsperado = "N-1";
+        assertEquals(resEsperado, res[res.length - 1].getSku());
     }
 
     // =========================================
@@ -322,7 +363,9 @@ class MarketAppTest {
         Producto[] top3 = app.topN(original, 3, ComparadoresProducto.POR_PRECIO_ASC);
 
         assertArrayEquals(copiaAntes, original, "topN no debe modificar la tabla original");
-        assertEquals(3, top3.length);
+
+        int resEsperado = 3;
+        assertEquals(resEsperado, top3.length);
 
         assertTrue(top3[0].getPrecio() <= top3[1].getPrecio());
         assertTrue(top3[1].getPrecio() <= top3[2].getPrecio());
