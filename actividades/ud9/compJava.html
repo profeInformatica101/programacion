@@ -8,504 +8,126 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --ink: #0d0f14;
-      --ink2: #1e2230;
-      --ink3: #2e3347;
-      --surface: #f4f2ee;
-      --paper: #faf9f6;
-      --accent: #d4410c;
-      --accent2: #1a6b3c;
-      --gold: #c8922a;
+      --ink: #0d0f14; --ink2: #1e2230; --ink3: #2e3347;
+      --surface: #f4f2ee; --paper: #faf9f6;
+      --accent: #d4410c; --accent2: #1a6b3c; --gold: #c8922a;
       --rule: rgba(13,15,20,.12);
       --mono: 'JetBrains Mono', monospace;
       --display: 'Syne', sans-serif;
       --body: 'Lora', Georgia, serif;
-
-      --code-bg: #0d1117;
-      --code-fg: #e6edf3;
-      --code-kw: #ff7b72;
-      --code-str: #a5d6ff;
-      --code-type: #79c0ff;
-      --code-comment: #6e7681;
-      --code-fn: #d2a8ff;
-      --code-num: #f8c555;
-      --code-ann: #ffa657;
+      --code-bg: #0d1117; --code-fg: #e6edf3;
+      --code-kw: #ff7b72; --code-type: #79c0ff;
+      --code-comment: #6e7681; --code-fn: #d2a8ff;
+      --code-num: #f8c555; --code-ann: #ffa657;
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--surface);
-      color: var(--ink);
-      font-family: var(--body);
-      font-size: 17px;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      background: var(--ink);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: .7rem 2.5rem;
-      font-family: var(--display);
-      font-size: .8rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      position: sticky; top: 0; z-index: 100;
-      border-bottom: 2px solid var(--accent);
-    }
-    nav .logo { font-weight: 800; font-size: .9rem; color: #fff; text-decoration: none; }
-    nav .breadcrumb { color: rgba(255,255,255,.45); display: flex; gap: .5rem; align-items: center; }
-    nav .breadcrumb span { color: var(--accent); }
-
-    /* ── HEADER ── */
-    .hero {
-      background: var(--ink);
-      color: #fff;
-      padding: 4.5rem 2.5rem 3.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(0deg,
-        transparent, transparent 59px,
-        rgba(255,255,255,.03) 60px),
-        repeating-linear-gradient(90deg,
-        transparent, transparent 59px,
-        rgba(255,255,255,.03) 60px);
-    }
+    body { background: var(--surface); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.7; overflow-x: hidden; }
+    nav { background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: .7rem 2.5rem; font-family: var(--display); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--accent); }
+    .nav-logo { font-weight: 800; font-size: .9rem; color: #fff; text-decoration: none; }
+    .nav-bc { color: rgba(255,255,255,.45); display: flex; gap: .5rem; align-items: center; }
+    .nav-bc span { color: var(--accent); }
+    .hero { background: var(--ink); color: #fff; padding: 4.5rem 2.5rem 3.5rem; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,.03) 60px), repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,.03) 60px); }
     .hero-inner { max-width: 960px; margin: 0 auto; position: relative; }
-    .hero-tag {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: .72rem;
-      color: var(--accent);
-      background: rgba(212,65,12,.15);
-      border: 1px solid rgba(212,65,12,.35);
-      padding: .2rem .65rem;
-      border-radius: 3px;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
-    }
-    .hero h1 {
-      font-family: var(--display);
-      font-size: clamp(2.2rem, 5vw, 3.8rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -.02em;
-      margin-bottom: 1.2rem;
-    }
-    .hero h1 .c1 { color: #79c0ff; }
-    .hero h1 .vs { color: rgba(255,255,255,.25); font-weight: 400; margin: 0 .3rem; }
-    .hero h1 .c2 { color: #7ee787; }
-    .hero p {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,.6);
-      max-width: 580px;
-      font-style: italic;
-    }
-    .hero-chips {
-      display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.6rem;
-    }
-    .chip {
-      font-family: var(--mono);
-      font-size: .7rem;
-      padding: .25rem .7rem;
-      border-radius: 3px;
-      border: 1px solid rgba(255,255,255,.15);
-      color: rgba(255,255,255,.65);
-    }
-
-    /* ── LAYOUT ── */
-    .layout {
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 3rem;
-      align-items: start;
-    }
-    @media (max-width: 820px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar { position: static !important; }
-    }
-
-    /* ── SECTION HEADING ── */
-    .sec-label {
-      font-family: var(--mono);
-      font-size: .7rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      display: flex; align-items: center; gap: .6rem;
-      margin-bottom: .9rem;
-    }
-    .sec-label::after {
-      content: '';
-      flex: 1; height: 1px;
-      background: var(--rule);
-    }
-    h2.sec-title {
-      font-family: var(--display);
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      line-height: 1.2;
-      margin-bottom: 1.2rem;
-    }
-
-    /* ── CARDS ── */
-    .card {
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      border-radius: 6px;
-      padding: 1.6rem;
-      margin-bottom: 2rem;
-    }
-    .card-accent-top { border-top: 3px solid var(--accent); }
-
-    /* ── DUAL CARD ── */
-    .dual {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
+    .hero-tag { display: inline-block; font-family: var(--mono); font-size: .72rem; color: var(--accent); background: rgba(212,65,12,.15); border: 1px solid rgba(212,65,12,.35); padding: .2rem .65rem; border-radius: 3px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1.2rem; }
+    .hero h1 { font-family: var(--display); font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 800; line-height: 1.05; letter-spacing: -.02em; margin-bottom: 1.2rem; }
+    .c1 { color: #79c0ff; } .vs { color: rgba(255,255,255,.25); font-weight: 400; margin: 0 .3rem; } .c2 { color: #7ee787; }
+    .hero p { font-size: 1.05rem; color: rgba(255,255,255,.6); max-width: 580px; font-style: italic; }
+    .hero-chips { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.6rem; }
+    .chip { font-family: var(--mono); font-size: .7rem; padding: .25rem .7rem; border-radius: 3px; border: 1px solid rgba(255,255,255,.15); color: rgba(255,255,255,.65); }
+    .layout { max-width: 1060px; margin: 0 auto; padding: 3rem 2rem; display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; }
+    @media (max-width: 820px) { .layout { grid-template-columns: 1fr; } .sidebar { position: static !important; } }
+    .sec-label { font-family: var(--mono); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: .6rem; margin-bottom: .9rem; }
+    .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    h2.sec-title { font-family: var(--display); font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 1.2rem; }
+    .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 1.6rem; margin-bottom: 2rem; }
+    .dual { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
     @media (max-width: 600px) { .dual { grid-template-columns: 1fr; } }
-
-    .def-card {
-      border-radius: 6px;
-      padding: 1.4rem;
-      border: 1px solid var(--rule);
-    }
-    .def-card.comparable {
-      background: #eef6ff;
-      border-top: 4px solid #1a6cb8;
-    }
-    .def-card.comparator {
-      background: #edfbf1;
-      border-top: 4px solid var(--accent2);
-    }
-    .def-card .badge {
-      font-family: var(--mono);
-      font-size: .7rem;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: .2rem .6rem;
-      border-radius: 3px;
-      display: inline-block;
-      margin-bottom: .9rem;
-    }
-    .badge-blue { background: #1a6cb8; color: #fff; }
-    .badge-green { background: var(--accent2); color: #fff; }
-
-    .def-card ul {
-      list-style: none;
-      padding: 0;
-      font-size: .92rem;
-    }
-    .def-card ul li {
-      padding: .25rem 0;
-      display: flex; align-items: flex-start; gap: .5rem;
-      border-bottom: 1px dashed rgba(0,0,0,.07);
-      font-family: var(--body);
-    }
+    .def-card { border-radius: 6px; padding: 1.4rem; border: 1px solid var(--rule); }
+    .def-card.comparable { background: #eef6ff; border-top: 4px solid #1a6cb8; }
+    .def-card.comparator { background: #edfbf1; border-top: 4px solid var(--accent2); }
+    .def-card .badge { font-family: var(--mono); font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 3px; display: inline-block; margin-bottom: .9rem; }
+    .badge-blue { background: #1a6cb8; color: #fff; } .badge-green { background: var(--accent2); color: #fff; }
+    .def-card ul { list-style: none; padding: 0; font-size: .92rem; }
+    .def-card ul li { padding: .25rem 0; display: flex; align-items: flex-start; gap: .5rem; border-bottom: 1px dashed rgba(0,0,0,.07); }
     .def-card ul li:last-child { border-bottom: none; }
-    .def-card ul li::before {
-      content: '→';
-      font-family: var(--mono);
-      font-size: .75rem;
-      margin-top: .25rem;
-      opacity: .5;
-      flex-shrink: 0;
-    }
-    .def-card .method {
-      font-family: var(--mono);
-      font-size: .8rem;
-      background: rgba(0,0,0,.07);
-      padding: .1rem .4rem;
-      border-radius: 3px;
-    }
-
-    /* ── CODE BLOCK ── */
-    .codebox {
-      background: var(--code-bg);
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,.06);
-      margin: 1rem 0;
-    }
-    .code-header {
-      background: #161b22;
-      padding: .55rem 1rem;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid rgba(255,255,255,.06);
-    }
+    .def-card ul li::before { content: '→'; font-family: var(--mono); font-size: .75rem; margin-top: .25rem; opacity: .5; flex-shrink: 0; }
+    .def-card .method { font-family: var(--mono); font-size: .8rem; background: rgba(0,0,0,.07); padding: .1rem .4rem; border-radius: 3px; }
+    .codebox { background: var(--code-bg); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,.06); margin: 1rem 0; }
+    .code-header { background: #161b22; padding: .55rem 1rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.06); }
     .code-header .dots { display: flex; gap: .4rem; }
-    .code-header .dots span {
-      width: 11px; height: 11px;
-      border-radius: 50%;
-    }
-    .d1 { background: #ff5f57; }
-    .d2 { background: #febc2e; }
-    .d3 { background: #28c840; }
-    .code-lang {
-      font-family: var(--mono);
-      font-size: .68rem;
-      color: rgba(255,255,255,.35);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .codebox pre {
-      padding: 1.2rem 1.3rem;
-      font-family: var(--mono);
-      font-size: .82rem;
-      line-height: 1.65;
-      color: var(--code-fg);
-      overflow-x: auto;
-      tab-size: 2;
-    }
-    .kw { color: var(--code-kw); }
-    .ty { color: var(--code-type); }
-    .fn { color: var(--code-fn); }
-    .st { color: var(--code-str); }
-    .cm { color: var(--code-comment); font-style: italic; }
-    .nu { color: var(--code-num); }
-    .an { color: var(--code-ann); }
-    .op { color: rgba(255,255,255,.55); }
-
-    /* ── TABLE ── */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .9rem;
-      margin: .5rem 0;
-    }
-    thead tr {
-      background: var(--ink);
-      color: #fff;
-    }
-    thead th {
-      font-family: var(--mono);
-      font-size: .72rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: .7rem .9rem;
-      font-weight: 600;
-      text-align: left;
-    }
-    tbody tr {
-      border-bottom: 1px solid var(--rule);
-      transition: background .15s;
-    }
+    .code-header .dots span { width: 11px; height: 11px; border-radius: 50%; }
+    .d1{background:#ff5f57;} .d2{background:#febc2e;} .d3{background:#28c840;}
+    .code-lang { font-family: var(--mono); font-size: .68rem; color: rgba(255,255,255,.35); letter-spacing: .08em; text-transform: uppercase; }
+    .codebox pre { padding: 1.2rem 1.3rem; font-family: var(--mono); font-size: .82rem; line-height: 1.65; color: var(--code-fg); overflow-x: auto; tab-size: 2; }
+    .kw{color:var(--code-kw);} .ty{color:var(--code-type);} .fn{color:var(--code-fn);}
+    .cm{color:var(--code-comment);font-style:italic;} .nu{color:var(--code-num);}
+    .an{color:var(--code-ann);} .op{color:rgba(255,255,255,.55);}
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    thead tr { background: var(--ink); color: #fff; }
+    thead th { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; padding: .7rem .9rem; font-weight: 600; text-align: left; }
+    tbody tr { border-bottom: 1px solid var(--rule); transition: background .15s; }
     tbody tr:hover { background: rgba(0,0,0,.03); }
-    tbody td {
-      padding: .65rem .9rem;
-      vertical-align: top;
-    }
+    tbody td { padding: .65rem .9rem; vertical-align: top; }
     tbody td:first-child { font-family: var(--mono); font-size: .8rem; color: var(--ink3); }
-    .yes { color: var(--accent2); font-weight: 600; font-family: var(--mono); font-size: .85rem; }
-    .no { color: var(--accent); font-weight: 600; font-family: var(--mono); font-size: .85rem; }
-
-    /* ── SIDEBAR ── */
-    .sidebar {
-      position: sticky;
-      top: 4rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .side-card {
-      background: var(--paper);
-      border: 1px solid var(--rule);
-      border-radius: 6px;
-      padding: 1.3rem;
-    }
-    .side-card h3 {
-      font-family: var(--display);
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -.01em;
-      margin-bottom: .9rem;
-      padding-bottom: .6rem;
-      border-bottom: 1px solid var(--rule);
-    }
-    .error-list {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      gap: .5rem;
-    }
-    .error-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: .7rem;
-      font-size: .88rem;
-      padding: .5rem .6rem;
-      border-radius: 4px;
-      background: rgba(212,65,12,.06);
-      border-left: 3px solid var(--accent);
-    }
-    .error-list li .icon {
-      font-family: var(--mono);
-      font-size: .75rem;
-      color: var(--accent);
-      font-weight: 700;
-      margin-top: .05rem;
-      flex-shrink: 0;
-    }
-
-    .rule-card {
-      background: var(--ink);
-      color: rgba(255,255,255,.9);
-      border-radius: 6px;
-      padding: 1.3rem;
-    }
-    .rule-card h3 {
-      font-family: var(--display);
-      font-size: .95rem;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: .8rem;
-      letter-spacing: .01em;
-    }
-    .rule-card p {
-      font-size: .85rem;
-      color: rgba(255,255,255,.6);
-      line-height: 1.6;
-      font-family: var(--body);
-      font-style: italic;
-    }
-    .rule-card .mono-rule {
-      font-family: var(--mono);
-      font-size: .78rem;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.1);
-      padding: .6rem .8rem;
-      border-radius: 4px;
-      margin-top: .8rem;
-      color: #7ee787;
-      line-height: 1.5;
-    }
-
+    .yes{color:var(--accent2);font-weight:600;font-family:var(--mono);font-size:.85rem;}
+    .no{color:var(--accent);font-weight:600;font-family:var(--mono);font-size:.85rem;}
+    /* ENLACES */
+    .ref-group-label { font-family: var(--mono); font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: rgba(13,15,20,.4); padding: .8rem 1rem .35rem; border-bottom: 1px solid var(--rule); }
+    .ref-list { list-style: none; padding: 0; }
+    .ref-list li { border-bottom: 1px solid var(--rule); }
+    .ref-list li:last-child { border-bottom: none; }
+    .ref-list a { display: flex; align-items: center; gap: .9rem; padding: .7rem 1rem; text-decoration: none; color: var(--ink); transition: background .15s, color .15s; }
+    .ref-list a:hover { background: rgba(212,65,12,.04); color: var(--accent); }
+    .ref-list a:hover .ref-arrow { opacity: 1; transform: translate(2px,-2px); }
+    .ref-pkg { font-family: var(--mono); font-size: .65rem; color: rgba(13,15,20,.4); background: rgba(13,15,20,.05); border: 1px solid var(--rule); padding: .12rem .45rem; border-radius: 3px; white-space: nowrap; flex-shrink: 0; min-width: 76px; text-align: center; }
+    .ref-name { font-family: var(--mono); font-size: .82rem; font-weight: 500; flex-shrink: 0; }
+    .ref-generic { color: rgba(13,15,20,.3); }
+    .ref-desc { font-size: .8rem; color: var(--ink3); font-family: var(--body); flex: 1; }
+    .ref-arrow { font-size: .8rem; color: var(--accent); opacity: .3; transition: opacity .15s, transform .15s; margin-left: auto; flex-shrink: 0; }
+    /* SIDEBAR */
+    .sidebar { position: sticky; top: 4rem; display: flex; flex-direction: column; gap: 1.2rem; }
+    .side-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 1.3rem; }
+    .side-card h3 { font-family: var(--display); font-size: 1rem; font-weight: 700; letter-spacing: -.01em; margin-bottom: .9rem; padding-bottom: .6rem; border-bottom: 1px solid var(--rule); }
+    .error-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+    .error-list li { display: flex; align-items: flex-start; gap: .7rem; font-size: .88rem; padding: .5rem .6rem; border-radius: 4px; background: rgba(212,65,12,.06); border-left: 3px solid var(--accent); }
+    .error-list li .icon { font-family: var(--mono); font-size: .75rem; color: var(--accent); font-weight: 700; margin-top: .05rem; flex-shrink: 0; }
+    .rule-card { background: var(--ink); color: rgba(255,255,255,.9); border-radius: 6px; padding: 1.3rem; }
+    .rule-card h3 { font-family: var(--display); font-size: .95rem; font-weight: 700; color: var(--gold); margin-bottom: .8rem; }
+    .rule-card p { font-size: .85rem; color: rgba(255,255,255,.6); line-height: 1.6; font-family: var(--body); font-style: italic; }
+    .rule-card .mono-rule { font-family: var(--mono); font-size: .78rem; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); padding: .6rem .8rem; border-radius: 4px; margin-top: .8rem; color: #7ee787; line-height: 1.5; }
     .nav-links { list-style: none; padding: 0; }
     .nav-links li { border-bottom: 1px solid var(--rule); }
     .nav-links li:last-child { border-bottom: none; }
-    .nav-links a {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: .55rem .2rem;
-      text-decoration: none;
-      color: var(--ink);
-      font-size: .88rem;
-      transition: color .15s;
-    }
+    .nav-links a { display: flex; align-items: center; justify-content: space-between; padding: .55rem .2rem; text-decoration: none; color: var(--ink); font-size: .88rem; transition: color .15s; }
     .nav-links a:hover { color: var(--accent); }
-    .nav-links a::after {
-      content: '↓';
-      font-family: var(--mono);
-      font-size: .75rem;
-      color: rgba(0,0,0,.3);
-    }
-
-    /* ── DECISION FLOW ── */
-    .flow {
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-      margin: 1rem 0;
-    }
-    .flow-node {
-      padding: .7rem 1rem;
-      border-radius: 5px;
-      font-size: .88rem;
-      position: relative;
-    }
-    .flow-q {
-      background: var(--ink2);
-      color: #fff;
-      font-family: var(--display);
-      font-weight: 600;
-    }
-    .flow-a {
-      display: flex;
-      gap: .6rem;
-      padding: 0 1rem;
-    }
-    .flow-a .ans {
-      flex: 1;
-      padding: .65rem .9rem;
-      border-radius: 5px;
-      font-size: .83rem;
-      text-align: center;
-      font-family: var(--mono);
-      font-weight: 500;
-    }
+    .nav-links a::after { content: '↓'; font-family: var(--mono); font-size: .75rem; color: rgba(0,0,0,.3); }
+    .flow { display: flex; flex-direction: column; gap: .4rem; margin: 1rem 0; }
+    .flow-q { padding: .7rem 1rem; border-radius: 5px; background: var(--ink2); color: #fff; font-family: var(--display); font-weight: 600; font-size: .88rem; }
+    .flow-a { display: flex; gap: .6rem; padding: 0 1rem; }
+    .flow-a .ans { flex: 1; padding: .65rem .9rem; border-radius: 5px; font-size: .83rem; text-align: center; font-family: var(--mono); font-weight: 500; }
     .ans-yes { background: rgba(26,107,60,.12); border: 1.5px solid var(--accent2); color: var(--accent2); }
-    .ans-no  { background: rgba(212,65,12,.1); border: 1.5px solid var(--accent); color: var(--accent); }
-
-    .connector {
-      width: 2px; height: 18px;
-      background: var(--rule);
-      margin: 0 auto;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--ink);
-      color: rgba(255,255,255,.35);
-      text-align: center;
-      padding: 2rem;
-      font-family: var(--mono);
-      font-size: .72rem;
-      letter-spacing: .06em;
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-inner > * {
-      animation: fadeUp .5s ease both;
-    }
-    .hero-inner > *:nth-child(1) { animation-delay: .05s; }
-    .hero-inner > *:nth-child(2) { animation-delay: .15s; }
-    .hero-inner > *:nth-child(3) { animation-delay: .25s; }
-    .hero-inner > *:nth-child(4) { animation-delay: .35s; }
-
-    .card, .dual, .codebox {
-      animation: fadeUp .5s ease both;
-      animation-delay: .1s;
-    }
+    .ans-no  { background: rgba(212,65,12,.1);  border: 1.5px solid var(--accent); color: var(--accent); }
+    .connector { width: 2px; height: 18px; background: var(--rule); margin: 0 auto; }
+    footer { background: var(--ink); color: rgba(255,255,255,.35); text-align: center; padding: 2rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .hero-inner > * { animation: fadeUp .5s ease both; }
+    .hero-inner > *:nth-child(1){animation-delay:.05s} .hero-inner > *:nth-child(2){animation-delay:.15s}
+    .hero-inner > *:nth-child(3){animation-delay:.25s} .hero-inner > *:nth-child(4){animation-delay:.35s}
   </style>
 </head>
 <body>
 
 <nav>
-  <a class="logo" href="#">☕ Java Sorting</a>
-  <div class="breadcrumb">DAW / DAM <span>/</span> Arrays &amp; Ordenación</div>
+  <a class="nav-logo" href="#">☕ Java Sorting</a>
+  <div class="nav-bc">DAW / DAM <span>/</span> Arrays &amp; Ordenación</div>
 </nav>
 
 <header class="hero">
   <div class="hero-inner">
     <div class="hero-tag">// Interfaces de comparación</div>
-    <h1>
-      <span class="c1">Comparable</span>
-      <span class="vs">vs</span>
-      <span class="c2">Comparator</span>
-    </h1>
+    <h1><span class="c1">Comparable</span><span class="vs">vs</span><span class="c2">Comparator</span></h1>
     <p>Ordena objetos en Java con criterio propio — entiende cuándo usar el orden natural de una clase y cuándo externalizar la lógica.</p>
     <div class="hero-chips">
       <span class="chip">Java 8+</span>
@@ -518,10 +140,8 @@
 
 <main>
   <div class="layout">
-    <!-- MAIN COLUMN -->
     <div class="main-col">
 
-      <!-- IDEA CLAVE -->
       <div class="sec-label" id="concepto">01 — Concepto</div>
       <h2 class="sec-title">¿Qué diferencia a cada uno?</h2>
       <div class="dual">
@@ -545,10 +165,8 @@
         </div>
       </div>
 
-      <!-- COMPARABLE -->
       <div class="sec-label" id="comparable">02 — Comparable</div>
       <h2 class="sec-title">Implementando <code style="font-family:var(--mono);font-size:1.1rem">Comparable</code></h2>
-
       <div class="codebox">
         <div class="code-header">
           <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
@@ -560,122 +178,68 @@
     <span class="kw">private</span> <span class="ty">double</span>  precio<span class="op">;</span>
     <span class="kw">private</span> <span class="ty">int</span>     stock<span class="op">;</span>
 
-    <span class="cm">// Constructor, getters… (omitidos por brevedad)</span>
-
     <span class="an">@Override</span>
     <span class="kw">public int</span> <span class="fn">compareTo</span><span class="op">(</span><span class="ty">Producto</span> otro<span class="op">) {</span>
         <span class="cm">// 1.º criterio: precio ascendente</span>
         <span class="kw">int</span> cmp <span class="op">=</span> <span class="ty">Double</span><span class="op">.</span><span class="fn">compare</span><span class="op">(</span><span class="kw">this</span><span class="op">.</span>precio<span class="op">,</span> otro<span class="op">.</span>precio<span class="op">);</span>
         <span class="kw">if</span> <span class="op">(</span>cmp <span class="op">!=</span> <span class="nu">0</span><span class="op">)</span> <span class="kw">return</span> cmp<span class="op">;</span>
-
         <span class="cm">// Desempate: nombre alfabético</span>
         <span class="kw">return this</span><span class="op">.</span>nombre<span class="op">.</span><span class="fn">compareTo</span><span class="op">(</span>otro<span class="op">.</span>nombre<span class="op">);</span>
     <span class="op">}</span>
 <span class="op">}</span></pre>
       </div>
+      <div class="card"><p style="font-size:.9rem;color:var(--ink3)"><strong>Regla del signo:</strong> <code style="font-family:var(--mono)">compareTo</code> devuelve negativo si <em>this</em> va antes, cero si son iguales, positivo si va después. Usa <code style="font-family:var(--mono)">Double.compare()</code> e <code style="font-family:var(--mono)">Integer.compare()</code> para evitar desbordamientos de la resta manual.</p></div>
 
-      <div class="card">
-        <p style="font-size:.9rem; color:var(--ink3)">
-          <strong>Regla del signo:</strong> <code style="font-family:var(--mono)">compareTo</code> devuelve negativo si <em>this</em> va antes, cero si son iguales, positivo si va después. Usar <code style="font-family:var(--mono)">Double.compare()</code> e <code style="font-family:var(--mono)">Integer.compare()</code> evita los errores de desbordamiento de la resta manual.
-        </p>
-      </div>
-
-      <!-- COMPARATOR -->
       <div class="sec-label" id="comparator">03 — Comparator</div>
       <h2 class="sec-title">Implementando <code style="font-family:var(--mono);font-size:1.1rem">Comparator</code></h2>
-
       <div class="codebox">
         <div class="code-header">
           <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
           <span class="code-lang">Java — lambda / clase anónima</span>
         </div>
-        <pre><span class="cm">// ── Opción A: lambda (Java 8+) ──────────────────────────────</span>
+        <pre><span class="cm">// Opción A: lambda (Java 8+)</span>
 <span class="ty">Comparator</span><span class="op">&lt;</span><span class="ty">Producto</span><span class="op">&gt;</span> porStock <span class="op">=</span>
     <span class="op">(</span>a<span class="op">,</span> b<span class="op">) -&gt;</span> <span class="ty">Integer</span><span class="op">.</span><span class="fn">compare</span><span class="op">(</span>a<span class="op">.</span><span class="fn">getStock</span><span class="op">(),</span> b<span class="op">.</span><span class="fn">getStock</span><span class="op">());</span>
 
-<span class="cm">// ── Opción B: Comparator.comparing (más expresivo) ──────────</span>
+<span class="cm">// Opción B: Comparator.comparing</span>
 <span class="ty">Comparator</span><span class="op">&lt;</span><span class="ty">Producto</span><span class="op">&gt;</span> porNombre <span class="op">=</span>
     <span class="ty">Comparator</span><span class="op">.</span><span class="fn">comparing</span><span class="op">(</span><span class="ty">Producto</span><span class="op">::</span><span class="fn">getNombre</span><span class="op">);</span>
 
-<span class="cm">// ── Encadenado: precio desc → nombre asc ────────────────────</span>
+<span class="cm">// Encadenado: precio DESC, nombre ASC</span>
 <span class="ty">Comparator</span><span class="op">&lt;</span><span class="ty">Producto</span><span class="op">&gt;</span> mixto <span class="op">=</span>
     <span class="ty">Comparator</span><span class="op">.</span><span class="fn">comparingDouble</span><span class="op">(</span><span class="ty">Producto</span><span class="op">::</span><span class="fn">getPrecio</span><span class="op">)</span>
                <span class="op">.</span><span class="fn">reversed</span><span class="op">()</span>
                <span class="op">.</span><span class="fn">thenComparing</span><span class="op">(</span><span class="ty">Producto</span><span class="op">::</span><span class="fn">getNombre</span><span class="op">);</span>
 
-<span class="cm">// ── Uso con Arrays.sort ─────────────────────────────────────</span>
-<span class="ty">Producto</span><span class="op">[]</span> catalogo <span class="op">=</span> <span class="cm">/* … */</span><span class="op">;</span>
 <span class="ty">Arrays</span><span class="op">.</span><span class="fn">sort</span><span class="op">(</span>catalogo<span class="op">,</span> mixto<span class="op">);</span></pre>
       </div>
 
-      <!-- COMPARACIÓN -->
       <div class="sec-label" id="tabla">04 — Comparativa</div>
       <h2 class="sec-title">Resumen visual</h2>
-
-      <div class="card" style="padding: 0; overflow: hidden;">
+      <div class="card" style="padding:0;overflow:hidden;">
         <table>
-          <thead>
-            <tr>
-              <th>Aspecto</th>
-              <th>Comparable</th>
-              <th>Comparator</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Aspecto</th><th>Comparable</th><th>Comparator</th></tr></thead>
           <tbody>
-            <tr>
-              <td>Paquete</td>
-              <td>java.lang</td>
-              <td>java.util</td>
-            </tr>
-            <tr>
-              <td>Método</td>
-              <td>compareTo(T o)</td>
-              <td>compare(T a, T b)</td>
-            </tr>
-            <tr>
-              <td>¿Modifica la clase?</td>
-              <td><span class="yes">✓ sí</span></td>
-              <td><span class="no">✗ no</span></td>
-            </tr>
-            <tr>
-              <td>¿Múltiples criterios?</td>
-              <td><span class="no">✗ uno solo</span></td>
-              <td><span class="yes">✓ ilimitados</span></td>
-            </tr>
-            <tr>
-              <td>Arrays.sort(arr)</td>
-              <td><span class="yes">✓ directo</span></td>
-              <td>Arrays.sort(arr, cmp)</td>
-            </tr>
-            <tr>
-              <td>Lambdas</td>
-              <td><span class="no">✗</span></td>
-              <td><span class="yes">✓ sí</span></td>
-            </tr>
-            <tr>
-              <td>Clases de terceros</td>
-              <td><span class="no">✗ imposible</span></td>
-              <td><span class="yes">✓ posible</span></td>
-            </tr>
+            <tr><td>Paquete</td><td>java.lang</td><td>java.util</td></tr>
+            <tr><td>Método</td><td>compareTo(T o)</td><td>compare(T a, T b)</td></tr>
+            <tr><td>¿Modifica la clase?</td><td><span class="yes">✓ sí</span></td><td><span class="no">✗ no</span></td></tr>
+            <tr><td>¿Múltiples criterios?</td><td><span class="no">✗ uno solo</span></td><td><span class="yes">✓ ilimitados</span></td></tr>
+            <tr><td>Arrays.sort(arr)</td><td><span class="yes">✓ directo</span></td><td>Arrays.sort(arr, cmp)</td></tr>
+            <tr><td>Lambdas</td><td><span class="no">✗</span></td><td><span class="yes">✓ sí</span></td></tr>
+            <tr><td>Clases de terceros</td><td><span class="no">✗ imposible</span></td><td><span class="yes">✓ posible</span></td></tr>
           </tbody>
         </table>
       </div>
 
-      <!-- ORDENACIÓN MANUAL -->
       <div class="sec-label" id="manual">05 — Ordenación manual</div>
-      <h2 class="sec-title">Bubble sort usando <code style="font-family:var(--mono);font-size:1.1rem">compareTo</code></h2>
-
+      <h2 class="sec-title">Bubble sort con <code style="font-family:var(--mono);font-size:1.1rem">compareTo</code></h2>
       <div class="codebox">
         <div class="code-header">
           <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
-          <span class="code-lang">Java — algoritmo con Comparable</span>
+          <span class="code-lang">Java — algoritmo genérico</span>
         </div>
-        <pre><span class="cm">/**
- * Bubble sort genérico — T debe implementar Comparable.
- * OJO: nunca modifiques el array original en el examen;
- *      haz una copia con Arrays.copyOf() primero.
- */</span>
-<span class="kw">public static</span> <span class="op">&lt;</span><span class="ty">T</span> <span class="kw">extends</span> <span class="ty">Comparable</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;&gt;</span> <span class="kw">void</span> <span class="fn">bubbleSort</span><span class="op">(</span><span class="ty">T</span><span class="op">[]</span> arr<span class="op">) {</span>
+        <pre><span class="cm">// OJO: nunca modifiques el array original; usa Arrays.copyOf().</span>
+<span class="kw">public static</span> <span class="op">&lt;</span><span class="ty">T</span> <span class="kw">extends</span> <span class="ty">Comparable</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;&gt;</span> <span class="ty">T</span><span class="op">[]</span> <span class="fn">bubbleSort</span><span class="op">(</span><span class="ty">T</span><span class="op">[]</span> arr<span class="op">) {</span>
     <span class="ty">T</span><span class="op">[]</span> copia <span class="op">=</span> <span class="ty">Arrays</span><span class="op">.</span><span class="fn">copyOf</span><span class="op">(</span>arr<span class="op">,</span> arr<span class="op">.</span>length<span class="op">);</span>
     <span class="kw">int</span> n <span class="op">=</span> copia<span class="op">.</span>length<span class="op">;</span>
     <span class="kw">for</span> <span class="op">(</span><span class="kw">int</span> i <span class="op">=</span> <span class="nu">0</span><span class="op">;</span> i <span class="op">&lt;</span> n <span class="op">-</span> <span class="nu">1</span><span class="op">;</span> i<span class="op">++) {</span>
@@ -687,15 +251,92 @@
             <span class="op">}</span>
         <span class="op">}</span>
     <span class="op">}</span>
-    <span class="cm">// Aquí usarías 'copia' para el resultado</span>
+    <span class="kw">return</span> copia<span class="op">;</span>
 <span class="op">}</span></pre>
+      </div>
+
+      <!-- 06 ENLACES OFICIALES -->
+      <div class="sec-label" id="enlaces">06 — Referencias</div>
+      <h2 class="sec-title">Documentación oficial</h2>
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:3rem;">
+
+        <div class="ref-group-label">Oracle Java SE 24 — Javadoc</div>
+        <ul class="ref-list">
+          <li>
+            <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Comparable.html" target="_blank" rel="noopener">
+              <span class="ref-pkg">java.lang</span>
+              <span class="ref-name">Comparable<span class="ref-generic">&lt;T&gt;</span></span>
+              <span class="ref-desc">Interfaz de orden natural — define <code style="font-family:var(--mono);font-size:.76rem">compareTo(T o)</code></span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/Comparator.html" target="_blank" rel="noopener">
+              <span class="ref-pkg">java.util</span>
+              <span class="ref-name">Comparator<span class="ref-generic">&lt;T&gt;</span></span>
+              <span class="ref-desc">Orden externo — incluye <code style="font-family:var(--mono);font-size:.76rem">compare()</code>, <code style="font-family:var(--mono);font-size:.76rem">thenComparing()</code>, <code style="font-family:var(--mono);font-size:.76rem">reversed()</code></span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/Arrays.html" target="_blank" rel="noopener">
+              <span class="ref-pkg">java.util</span>
+              <span class="ref-name">Arrays</span>
+              <span class="ref-desc">Utilidades sobre arrays — <code style="font-family:var(--mono);font-size:.76rem">sort()</code>, <code style="font-family:var(--mono);font-size:.76rem">copyOf()</code>, <code style="font-family:var(--mono);font-size:.76rem">copyOfRange()</code></span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Integer.html#compare(int,int)" target="_blank" rel="noopener">
+              <span class="ref-pkg">java.lang</span>
+              <span class="ref-name">Integer<span class="ref-generic">.compare(int,int)</span></span>
+              <span class="ref-desc">Evita desbordamiento al comparar enteros — alternativa segura a la resta manual</span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Double.html#compare(double,double)" target="_blank" rel="noopener">
+              <span class="ref-pkg">java.lang</span>
+              <span class="ref-name">Double<span class="ref-generic">.compare(double,double)</span></span>
+              <span class="ref-desc">Comparación segura de decimales, maneja NaN correctamente</span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html#compareTo(java.lang.String)" target="_blank" rel="noopener">
+              <span class="ref-pkg">java.lang</span>
+              <span class="ref-name">String<span class="ref-generic">.compareTo(String)</span></span>
+              <span class="ref-desc">Orden lexicográfico — útil en desempates por nombre o SKU</span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="ref-group-label">Recursos adicionales</div>
+        <ul class="ref-list">
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort" target="_blank" rel="noopener">
+              <span class="ref-pkg">MDN</span>
+              <span class="ref-name">Array.prototype.sort</span>
+              <span class="ref-desc">El mismo concepto de comparador en JavaScript — útil para entender las demos interactivas</span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank" rel="noopener">
+              <span class="ref-pkg">Bootstrap</span>
+              <span class="ref-name">Bootstrap 5.3</span>
+              <span class="ref-desc">Framework CSS usado en las prácticas de interfaz del módulo</span>
+              <span class="ref-arrow">↗</span>
+            </a>
+          </li>
+        </ul>
+
       </div>
 
     </div><!-- /main-col -->
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-
       <div class="side-card">
         <h3>Índice</h3>
         <ul class="nav-links">
@@ -704,64 +345,46 @@
           <li><a href="#comparator">03 Comparator</a></li>
           <li><a href="#tabla">04 Comparativa</a></li>
           <li><a href="#manual">05 Ordenación manual</a></li>
+          <li><a href="#enlaces">06 Referencias</a></li>
         </ul>
       </div>
-
       <div class="side-card">
         <h3>⚠ Errores típicos</h3>
         <ul class="error-list">
-          <li>
-            <span class="icon">01</span>
-            <span>Invertir el signo en <code style="font-family:var(--mono);font-size:.78rem">compareTo</code> — el array queda al revés</span>
-          </li>
-          <li>
-            <span class="icon">02</span>
-            <span>No contemplar desempates — orden inestable entre iguales</span>
-          </li>
-          <li>
-            <span class="icon">03</span>
-            <span>Olvidar tratar <code style="font-family:var(--mono);font-size:.78rem">null</code> — NullPointerException en runtime</span>
-          </li>
-          <li>
-            <span class="icon">04</span>
-            <span>Modificar el array original en vez de trabajar con una copia</span>
-          </li>
-          <li>
-            <span class="icon">05</span>
-            <span>Usar <code style="font-family:var(--mono);font-size:.78rem">a - b</code> en lugar de <code style="font-family:var(--mono);font-size:.78rem">Integer.compare(a,b)</code> — overflow</span>
-          </li>
+          <li><span class="icon">01</span><span>Invertir el signo en <code style="font-family:var(--mono);font-size:.78rem">compareTo</code> — el array queda al revés</span></li>
+          <li><span class="icon">02</span><span>No contemplar desempates — orden inestable entre iguales</span></li>
+          <li><span class="icon">03</span><span>Olvidar tratar <code style="font-family:var(--mono);font-size:.78rem">null</code> — NullPointerException en runtime</span></li>
+          <li><span class="icon">04</span><span>Modificar el array original en vez de trabajar con una copia</span></li>
+          <li><span class="icon">05</span><span>Usar <code style="font-family:var(--mono);font-size:.78rem">a - b</code> en lugar de <code style="font-family:var(--mono);font-size:.78rem">Integer.compare(a,b)</code> — overflow</span></li>
         </ul>
       </div>
-
       <div class="rule-card">
         <h3>Regla de decisión rápida</h3>
         <p>¿Necesitas un solo orden lógico para los objetos?</p>
         <div class="mono-rule">
-          ✓ Orden único  →  Comparable<br>
-          ✓ Varios criterios →  Comparator<br>
-          ✓ Clase ajena  →  Comparator
+          ✓ Orden único   → Comparable<br>
+          ✓ Varios criterios → Comparator<br>
+          ✓ Clase ajena   → Comparator
         </div>
       </div>
-
       <div class="side-card">
         <h3>Árbol de decisión</h3>
         <div class="flow">
-          <div class="flow-node flow-q">¿Controlas el código de la clase?</div>
+          <div class="flow-q">¿Controlas el código de la clase?</div>
           <div class="flow-a">
             <div class="ans ans-no">No → Comparator</div>
             <div class="ans ans-yes">Sí ↓</div>
           </div>
           <div class="connector"></div>
-          <div class="flow-node flow-q">¿Solo un orden natural?</div>
+          <div class="flow-q">¿Solo un orden natural?</div>
           <div class="flow-a">
             <div class="ans ans-yes">Sí → Comparable</div>
             <div class="ans ans-no">No → Comparator</div>
           </div>
         </div>
       </div>
-
     </aside>
-  </div><!-- /layout -->
+  </div>
 </main>
 
 <footer>
