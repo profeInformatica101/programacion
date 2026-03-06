@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tema 10 · Ficheros de Texto y Excepciones · Java</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root{
+      --bg:#f5f3ef;
+      --bg2:#faf9f7;
+      --white:#ffffff;
+      --ink:#1a1814;
+      --ink2:#3d3830;
+      --muted:#7d7468;
+      --border:#e0dbd2;
+      --border2:#c8c1b6;
+
+      --blue:#1a56db;
+      --blue-bg:#eef3fd;
+      --blue-bd:#c3d5f8;
+
+      --green:#0d6640;
+      --green-bg:#ecf8f1;
+      --green-bd:#b3e3c9;
+
+      --amber:#92500a;
+      --amber-bg:#fdf4e7;
+      --amber-bd:#f3d49c;
+
+      --red:#9b1c2e;
+      --red-bg:#fdf0f2;
+      --red-bd:#f5c0ca;
+
+      --code-bg:#f0ede8;
+      --code-fg:#1a1814;
+
+      --mono:'IBM Plex Mono', monospace;
+      --serif:'Fraunces', Georgia, serif;
+      --sans:'DM Sans', sans-serif;
+
+      --sidebar-w: 290px;
+      --topbar-h: 56px;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--ink2);
+      font-family:var(--sans);
+      font-size:1rem;
+      line-height:1.7;
+    }
+
+    .topbar{
+      background:rgba(255,255,255,.92);
+      border-bottom:1px solid var(--border);
+      padding:.75rem 1rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      font-family:var(--mono);
+      font-size:.74rem;
+      color:var(--muted);
+      position:sticky;
+      top:0;
+      z-index:120;
+      backdrop-filter:blur(8px);
+      min-height:var(--topbar-h);
+    }
+
+    .topbar-path span{ color:var(--blue); }
+
+    .topbar-tag{
+      background:var(--blue-bg);
+      border:1px solid var(--blue-bd);
+      color:var(--blue);
+      padding:.18rem .7rem;
+      border-radius:999px;
+      font-size:.7rem;
+      white-space:nowrap;
+    }
+
+    .layout{
+      max-width:1450px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1020px);
+      gap:2rem;
+      padding:1.5rem;
+      align-items:start;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:calc(var(--topbar-h) + 16px);
+      align-self:start;
+      max-height:calc(100vh - var(--topbar-h) - 32px);
+      overflow:auto;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:1rem;
+      box-shadow:0 10px 30px rgba(0,0,0,.04);
+    }
+
+    .sidebar-title{
+      font-family:var(--serif);
+      font-size:1.05rem;
+      color:var(--ink);
+      margin-bottom:.2rem;
+    }
+
+    .sidebar-sub{
+      font-family:var(--mono);
+      font-size:.72rem;
+      color:var(--muted);
+      margin-bottom:1rem;
+    }
+
+    .nav-list{
+      list-style:none;
+      display:flex;
+      flex-direction:column;
+      gap:.32rem;
+    }
+
+    .nav-link{
+      display:flex;
+      align-items:center;
+      gap:.65rem;
+      text-decoration:none;
+      color:var(--muted);
+      border:1px solid transparent;
+      border-radius:10px;
+      padding:.55rem .7rem;
+      transition:.2s ease;
+      font-size:.84rem;
+      line-height:1.35;
+    }
+
+    .nav-link:hover{
+      color:var(--blue);
+      background:var(--blue-bg);
+      border-color:var(--blue-bd);
+    }
+
+    .nav-link.active{
+      color:var(--blue);
+      background:var(--blue-bg);
+      border-color:var(--blue-bd);
+      box-shadow:inset 3px 0 0 var(--blue);
+    }
+
+    .nav-num{
+      font-family:var(--mono);
+      font-size:.68rem;
+      min-width:2rem;
+      color:inherit;
+      opacity:.9;
+    }
+
+    .sidebar-tools{
+      margin-top:1rem;
+      padding-top:1rem;
+      border-top:1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+      gap:.6rem;
+    }
+
+    .mini-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      width:100%;
+      justify-content:center;
+      text-decoration:none;
+      background:var(--bg2);
+      border:1px solid var(--border);
+      color:var(--ink2);
+      border-radius:10px;
+      padding:.6rem .8rem;
+      font-family:var(--mono);
+      font-size:.72rem;
+      transition:.2s;
+      cursor:pointer;
+    }
+
+    .mini-btn:hover{
+      border-color:var(--blue-bd);
+      color:var(--blue);
+      background:var(--blue-bg);
+    }
+
+    .content{
+      min-width:0;
+    }
+
+    .page{
+      width:100%;
+    }
+
+    .hero{
+      padding:2rem 0 2.2rem;
+      border-bottom:1.5px solid var(--border2);
+      margin-bottom:3rem;
+    }
+
+    .hero-label{
+      font-family:var(--mono);
+      font-size:.72rem;
+      color:var(--blue);
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      margin-bottom:1rem;
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+
+    .hero-label::before{
+      content:'//';
+      color:var(--muted);
+    }
+
+    .hero h1{
+      font-family:var(--serif);
+      font-size:clamp(2rem,4.5vw,3rem);
+      font-weight:700;
+      color:var(--ink);
+      letter-spacing:-.02em;
+      line-height:1.1;
+      margin-bottom:1rem;
+    }
+
+    .hero h1 em{
+      font-style:normal;
+      color:var(--blue);
+    }
+
+    .hero-desc{
+      max-width:760px;
+      font-size:1rem;
+      font-weight:300;
+      color:var(--ink2);
+      margin-bottom:1.5rem;
+    }
+
+    .hero-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.45rem;
+    }
+
+    .hero-tag{
+      font-family:var(--mono);
+      font-size:.71rem;
+      padding:.28rem .7rem;
+      border-radius:5px;
+      border:1px solid var(--border2);
+      background:var(--white);
+      color:var(--muted);
+    }
+
+    .api-link{
+      color:var(--blue);
+      text-decoration:none;
+      border-bottom:1px dotted var(--blue-bd);
+      transition:.2s;
+    }
+
+    .api-link:hover{
+      color:#0d47c0;
+      border-bottom-color:var(--blue);
+      background:var(--blue-bg);
+    }
+
+    .sec{
+      margin-bottom:4rem;
+      opacity:0;
+      transform:translateY(16px);
+      transition:opacity .55s ease,transform .55s ease;
+      scroll-margin-top: calc(var(--topbar-h) + 18px);
+    }
+
+    .sec.visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .sec-header{
+      display:flex;
+      align-items:baseline;
+      gap:1rem;
+      border-bottom:1.5px solid var(--border2);
+      padding-bottom:.85rem;
+      margin-bottom:2rem;
+    }
+
+    .sec-num{
+      font-family:var(--mono);
+      font-size:.7rem;
+      color:var(--muted);
+      background:var(--white);
+      border:1px solid var(--border2);
+      padding:.2rem .55rem;
+      border-radius:4px;
+      flex-shrink:0;
+    }
+
+    .sec-title{
+      font-family:var(--serif);
+      font-size:1.45rem;
+      font-weight:600;
+      color:var(--ink);
+      letter-spacing:-.01em;
+      line-height:1.2;
+    }
+
+    .sec-sub{
+      font-size:.83rem;
+      color:var(--muted);
+      margin-top:.2rem;
+    }
+
+    .prose{
+      font-size:.93rem;
+      color:var(--ink2);
+      line-height:1.8;
+    }
+
+    .prose p{ margin-bottom:1rem; }
+    .prose p:last-child{ margin-bottom:0; }
+
+    .prose code,
+    .inline-code{
+      font-family:var(--mono);
+      font-size:.82rem;
+      background:var(--code-bg);
+      padding:.1rem .38rem;
+      border-radius:4px;
+      color:var(--blue);
+    }
+
+    .prose strong{
+      font-weight:500;
+      color:var(--ink);
+    }
+
+    .callout{
+      display:flex;
+      gap:.9rem;
+      align-items:flex-start;
+      border-radius:10px;
+      padding:1rem 1.1rem;
+      margin:.75rem 0;
+      font-size:.87rem;
+      line-height:1.6;
+    }
+
+    .callout-icon{
+      font-size:1rem;
+      flex-shrink:0;
+      margin-top:.1rem;
+    }
+
+    .callout.warn{ background:var(--amber-bg); border:1px solid var(--amber-bd); color:var(--amber); }
+    .callout.info{ background:var(--blue-bg);  border:1px solid var(--blue-bd);  color:#0d47c0; }
+    .callout.ok  { background:var(--green-bg); border:1px solid var(--green-bd); color:var(--green); }
+    .callout.err { background:var(--red-bg);   border:1px solid var(--red-bd);   color:var(--red); }
+
+    .callout strong{ font-weight:600; }
+
+    .callout code{
+      font-family:var(--mono);
+      font-size:.8rem;
+      background:rgba(0,0,0,.07);
+      padding:.1rem .35rem;
+      border-radius:3px;
+    }
+
+    .api-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:.9rem;
+    }
+
+    .api-card{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:1rem 1.1rem;
+      transition:.2s;
+    }
+
+    .api-card:hover{
+      border-color:var(--blue-bd);
+      background:var(--blue-bg);
+      transform:translateY(-2px);
+    }
+
+    .api-card h4{
+      font-family:var(--serif);
+      font-size:.96rem;
+      color:var(--ink);
+      margin-bottom:.3rem;
+      font-weight:600;
+    }
+
+    .api-card p{
+      font-size:.82rem;
+      color:var(--muted);
+      line-height:1.55;
+      margin-bottom:.55rem;
+    }
+
+    .api-pill{
+      display:inline-block;
+      font-family:var(--mono);
+      font-size:.68rem;
+      padding:.18rem .55rem;
+      border-radius:999px;
+      background:var(--bg);
+      border:1px solid var(--border);
+      color:var(--muted);
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:1px;
+      background:var(--border);
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+    }
+
+    .info-card{
+      background:var(--bg2);
+      padding:1.4rem;
+      transition:background .2s;
+    }
+
+    .info-card:hover{ background:var(--white); }
+
+    .info-card-icon{
+      width:34px;
+      height:34px;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.95rem;
+      margin-bottom:.9rem;
+    }
+
+    .icon-blue { background:rgba(26,86,219,.12); color:var(--blue); }
+    .icon-green{ background:rgba(13,102,64,.12);  color:var(--green); }
+    .icon-amber{ background:rgba(146,80,10,.12);  color:var(--amber); }
+    .icon-red  { background:rgba(155,28,46,.12);  color:var(--red); }
+
+    .info-card h4{
+      font-family:var(--serif);
+      font-size:.95rem;
+      font-weight:600;
+      color:var(--ink);
+      margin-bottom:.35rem;
+    }
+
+    .info-card p{
+      font-size:.83rem;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .info-card code{
+      font-family:var(--mono);
+      font-size:.78rem;
+      background:var(--code-bg);
+      padding:.1rem .32rem;
+      border-radius:3px;
+      color:var(--ink2);
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1rem;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1rem;
+    }
+
+    .spec-box{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:1.5rem;
+    }
+
+    .spec-box h4{
+      font-family:var(--serif);
+      font-size:1rem;
+      font-weight:600;
+      color:var(--ink);
+      margin-bottom:1rem;
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+
+    .tree{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:1.5rem;
+      font-family:var(--mono);
+      font-size:.8rem;
+      line-height:2;
+    }
+
+    .tree-root { color:var(--ink); font-weight:600; }
+    .tree-l1   { margin-left:1.5rem; color:var(--ink2); }
+    .tree-l2   { margin-left:3rem;   color:var(--muted); }
+    .tree-l3   { margin-left:4.5rem; color:var(--muted); }
+
+    .tree-branch::before{ content:'├── '; color:var(--border2); }
+    .tree-last::before  { content:'└── '; color:var(--border2); }
+
+    .hl-exc { color:var(--red); font-weight:600; }
+    .hl-chk { color:var(--amber); }
+    .hl-unk { color:var(--blue); }
+
+    .code-wrap{
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      margin-bottom:.9rem;
+    }
+
+    .code-head{
+      background:var(--bg);
+      border-bottom:1px solid var(--border);
+      padding:.55rem 1rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      font-family:var(--mono);
+      font-size:.74rem;
+      color:var(--muted);
+    }
+
+    .code-head .dots{
+      display:flex;
+      gap:.35rem;
+    }
+
+    .code-head .dots span{
+      width:10px;height:10px;border-radius:50%;display:inline-block;
+    }
+
+    pre{
+      background:var(--code-bg);
+      padding:1.25rem 1.4rem;
+      overflow-x:auto;
+      font-family:var(--mono);
+      font-size:.81rem;
+      line-height:1.7;
+      color:var(--code-fg);
+      tab-size:4;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .kw  { color:#7c3aed; }
+    .fn  { color:#1a56db; }
+    .cl  { color:#0d6640; font-style:italic; }
+    .str { color:#92500a; }
+    .cm  { color:#9c9488; font-style:italic; }
+    .ann { color:#0f6b8a; }
+    .num { color:#c2410c; }
+
+    .copy-btn{
+      background:transparent;
+      border:1px solid var(--border2);
+      color:var(--muted);
+      font-family:var(--mono);
+      font-size:.7rem;
+      padding:.2rem .6rem;
+      border-radius:4px;
+      cursor:pointer;
+      transition:.2s;
+    }
+
+    .copy-btn:hover{
+      color:var(--blue);
+      border-color:var(--blue);
+    }
+
+    .copy-btn.ok{
+      color:var(--green);
+      border-color:var(--green-bd);
+    }
+
+    .method-table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:.86rem;
+    }
+
+    .method-table thead tr{ background:var(--bg); }
+
+    .method-table th{
+      padding:.6rem .9rem;
+      font-family:var(--serif);
+      font-weight:600;
+      color:var(--ink);
+      border-bottom:2px solid var(--border2);
+      text-align:left;
+      font-size:.85rem;
+    }
+
+    .method-table td{
+      padding:.55rem .9rem;
+      border-bottom:1px solid var(--border);
+      vertical-align:top;
+    }
+
+    .method-table tr:last-child td{ border-bottom:none; }
+
+    .method-table tr:hover td{ background:var(--bg2); }
+
+    .method-table code{
+      font-family:var(--mono);
+      font-size:.78rem;
+      background:var(--code-bg);
+      padding:.1rem .35rem;
+      border-radius:3px;
+      color:var(--blue);
+      white-space:nowrap;
+    }
+
+    .badge-m{
+      display:inline-block;
+      font-family:var(--mono);
+      font-size:.66rem;
+      font-weight:600;
+      padding:.18rem .55rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+
+    .b-read  { background:var(--blue-bg);  color:var(--blue);  border:1px solid var(--blue-bd); }
+    .b-write { background:var(--green-bg); color:var(--green); border:1px solid var(--green-bd); }
+    .b-both  { background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-bd); }
+    .b-exc   { background:var(--red-bg);   color:var(--red);   border:1px solid var(--red-bd); }
+
+    .flow{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:.5rem;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:1.25rem 1.5rem;
+      font-family:var(--mono);
+      font-size:.8rem;
+    }
+
+    .flow-box{
+      background:var(--code-bg);
+      border:1px solid var(--border2);
+      padding:.5rem .9rem;
+      border-radius:8px;
+      color:var(--ink2);
+      text-align:center;
+      line-height:1.4;
+    }
+
+    .flow-box.highlight{ background:var(--blue-bg); border-color:var(--blue-bd); color:var(--blue); }
+    .flow-box.highlight2{ background:var(--green-bg); border-color:var(--green-bd); color:var(--green); }
+    .flow-box.warn-box{ background:var(--amber-bg); border-color:var(--amber-bd); color:var(--amber); }
+
+    .flow-arrow{
+      color:var(--border2);
+      font-size:1.1rem;
+      flex-shrink:0;
+    }
+
+    .flow-label{
+      font-size:.68rem;
+      color:var(--muted);
+      display:block;
+    }
+
+    .concept-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:.85rem;
+    }
+
+    .concept-card{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:1.2rem;
+      transition:.2s;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .concept-card::after{
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height:3px;
+    }
+
+    .cc-blue::after  { background:var(--blue); }
+    .cc-green::after { background:var(--green); }
+    .cc-amber::after { background:var(--amber); }
+    .cc-red::after   { background:var(--red); }
+
+    .concept-card:hover{
+      box-shadow:0 6px 20px rgba(0,0,0,.07);
+      transform:translateY(-2px);
+    }
+
+    .concept-card h5{
+      font-family:var(--serif);
+      font-size:.95rem;
+      font-weight:600;
+      color:var(--ink);
+      margin-bottom:.45rem;
+    }
+
+    .concept-card p{
+      font-size:.82rem;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    .concept-card code{
+      font-family:var(--mono);
+      font-size:.76rem;
+      background:var(--code-bg);
+      padding:.1rem .35rem;
+      border-radius:3px;
+      color:var(--ink2);
+    }
+
+    .checklist{
+      display:flex;
+      flex-direction:column;
+      gap:.55rem;
+    }
+
+    .check-item{
+      display:flex;
+      align-items:flex-start;
+      gap:.75rem;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:9px;
+      padding:.8rem 1rem;
+      font-size:.88rem;
+      transition:.2s;
+    }
+
+    .check-item:hover{
+      border-color:var(--green-bd);
+      background:var(--green-bg);
+    }
+
+    .check-icon{
+      color:var(--green);
+      flex-shrink:0;
+      margin-top:.1rem;
+    }
+
+    .err-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:.85rem;
+    }
+
+    .err-card{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:1.2rem;
+      transition:.2s;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .err-card::before{
+      content:'';
+      position:absolute;
+      top:0; left:0; bottom:0;
+      width:3px;
+      background:var(--red);
+    }
+
+    .err-card:hover{
+      border-color:var(--red-bd);
+      background:var(--red-bg);
+    }
+
+    .err-card h5{
+      font-family:var(--serif);
+      font-size:.92rem;
+      font-weight:600;
+      color:var(--ink);
+      margin-bottom:.4rem;
+    }
+
+    .err-card p{
+      font-size:.82rem;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .err-card code{
+      font-family:var(--mono);
+      font-size:.78rem;
+      background:var(--code-bg);
+      padding:.1rem .35rem;
+      border-radius:3px;
+      color:var(--red);
+    }
+
+    .footer-note{
+      margin-top:3rem;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:2rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:1rem;
+    }
+
+    .footer-note h3{
+      font-family:var(--serif);
+      font-size:1.1rem;
+      font-weight:600;
+      color:var(--ink);
+      margin-bottom:.4rem;
+    }
+
+    .footer-note p{
+      font-size:.86rem;
+      color:var(--muted);
+      max-width:560px;
+    }
+
+    .footer-tag{
+      font-family:var(--mono);
+      font-size:.72rem;
+      color:var(--muted);
+      background:var(--bg);
+      border:1px solid var(--border);
+      padding:.3rem .75rem;
+      border-radius:4px;
+      white-space:nowrap;
+    }
+
+    .divider{
+      height:1px;
+      background:var(--border);
+      margin:1.5rem 0;
+    }
+
+    .mobile-menu-btn{
+      display:none;
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:140;
+      width:52px;
+      height:52px;
+      border-radius:50%;
+      border:1px solid var(--blue-bd);
+      background:var(--white);
+      color:var(--blue);
+      box-shadow:0 10px 24px rgba(0,0,0,.12);
+      font-size:1.1rem;
+      cursor:pointer;
+    }
+
+    .overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.28);
+      z-index:125;
+    }
+
+    @media (max-width: 1100px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+
+      .sidebar{
+        position:fixed;
+        top:calc(var(--topbar-h) + 10px);
+        left:12px;
+        bottom:12px;
+        width:min(86vw, 320px);
+        max-height:none;
+        transform:translateX(-115%);
+        transition:transform .25s ease;
+        z-index:130;
+      }
+
+      .sidebar.open{
+        transform:translateX(0);
+      }
+
+      .mobile-menu-btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+
+      .overlay.show{
+        display:block;
+      }
+    }
+
+    @media (max-width: 900px){
+      .grid-3{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 760px){
+      .topbar{
+        padding:.65rem .8rem;
+      }
+
+      .topbar-tag{
+        display:none;
+      }
+
+      .layout{
+        padding:1rem;
+      }
+
+      .grid-2{
+        grid-template-columns:1fr;
+      }
+
+      .hero{
+        padding-top:1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="topbar">
+  <span class="topbar-path">DAW1 / Programación / <span>Tema 10 · Ficheros y Excepciones</span></span>
+  <span class="topbar-tag">Java · java.io · try-catch</span>
+</nav>
+
+<div class="overlay" id="overlay"></div>
+
+<button class="mobile-menu-btn" id="menuBtn" aria-label="Abrir menú de navegación">
+  <i class="bi bi-list"></i>
+</button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-title">Navegación</div>
+    <div class="sidebar-sub">Muévete por todo el contenido</div>
+
+    <ul class="nav-list">
+      <li><a class="nav-link" href="#sec-intro"><span class="nav-num">01</span><span>Introducción</span></a></li>
+      <li><a class="nav-link" href="#sec-api"><span class="nav-num">02</span><span>API oficial</span></a></li>
+      <li><a class="nav-link" href="#sec-excepciones"><span class="nav-num">03</span><span>Excepciones</span></a></li>
+      <li><a class="nav-link" href="#sec-trycatch"><span class="nav-num">04</span><span>try-catch-finally</span></a></li>
+      <li><a class="nav-link" href="#sec-throw"><span class="nav-num">05</span><span>throw · throws</span></a></li>
+      <li><a class="nav-link" href="#sec-ficheros"><span class="nav-num">06</span><span>Ficheros de texto</span></a></li>
+      <li><a class="nav-link" href="#sec-acceso"><span class="nav-num">07</span><span>Acceso carácter y línea</span></a></li>
+      <li><a class="nav-link" href="#sec-localizacion"><span class="nav-num">08</span><span>Localización de ficheros</span></a></li>
+      <li><a class="nav-link" href="#sec-clases"><span class="nav-num">09</span><span>Clases java.io</span></a></li>
+      <li><a class="nav-link" href="#sec-jerarquia"><span class="nav-num">10</span><span>Jerarquía E/S</span></a></li>
+      <li><a class="nav-link" href="#sec-ejemplos"><span class="nav-num">11</span><span>Ejemplos</span></a></li>
+      <li><a class="nav-link" href="#sec-errores"><span class="nav-num">12</span><span>Errores comunes</span></a></li>
+      <li><a class="nav-link" href="#sec-repaso"><span class="nav-num">13</span><span>Repaso final</span></a></li>
+    </ul>
+
+    <div class="sidebar-tools">
+      <a class="mini-btn" href="#sec-intro"><i class="bi bi-arrow-up"></i>Ir al inicio</a>
+      <a class="mini-btn" href="https://docs.oracle.com/javase/8/docs/api/" target="_blank" rel="noopener noreferrer">
+        <i class="bi bi-box-arrow-up-right"></i>API Java SE 8
+      </a>
+      <a class="mini-btn" href="https://docs.oracle.com/en/java/javase/17/docs/api/" target="_blank" rel="noopener noreferrer">
+        <i class="bi bi-box-arrow-up-right"></i>API Java SE 17
+      </a>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="page">
+
+      <header class="hero">
+        <div class="hero-label">Tema 10 · Módulo de Programación</div>
+        <h1>Ficheros de Texto<br>y <em>Excepciones</em></h1>
+        <p class="hero-desc">
+          Tratamiento de errores en tiempo de ejecución con <strong>try-catch-finally</strong>,
+          lanzamiento de excepciones con <strong>throw / throws</strong>,
+          y acceso a ficheros de texto con <strong>flujos de caracteres</strong> de la API <code>java.io</code>.
+          También se incluye la localización de ficheros y la visión global de la jerarquía de entrada/salida.
+        </p>
+        <div class="hero-tags">
+          <span class="hero-tag">try-catch-finally</span>
+          <span class="hero-tag">throw / throws</span>
+          <span class="hero-tag">checked exceptions</span>
+          <span class="hero-tag">FileReader / FileWriter</span>
+          <span class="hero-tag">BufferedReader / BufferedWriter</span>
+          <span class="hero-tag">InputStream / OutputStream</span>
+          <span class="hero-tag">try-with-resources</span>
+        </div>
+      </header>
+
+      <section class="sec" id="sec-intro">
+        <div class="sec-header">
+          <span class="sec-num">01</span>
+          <div>
+            <div class="sec-title">Introducción</div>
+            <div class="sec-sub">Qué se estudia en este tema</div>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-card-icon icon-red"><i class="bi bi-shield-exclamation"></i></div>
+            <h4>Excepciones</h4>
+            <p>Mecanismo para controlar errores en tiempo de ejecución: fallos físicos, datos incorrectos, violaciones de seguridad u operaciones no permitidas.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon icon-amber"><i class="bi bi-arrow-repeat"></i></div>
+            <h4>try-catch-finally</h4>
+            <p>Estructura para capturar y tratar excepciones sin interrumpir por completo el flujo normal del programa.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon icon-blue"><i class="bi bi-file-earmark-text"></i></div>
+            <h4>Ficheros de texto</h4>
+            <p>Lectura y escritura de ficheros <code>.txt</code>, muy usados para configuraciones, migraciones e intercambio de información.</p>
+          </div>
+          <div class="info-card">
+            <div class="info-card-icon icon-green"><i class="bi bi-arrow-left-right"></i></div>
+            <h4>Conexión entre bloques</h4>
+            <p>Cuando trabajamos con ficheros es imprescindible tratar excepciones de entrada/salida, así que ambos apartados se practican juntos.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-api">
+        <div class="sec-header">
+          <span class="sec-num">02</span>
+          <div>
+            <div class="sec-title">API oficial recomendada</div>
+            <div class="sec-sub">Acceso directo a la documentación de Oracle</div>
+          </div>
+        </div>
+
+        <div class="api-grid">
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Throwable.html" target="_blank" rel="noopener noreferrer">Throwable</a></h4>
+            <p>Superclase de todos los errores y excepciones.</p>
+            <span class="api-pill">java.lang</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" target="_blank" rel="noopener noreferrer">Exception</a></h4>
+            <p>Base de las excepciones tratables por la aplicación.</p>
+            <span class="api-pill">java.lang</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html" target="_blank" rel="noopener noreferrer">RuntimeException</a></h4>
+            <p>Excepciones no comprobadas por el compilador.</p>
+            <span class="api-pill">java.lang</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" target="_blank" rel="noopener noreferrer">IOException</a></h4>
+            <p>Excepción general para problemas de entrada/salida.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileNotFoundException.html" target="_blank" rel="noopener noreferrer">FileNotFoundException</a></h4>
+            <p>No existe el fichero o no se puede abrir.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html" target="_blank" rel="noopener noreferrer">Reader</a></h4>
+            <p>Clase abstracta base para lectura de caracteres.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" target="_blank" rel="noopener noreferrer">Writer</a></h4>
+            <p>Clase abstracta base para escritura de caracteres.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileReader.html" target="_blank" rel="noopener noreferrer">FileReader</a></h4>
+            <p>Lectura carácter a carácter desde fichero.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html" target="_blank" rel="noopener noreferrer">BufferedReader</a></h4>
+            <p>Lectura eficiente y por líneas.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileWriter.html" target="_blank" rel="noopener noreferrer">FileWriter</a></h4>
+            <p>Escritura carácter a carácter hacia fichero.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedWriter.html" target="_blank" rel="noopener noreferrer">BufferedWriter</a></h4>
+            <p>Escritura eficiente y soporte de <code>newLine()</code>.</p>
+            <span class="api-pill">java.io</span>
+          </div>
+
+          <div class="api-card">
+            <h4><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html" target="_blank" rel="noopener noreferrer">Files</a></h4>
+            <p>Alternativa moderna con utilidades en <code>java.nio.file</code>.</p>
+            <span class="api-pill">java.nio.file</span>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top:1rem">
+          <span class="callout-icon"><i class="bi bi-box-arrow-up-right"></i></span>
+          <div>La idea es que el alumnado pueda pulsar cualquier clase enlazada y abrir directamente su documentación oficial.</div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-excepciones">
+        <div class="sec-header">
+          <span class="sec-num">03</span>
+          <div>
+            <div class="sec-title">Tratamiento de errores en tiempo de ejecución</div>
+            <div class="sec-sub">Excepciones, jerarquía y tipos</div>
+          </div>
+        </div>
+
+        <div class="prose" style="margin-bottom:1.5rem">
+          <p>
+            Las excepciones son <strong>objetos Java</strong> que representan situaciones anómalas en tiempo de ejecución.
+            Todas heredan directa o indirectamente de
+            <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Throwable.html" target="_blank" rel="noopener noreferrer">Throwable</a>.
+            Se apoyan en la herencia para representar errores más generales y más específicos.
+          </p>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:1.5rem">
+          <div class="tree">
+            <div class="tree-root"><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Throwable.html" target="_blank" rel="noopener noreferrer">Throwable</a></div>
+            <div class="tree-l1 tree-branch"><span class="hl-exc">Error</span> <span style="color:var(--muted);font-size:.74rem">— errores intratables</span></div>
+            <div class="tree-l2 tree-branch" style="color:var(--muted)">VirtualMachineError</div>
+            <div class="tree-l2 tree-last" style="color:var(--muted)">OutOfMemoryError</div>
+            <div class="tree-l1 tree-last">
+              <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" target="_blank" rel="noopener noreferrer">Exception</a>
+              <span style="color:var(--muted);font-size:.74rem">— errores tratables</span>
+            </div>
+            <div class="tree-l2 tree-branch">
+              <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" target="_blank" rel="noopener noreferrer">IOException</a>
+              <span style="color:var(--muted);font-size:.72rem">checked ✓</span>
+            </div>
+            <div class="tree-l3 tree-branch" style="color:var(--muted)">
+              <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileNotFoundException.html" target="_blank" rel="noopener noreferrer">FileNotFoundException</a>
+            </div>
+            <div class="tree-l3 tree-last" style="color:var(--muted)">EOFException</div>
+            <div class="tree-l2 tree-branch">
+              <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html" target="_blank" rel="noopener noreferrer">RuntimeException</a>
+              <span style="color:var(--muted);font-size:.72rem">unchecked</span>
+            </div>
+            <div class="tree-l3 tree-branch" style="color:var(--muted)">NullPointerException</div>
+            <div class="tree-l3 tree-branch" style="color:var(--muted)">ArrayIndexOutOfBoundsException</div>
+            <div class="tree-l3 tree-last" style="color:var(--muted)">ClassCastException</div>
+          </div>
+
+          <div class="grid-3" style="grid-template-columns:1fr;">
+            <div class="spec-box">
+              <h4><i class="bi bi-check-circle" style="color:var(--amber)"></i> Checked exceptions</h4>
+              <p class="prose" style="font-size:.86rem">
+                Son las excepciones que el compilador conoce porque los métodos declaran que pueden lanzarlas.
+                Estamos obligados a tratarlas o propagarlas con <code>throws</code>.
+              </p>
+              <p class="prose" style="font-size:.86rem">
+                Ejemplos:
+                <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" target="_blank" rel="noopener noreferrer">IOException</a>,
+                <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileNotFoundException.html" target="_blank" rel="noopener noreferrer">FileNotFoundException</a>.
+              </p>
+            </div>
+
+            <div class="spec-box">
+              <h4><i class="bi bi-dash-circle" style="color:var(--blue)"></i> Unchecked exceptions</h4>
+              <p class="prose" style="font-size:.86rem">
+                No obligan al compilador. Heredan de
+                <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/RuntimeException.html" target="_blank" rel="noopener noreferrer">RuntimeException</a>
+                y suelen representar errores de programación.
+              </p>
+            </div>
+
+            <div class="callout info">
+              <span class="callout-icon"><i class="bi bi-lightbulb-fill"></i></span>
+              <div>
+                Para explorar más clases, abre
+                <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" target="_blank" rel="noopener noreferrer">Exception</a>
+                y revisa sus subclases conocidas en la documentación.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-trycatch">
+        <div class="sec-header">
+          <span class="sec-num">04</span>
+          <div>
+            <div class="sec-title">Estructura try-catch-finally</div>
+            <div class="sec-sub">Cómo capturar y tratar excepciones</div>
+          </div>
+        </div>
+
+        <div class="flow" style="margin-bottom:1.25rem;">
+          <div class="flow-box highlight">Bloque <strong>try</strong><span class="flow-label">código que puede fallar</span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box warn-box">¿excepción?<span class="flow-label">sí / no</span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box" style="background:var(--red-bg);border-color:var(--red-bd);color:var(--red)">Bloque <strong>catch</strong><span class="flow-label">tratar el error</span></div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-box highlight2">Bloque <strong>finally</strong><span class="flow-label">siempre se ejecuta</span></div>
+        </div>
+
+        <div class="prose" style="margin-bottom:1rem">
+          <p>
+            El bloque <code>try</code> contiene las sentencias que potencialmente pueden lanzar una excepción.
+            Si se produce una, se interrumpe la ejecución del bloque y se salta al <code>catch</code> correspondiente.
+            El bloque <code>finally</code> es opcional y se usa para salida segura, liberación de recursos y cierre.
+          </p>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span><span class="dots"><span style="background:#fc5f57"></span><span style="background:#fdbc2c"></span><span style="background:#33c748"></span></span>&nbsp; Sintaxis completa</span>
+            <button class="copy-btn" data-id="c1">Copiar</button>
+          </div>
+          <pre id="c1"><span class="kw">try</span> {
+    <span class="cm">// Código que puede lanzar excepciones</span>
+    acciones;
+
+} <span class="kw">catch</span> (<span class="cl">FileNotFoundException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Fichero no encontrado: "</span> + e.<span class="fn">getMessage</span>());
+
+} <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Error de E/S: "</span> + e.<span class="fn">getMessage</span>());
+
+} <span class="kw">finally</span> {
+    <span class="cm">// Se ejecuta siempre</span>
+    <span class="cm">// Ideal para liberar recursos o cerrar ficheros</span>
+}</pre>
+        </div>
+
+        <div class="callout warn">
+          <span class="callout-icon"><i class="bi bi-exclamation-triangle-fill"></i></span>
+          <div>
+            Los <code>catch</code> deben ordenarse del más específico al más genérico.
+            <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileNotFoundException.html" target="_blank" rel="noopener noreferrer">FileNotFoundException</a>
+            debe ir antes que
+            <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" target="_blank" rel="noopener noreferrer">IOException</a>.
+          </div>
+        </div>
+
+        <div class="prose">
+          <p>
+            Otra posibilidad es <strong>propagar</strong> la excepción en vez de tratarla en ese punto:
+          </p>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span>Propagar con throws</span>
+            <button class="copy-btn" data-id="c2">Copiar</button>
+          </div>
+          <pre id="c2"><span class="kw">public void</span> <span class="fn">leerFichero</span>(<span class="cl">String</span> ruta) <span class="kw">throws</span> <span class="cl">IOException</span> {
+    <span class="cl">BufferedReader</span> br = <span class="kw">new</span> <span class="cl">BufferedReader</span>(<span class="kw">new</span> <span class="cl">FileReader</span>(ruta));
+    <span class="cm">// Si hay problema, la excepción se propaga al método llamante</span>
+}</pre>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-throw">
+        <div class="sec-header">
+          <span class="sec-num">05</span>
+          <div>
+            <div class="sec-title">Lanzamiento de excepciones</div>
+            <div class="sec-sub">throw, throws y excepciones propias</div>
+          </div>
+        </div>
+
+        <div class="prose" style="margin-bottom:1rem">
+          <p>
+            Si dentro de un método detectamos una situación anómala que no podemos resolver, podemos <strong>lanzar una excepción</strong>
+            para interrumpir la ejecución del método y delegar el tratamiento en el llamante.
+          </p>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span>Lanzar con throw</span>
+            <button class="copy-btn" data-id="c3">Copiar</button>
+          </div>
+          <pre id="c3"><span class="kw">public void</span> <span class="fn">setEdad</span>(<span class="kw">int</span> edad) {
+    <span class="kw">if</span> (edad &lt; <span class="num">0</span>) {
+        <span class="kw">throw new</span> <span class="cl">IllegalArgumentException</span>(<span class="str">"Edad negativa"</span>);
+    }
+    <span class="kw">this</span>.edad = edad;
+}</pre>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span>Excepción propia</span>
+            <button class="copy-btn" data-id="c4">Copiar</button>
+          </div>
+          <pre id="c4"><span class="kw">public class</span> <span class="cl">TareaNoEncontradaException</span> <span class="kw">extends</span> <span class="cl">Exception</span> {
+
+    <span class="kw">public</span> <span class="fn">TareaNoEncontradaException</span>() {
+        <span class="kw">super</span>(<span class="str">"Tarea no encontrada"</span>);
+    }
+
+    <span class="kw">public</span> <span class="fn">TareaNoEncontradaException</span>(<span class="cl">String</span> mensaje) {
+        <span class="kw">super</span>(mensaje);
+    }
+}</pre>
+        </div>
+
+        <div class="callout info">
+          <span class="callout-icon"><i class="bi bi-info-circle-fill"></i></span>
+          <div>
+            Crear excepciones propias suele ser más habitual al desarrollar bibliotecas que en aplicaciones pequeñas,
+            aunque sigue siendo una técnica válida si queremos representar errores muy específicos.
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-ficheros">
+        <div class="sec-header">
+          <span class="sec-num">06</span>
+          <div>
+            <div class="sec-title">Ficheros de texto</div>
+            <div class="sec-sub">Características generales y modos de apertura</div>
+          </div>
+        </div>
+
+        <div class="concept-grid" style="margin-bottom:1rem">
+          <div class="concept-card cc-blue">
+            <h5>Carácteres codificados</h5>
+            <p>Los ficheros de texto se componen de caracteres codificados y son muy útiles para compatibilidad entre sistemas y aplicaciones.</p>
+          </div>
+          <div class="concept-card cc-green">
+            <h5>Acceso secuencial</h5>
+            <p>La lectura se hace desde el principio del fichero y la escritura desde el principio o desde el final si se abre en modo añadir.</p>
+          </div>
+          <div class="concept-card cc-amber">
+            <h5>Líneas de texto</h5>
+            <p>Las líneas suelen separarse con <code>\n</code> y en Windows también aparece <code>\r\n</code>. <code>newLine()</code> usa el separador adecuado.</p>
+          </div>
+          <div class="concept-card cc-red">
+            <h5>Tamaño variable</h5>
+            <p>Como las líneas tienen longitud variable, el acceso debe hacerse secuencialmente para encontrar sus separadores.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="spec-box">
+            <h4><i class="bi bi-folder2-open" style="color:var(--blue)"></i> Constructores habituales</h4>
+            <div class="prose" style="font-size:.87rem">
+              <p><code>FileReader(String ruta)</code> y <code>FileReader(File fichero)</code></p>
+              <p><code>FileWriter(String ruta)</code> y <code>FileWriter(File fichero)</code></p>
+              <p><code>FileWriter(String ruta, boolean append)</code> o <code>FileWriter(File fichero, boolean append)</code></p>
+            </div>
+          </div>
+
+          <div class="spec-box">
+            <h4><i class="bi bi-toggle-on" style="color:var(--green)"></i> Modos de acceso</h4>
+            <div class="prose" style="font-size:.87rem">
+              <p><strong>Sobreescribir</strong>: <code>new FileWriter("f.txt")</code> o segundo parámetro <code>false</code>.</p>
+              <p><strong>Añadir</strong>: <code>new FileWriter("f.txt", true)</code>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warn" style="margin-top:1rem">
+          <span class="callout-icon"><i class="bi bi-exclamation-circle-fill"></i></span>
+          <div>
+            Al construir un <code>FileReader</code> o un <code>FileWriter</code> el fichero se abre ya en ese momento.
+            A partir de ahí, ya podemos leer o escribir.
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-acceso">
+        <div class="sec-header">
+          <span class="sec-num">07</span>
+          <div>
+            <div class="sec-title">Acceso carácter a carácter y línea a línea</div>
+            <div class="sec-sub">Métodos clave y comportamiento real</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:1rem">
+          <div class="spec-box">
+            <h4><i class="bi bi-arrow-down-circle" style="color:var(--blue)"></i> Lectura con FileReader</h4>
+            <div class="prose" style="font-size:.87rem">
+              <p><code>read()</code> devuelve un <code>int</code> con el código Unicode del carácter leído.</p>
+              <p>Si se alcanza el final del fichero, devuelve <code>-1</code>.</p>
+              <p>Por eso, para trabajar con el carácter, suele hacerse cast con <code>(char)</code>.</p>
+              <p><code>ready()</code> permite comprobar si aún quedan datos por leer.</p>
+            </div>
+          </div>
+
+          <div class="spec-box">
+            <h4><i class="bi bi-arrow-up-circle" style="color:var(--green)"></i> Escritura con FileWriter</h4>
+            <div class="prose" style="font-size:.87rem">
+              <p><code>write(int)</code> escribe un carácter.</p>
+              <p>Se usa <code>int</code> por compatibilidad con <code>read()</code>, pero aquí no hace falta cast: la conversión es automática.</p>
+              <p>Después de procesar un fichero hay que cerrarlo siempre con <code>close()</code>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="spec-box" style="margin-bottom:1rem">
+          <h4><i class="bi bi-list-ul" style="color:var(--amber)"></i> BufferedReader y BufferedWriter</h4>
+          <div class="prose" style="font-size:.87rem">
+            <p>
+              Para crear un <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html" target="_blank" rel="noopener noreferrer">BufferedReader</a>
+              se utiliza un constructor que recibe un objeto de tipo
+              <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html" target="_blank" rel="noopener noreferrer">Reader</a>,
+              normalmente un <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileReader.html" target="_blank" rel="noopener noreferrer">FileReader</a>.
+            </p>
+            <p>
+              Para crear un <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedWriter.html" target="_blank" rel="noopener noreferrer">BufferedWriter</a>
+              se utiliza un constructor que recibe un objeto de tipo
+              <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" target="_blank" rel="noopener noreferrer">Writer</a>,
+              normalmente un <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileWriter.html" target="_blank" rel="noopener noreferrer">FileWriter</a>.
+            </p>
+            <p><code>readLine()</code> devuelve un <code>String</code> sin el separador de línea y, al final del fichero, devuelve <code>null</code>.</p>
+            <p><code>write(String)</code> escribe una cadena, y <code>newLine()</code> añade el separador correcto según el sistema operativo.</p>
+          </div>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span><span class="dots"><span style="background:#fc5f57"></span><span style="background:#fdbc2c"></span><span style="background:#33c748"></span></span>&nbsp; Lectura carácter a carácter</span>
+            <button class="copy-btn" data-id="c5">Copiar</button>
+          </div>
+          <pre id="c5"><span class="kw">try</span> (<span class="cl">FileReader</span> fr = <span class="kw">new</span> <span class="cl">FileReader</span>(<span class="str">"notas.txt"</span>)) {
+    <span class="kw">int</span> codigo;
+    <span class="kw">while</span> ((codigo = fr.<span class="fn">read</span>()) != -<span class="num">1</span>) {
+        <span class="kw">char</span> c = (<span class="kw">char</span>) codigo;
+        <span class="cl">System</span>.out.<span class="fn">print</span>(c);
+    }
+} <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(e.<span class="fn">getMessage</span>());
+}</pre>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span>Lectura línea a línea</span>
+            <button class="copy-btn" data-id="c6">Copiar</button>
+          </div>
+          <pre id="c6"><span class="kw">try</span> (<span class="cl">BufferedReader</span> br = <span class="kw">new</span> <span class="cl">BufferedReader</span>(
+        <span class="kw">new</span> <span class="cl">FileReader</span>(<span class="str">"tareas.txt"</span>))) {
+
+    <span class="cl">String</span> linea;
+    <span class="kw">while</span> ((linea = br.<span class="fn">readLine</span>()) != <span class="kw">null</span>) {
+        <span class="cl">System</span>.out.<span class="fn">println</span>(linea);
+    }
+
+} <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(e.<span class="fn">getMessage</span>());
+}</pre>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span>Escritura línea a línea</span>
+            <button class="copy-btn" data-id="c7">Copiar</button>
+          </div>
+          <pre id="c7"><span class="kw">try</span> (<span class="cl">BufferedWriter</span> bw = <span class="kw">new</span> <span class="cl">BufferedWriter</span>(
+        <span class="kw">new</span> <span class="cl">FileWriter</span>(<span class="str">"tareas.txt"</span>, <span class="kw">true</span>))) {
+
+    bw.<span class="fn">write</span>(<span class="str">"1;Actividad CRUD;Programación;PENDIENTE"</span>);
+    bw.<span class="fn">newLine</span>();
+
+} <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(e.<span class="fn">getMessage</span>());
+}</pre>
+        </div>
+
+        <div class="callout ok">
+          <span class="callout-icon"><i class="bi bi-check-circle-fill"></i></span>
+          <div>
+            Hoy en día es muy recomendable usar <strong>try-with-resources</strong>, porque cierra automáticamente los ficheros
+            y evita depender de un <code>finally</code> manual.
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-localizacion">
+        <div class="sec-header">
+          <span class="sec-num">08</span>
+          <div>
+            <div class="sec-title">Localización de los ficheros</div>
+            <div class="sec-sub">Rutas absolutas, rutas relativas y directorio de trabajo</div>
+          </div>
+        </div>
+
+        <div class="concept-grid">
+          <div class="concept-card cc-blue">
+            <h5>Ruta absoluta</h5>
+            <p>Indica exactamente dónde está el fichero, pero depende del sistema operativo y de la instalación concreta.</p>
+          </div>
+          <div class="concept-card cc-green">
+            <h5>Ruta relativa</h5>
+            <p>Depende del <strong>directorio de trabajo actual</strong>, por eso puede variar según dónde se ejecute el programa.</p>
+          </div>
+          <div class="concept-card cc-amber">
+            <h5>Desde terminal</h5>
+            <p>El directorio de trabajo es el que esté activo en la consola de comandos.</p>
+          </div>
+          <div class="concept-card cc-red">
+            <h5>Desde NetBeans o IDE</h5>
+            <p>El directorio de trabajo suele ser el directorio del proyecto.</p>
+          </div>
+        </div>
+
+        <div class="callout info" style="margin-top:1rem">
+          <span class="callout-icon"><i class="bi bi-folder2-open"></i></span>
+          <div>
+            Si una ruta relativa no funciona, lo primero que conviene comprobar es <strong>desde qué carpeta se está ejecutando realmente la aplicación</strong>.
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-clases">
+        <div class="sec-header">
+          <span class="sec-num">09</span>
+          <div>
+            <div class="sec-title">Clases de la API java.io</div>
+            <div class="sec-sub">Cuándo usar cada clase</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:1rem">
+          <div class="spec-box">
+            <h4><i class="bi bi-arrow-down-circle" style="color:var(--blue)"></i> Lectura</h4>
+            <table class="method-table">
+              <thead><tr><th>Clase</th><th>Uso</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileReader.html" target="_blank" rel="noopener noreferrer">FileReader</a></td>
+                  <td><span class="badge-m b-read">caracter</span> Lectura carácter a carácter.</td>
+                </tr>
+                <tr>
+                  <td><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html" target="_blank" rel="noopener noreferrer">BufferedReader</a></td>
+                  <td><span class="badge-m b-read">línea</span> Lectura por líneas con <code>readLine()</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="spec-box">
+            <h4><i class="bi bi-arrow-up-circle" style="color:var(--green)"></i> Escritura</h4>
+            <table class="method-table">
+              <thead><tr><th>Clase</th><th>Uso</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileWriter.html" target="_blank" rel="noopener noreferrer">FileWriter</a></td>
+                  <td><span class="badge-m b-write">caracter</span> Escritura carácter a carácter.</td>
+                </tr>
+                <tr>
+                  <td><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedWriter.html" target="_blank" rel="noopener noreferrer">BufferedWriter</a></td>
+                  <td><span class="badge-m b-write">línea</span> Escritura por líneas con <code>write()</code> y <code>newLine()</code>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="spec-box">
+          <h4><i class="bi bi-list-ul" style="color:var(--amber)"></i> Métodos y comportamiento clave</h4>
+          <table class="method-table">
+            <thead>
+              <tr><th>Método</th><th>Clase</th><th>Descripción</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>read()</code></td>
+                <td><span class="badge-m b-read">FileReader</span></td>
+                <td>Lee el siguiente carácter como <code>int</code>. Devuelve <code>-1</code> al final del fichero.</td>
+              </tr>
+              <tr>
+                <td><code>ready()</code></td>
+                <td><span class="badge-m b-read">FileReader / BufferedReader</span></td>
+                <td>Permite comprobar si aún quedan datos por leer.</td>
+              </tr>
+              <tr>
+                <td><code>readLine()</code></td>
+                <td><span class="badge-m b-read">BufferedReader</span></td>
+                <td>Lee una línea completa y devuelve <code>null</code> al final.</td>
+              </tr>
+              <tr>
+                <td><code>write(int)</code></td>
+                <td><span class="badge-m b-write">FileWriter</span></td>
+                <td>Escribe un carácter. No necesita cast de conversión.</td>
+              </tr>
+              <tr>
+                <td><code>write(String)</code></td>
+                <td><span class="badge-m b-write">BufferedWriter</span></td>
+                <td>Escribe una cadena completa.</td>
+              </tr>
+              <tr>
+                <td><code>newLine()</code></td>
+                <td><span class="badge-m b-write">BufferedWriter</span></td>
+                <td>Añade el separador de línea adecuado según el sistema operativo.</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td><span class="badge-m b-both">Todos</span></td>
+                <td>Cierra el flujo, libera recursos y garantiza el volcado de buffers de escritura.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout err" style="margin-top:1rem">
+          <span class="callout-icon"><i class="bi bi-exclamation-octagon-fill"></i></span>
+          <div>
+            El constructor de <code>FileReader</code> puede lanzar
+            <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/FileNotFoundException.html" target="_blank" rel="noopener noreferrer">FileNotFoundException</a>.
+            El de <code>FileWriter</code> puede lanzar
+            <a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/IOException.html" target="_blank" rel="noopener noreferrer">IOException</a>.
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-jerarquia">
+        <div class="sec-header">
+          <span class="sec-num">10</span>
+          <div>
+            <div class="sec-title">Visión global de la API de entrada / salida</div>
+            <div class="sec-sub">Jerarquía y simetría entre entrada y salida</div>
+          </div>
+        </div>
+
+        <div class="prose" style="margin-bottom:1rem">
+          <p>
+            La API <code>java.io</code> organiza las secuencias de entrada y salida en dos jerarquías paralelas.
+            No solo sirve para ficheros: también se usa para otras fuentes y destinos de datos, como conexiones de red.
+          </p>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:1rem">
+          <div class="tree">
+            <div class="tree-root" style="color:var(--blue)">Entrada</div>
+            <div class="divider" style="margin:.5rem 0"></div>
+            <div class="tree-l1 tree-branch" style="color:var(--muted);font-size:.75rem">Flujos binarios</div>
+            <div class="tree-l1 tree-branch">InputStream</div>
+            <div class="tree-l2 tree-branch" style="color:var(--muted)">FilterInputStream</div>
+            <div class="tree-l3 tree-last" style="color:var(--muted)">DataInputStream</div>
+            <div class="tree-l2 tree-last" style="color:var(--muted)">FileInputStream</div>
+
+            <div class="tree-l1 tree-branch" style="color:var(--muted);font-size:.75rem;margin-top:.6rem">Flujo de texto</div>
+            <div class="tree-l1 tree-branch"><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html" target="_blank" rel="noopener noreferrer">Reader</a></div>
+            <div class="tree-l2 tree-branch" style="color:var(--muted)">InputStreamReader</div>
+            <div class="tree-l2 tree-last"><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/BufferedReader.html" target="_blank" rel="noopener noreferrer">BufferedReader</a></div>
+          </div>
+
+          <div class="tree">
+            <div class="tree-root" style="color:var(--green)">Salida</div>
+            <div class="divider" style="margin:.5rem 0"></div>
+            <div class="tree-l1 tree-branch" style="color:var(--muted);font-size:.75rem">Flujos binarios</div>
+            <div class="tree-l1 tree-branch">OutputStream</div>
+            <div class="tree-l2 tree-branch" style="color:var(--muted)">FilterOutputStream</div>
+            <div class="tree-l3 tree-last" style="color:var(--muted)">DataOutputStream</div>
+            <div class="tree-l2 tree-last" style="color:var(--muted)">FileOutputStream</div>
+
+            <div class="tree-l1 tree-branch" style="color:var(--muted);font-size:.75rem;margin-top:.6rem">Flujo de texto</div>
+            <div class="tree-l1 tree-branch"><a class="api-link" href="https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html" target="_blank" rel="noopener noreferrer">Writer</a></div>
+            <div class="tree-l2 tree-branch" style="color:var(--muted)">OutputStreamWriter</div>
+            <div class="tree-l2 tree-last" style="color:var(--muted)">PrintWriter</div>
+          </div>
+        </div>
+
+        <div class="callout ok">
+          <span class="callout-icon"><i class="bi bi-symmetry-horizontal"></i></span>
+          <div>
+            Existe una <strong>simetría perfecta</strong> entre entrada y salida.
+            Las clases con sufijo <strong>Stream</strong> trabajan en modo binario,
+            mientras que las clases <strong>Reader / Writer</strong> trabajan con caracteres de texto.
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h1>Entrada: </h1>
+        <img src="img/entrada.png">
+        <h1>Salida: </h1>
+        <img src="img/salida.png">
+      </section>
+
+      <section class="sec" id="sec-ejemplos">
+        <div class="sec-header">
+          <span class="sec-num">11</span>
+          <div>
+            <div class="sec-title">Ejemplos de uso</div>
+            <div class="sec-sub">Patrones habituales en la práctica</div>
+          </div>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span><span class="dots"><span style="background:#fc5f57"></span><span style="background:#fdbc2c"></span><span style="background:#33c748"></span></span>&nbsp; Escritura en modo añadir</span>
+            <button class="copy-btn" data-id="c8">Copiar</button>
+          </div>
+          <pre id="c8"><span class="kw">try</span> (<span class="cl">BufferedWriter</span> bw = <span class="kw">new</span> <span class="cl">BufferedWriter</span>(
+        <span class="kw">new</span> <span class="cl">FileWriter</span>(<span class="str">"tareas.txt"</span>, <span class="kw">true</span>))) {
+
+    bw.<span class="fn">write</span>(<span class="str">"1;Actividad CRUD;Programación;PENDIENTE"</span>);
+    bw.<span class="fn">newLine</span>();
+
+    bw.<span class="fn">write</span>(<span class="str">"2;Examen CSS;LMSGI;EN_PROCESO"</span>);
+    bw.<span class="fn">newLine</span>();
+
+} <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Error al escribir: "</span> + e.<span class="fn">getMessage</span>());
+}</pre>
+        </div>
+
+        <div class="code-wrap">
+          <div class="code-head">
+            <span>Lectura de líneas</span>
+            <button class="copy-btn" data-id="c9">Copiar</button>
+          </div>
+          <pre id="c9"><span class="kw">try</span> (<span class="cl">BufferedReader</span> br = <span class="kw">new</span> <span class="cl">BufferedReader</span>(
+        <span class="kw">new</span> <span class="cl">FileReader</span>(<span class="str">"tareas.txt"</span>))) {
+
+    <span class="cl">String</span> linea;
+    <span class="kw">while</span> ((linea = br.<span class="fn">readLine</span>()) != <span class="kw">null</span>) {
+        <span class="cl">System</span>.out.<span class="fn">println</span>(linea);
+    }
+
+} <span class="kw">catch</span> (<span class="cl">FileNotFoundException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"No existe el fichero."</span>);
+} <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Error de lectura."</span>);
+}</pre>
+        </div>
+
+        <div class="callout info">
+          <span class="callout-icon"><i class="bi bi-journal-code"></i></span>
+          <div>
+            En el material original este apartado remite a <strong>ejercicios resueltos</strong>.
+            Puedes usar estos patrones como base para esas prácticas.
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-errores">
+        <div class="sec-header">
+          <span class="sec-num">12</span>
+          <div>
+            <div class="sec-title">Errores comunes</div>
+            <div class="sec-sub">Fallos frecuentes y cómo evitarlos</div>
+          </div>
+        </div>
+
+        <div class="err-grid">
+          <div class="err-card">
+            <h5>No cerrar el fichero</h5>
+            <p>Si no se cierra, pueden quedar datos en buffer y no liberarse correctamente los recursos. Usa <code>try-with-resources</code>.</p>
+          </div>
+          <div class="err-card">
+            <h5>Sobreescribir sin querer</h5>
+            <p><code>new FileWriter("f.txt")</code> borra el contenido previo. Para añadir hay que usar <code>true</code>.</p>
+          </div>
+          <div class="err-card">
+            <h5>Orden incorrecto de catch</h5>
+            <p>Si pones <code>IOException</code> antes de <code>FileNotFoundException</code>, el segundo no se alcanzará.</p>
+          </div>
+          <div class="err-card">
+            <h5>Olvidar el cast a char</h5>
+            <p><code>read()</code> devuelve <code>int</code>. Para imprimir el carácter normalmente necesitas <code>(char)</code>.</p>
+          </div>
+          <div class="err-card">
+            <h5>No comprobar el final de fichero</h5>
+            <p><code>readLine()</code> devuelve <code>null</code> y <code>read()</code> devuelve <code>-1</code> al final del fichero.</p>
+          </div>
+          <div class="err-card">
+            <h5>Ruta relativa mal entendida</h5>
+            <p>Si el programa no encuentra el fichero, revisa cuál es realmente el directorio de trabajo.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="sec-repaso">
+        <div class="sec-header">
+          <span class="sec-num">13</span>
+          <div>
+            <div class="sec-title">Repaso — puntos clave</div>
+            <div class="sec-sub">Checklist final</div>
+          </div>
+        </div>
+
+        <div class="checklist">
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span><code>Throwable</code> es la raíz de errores y excepciones.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span><code>Error</code> representa fallos intratables y <code>Exception</code> los tratables.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span>Las <strong>checked exceptions</strong> deben tratarse o propagarse con <code>throws</code>.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span><code>RuntimeException</code> y sus hijas son unchecked.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span>Los <code>catch</code> van del más específico al más genérico.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span><code>finally</code> se usa para salida segura y liberación de recursos.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span><code>FileReader.read()</code> devuelve <code>int</code> y al final <code>-1</code>.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span><code>BufferedReader.readLine()</code> devuelve <code>null</code> al final.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span><code>FileWriter("f.txt", true)</code> abre en modo añadir.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span>Las clases con sufijo <strong>Stream</strong> son binarias; las <strong>Reader/Writer</strong> son de texto.</span></div>
+          <div class="check-item"><span class="check-icon"><i class="bi bi-check-circle-fill"></i></span><span>Las rutas relativas dependen del directorio de trabajo actual.</span></div>
+        </div>
+
+        <div class="footer-note">
+          <div>
+            <h3>Relación con el tema anterior</h3>
+            <p>
+              Este tema encaja muy bien con una práctica CRUD: una interfaz define el contrato y una clase de servicio
+              implementa la persistencia usando los flujos de texto y el tratamiento de excepciones de este bloque.
+            </p>
+          </div>
+          <span class="footer-tag">Programación · DAW1 · Tema 10</span>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // Fade-in de secciones
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05 });
+
+  document.querySelectorAll('.sec').forEach((s, i) => {
+    s.style.transitionDelay = `${i * 0.03}s`;
+    obs.observe(s);
+  });
+
+  // Copiar código
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const el = document.getElementById(btn.dataset.id);
+      navigator.clipboard.writeText(el ? el.innerText : '').then(() => {
+        const orig = btn.textContent;
+        btn.textContent = '✓ Copiado';
+        btn.classList.add('ok');
+        setTimeout(() => {
+          btn.textContent = orig;
+          btn.classList.remove('ok');
+        }, 1500);
+      });
+    });
+  });
+
+  // Menú móvil
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+
+  function closeMenu() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+  }
+
+  function openMenu() {
+    sidebar.classList.add('open');
+    overlay.classList.add('show');
+  }
+
+  menuBtn.addEventListener('click', () => {
+    if (sidebar.classList.contains('open')) closeMenu();
+    else openMenu();
+  });
+
+  overlay.addEventListener('click', closeMenu);
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1100) closeMenu();
+    });
+  });
+
+  // Resaltado de sección activa
+  const navLinks = [...document.querySelectorAll('.nav-link')];
+  const sections = [...document.querySelectorAll('.sec[id]')];
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = '#' + entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === id);
+        });
+      }
+    });
+  }, {
+    rootMargin: '-20% 0px -65% 0px',
+    threshold: 0.01
+  });
+
+  sections.forEach(section => sectionObserver.observe(section));
+</script>
+</body>
+</html>
