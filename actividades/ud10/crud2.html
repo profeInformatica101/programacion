@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRUD en Java · DAW1 · Actividad completa</title>
+
+  <!-- Bootstrap real -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+  <!-- Iconos -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --bg:#f5f3ef;
+      --bg2:#faf9f7;
+      --white:#ffffff;
+      --ink:#1a1814;
+      --ink2:#3d3830;
+      --muted:#7d7468;
+      --border:#e0dbd2;
+      --border2:#c8c1b6;
+
+      --blue:#1a56db;
+      --blue-bg:#eef3fd;
+      --blue-bd:#c3d5f8;
+
+      --green:#0d6640;
+      --green-bg:#ecf8f1;
+      --green-bd:#b3e3c9;
+
+      --amber:#92500a;
+      --amber-bg:#fdf4e7;
+      --amber-bd:#f3d49c;
+
+      --red:#9b1c2e;
+      --red-bg:#fdf0f2;
+      --red-bd:#f5c0ca;
+
+      --code-bg:#f0ede8;
+      --code-fg:#1a1814;
+
+      --mono:'IBM Plex Mono', monospace;
+      --serif:'Fraunces', Georgia, serif;
+      --sans:'DM Sans', sans-serif;
+    }
+
+    body{
+      background: var(--bg);
+      color: var(--ink2);
+      font-family: var(--sans);
+      line-height: 1.7;
+    }
+
+    .page{
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .hero{
+      background:
+        linear-gradient(135deg, rgba(26,86,219,.08), rgba(13,102,64,.05)),
+        var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.04);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      font-family: var(--mono);
+      font-size:.75rem;
+      color: var(--blue);
+      background: var(--blue-bg);
+      border:1px solid var(--blue-bd);
+      border-radius: 999px;
+      padding:.35rem .8rem;
+      margin-bottom:1rem;
+    }
+
+    .hero h1{
+      font-family: var(--serif);
+      color: var(--ink);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.08;
+      margin-bottom: 1rem;
+    }
+
+    .hero p{
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 760px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.55rem;
+    }
+
+    .hero-tag{
+      font-family: var(--mono);
+      font-size:.74rem;
+      padding:.35rem .7rem;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--border);
+      color:var(--ink2);
+    }
+
+    .sec{
+      margin-top: 3.5rem;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+
+    .sec.visible{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    .sec-header{
+      display:flex;
+      align-items:flex-start;
+      gap:1rem;
+      border-bottom:1.5px solid var(--border2);
+      padding-bottom: .9rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .sec-num{
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--muted);
+      background: var(--white);
+      border: 1px solid var(--border2);
+      border-radius: 6px;
+      padding: .22rem .58rem;
+      flex-shrink:0;
+      margin-top:.2rem;
+    }
+
+    .sec-title{
+      font-family: var(--serif);
+      font-size: 1.55rem;
+      line-height: 1.15;
+      color: var(--ink);
+      font-weight: 600;
+      margin:0;
+    }
+
+    .sec-sub{
+      font-size: .88rem;
+      color: var(--muted);
+      margin-top: .3rem;
+    }
+
+    .soft-card{
+      background: var(--white);
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.035);
+    }
+
+    .card-title-custom{
+      font-family: var(--serif);
+      color: var(--ink);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: .95rem;
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+    }
+
+    .ops{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.5rem;
+    }
+
+    .op{
+      font-family: var(--mono);
+      font-size:.71rem;
+      font-weight:600;
+      padding:.3rem .75rem;
+      border-radius:6px;
+    }
+
+    .op-c{ background:var(--green-bg); color:var(--green); border:1px solid var(--green-bd); }
+    .op-r{ background:var(--blue-bg); color:var(--blue); border:1px solid var(--blue-bd); }
+    .op-u{ background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-bd); }
+    .op-d{ background:var(--red-bg); color:var(--red); border:1px solid var(--red-bd); }
+
+    .persist-note{
+      margin-top:1rem;
+      font-size:.87rem;
+      color:var(--muted);
+      background:var(--blue-bg);
+      border:1px solid var(--blue-bd);
+      border-radius:10px;
+      padding:.8rem 1rem;
+    }
+
+    .attr-table{
+      width:100%;
+      border-collapse:collapse;
+      font-family:var(--mono);
+      font-size:.83rem;
+    }
+
+    .attr-table tr{
+      border-bottom:1px solid var(--border);
+    }
+
+    .attr-table tr:last-child{
+      border-bottom:none;
+    }
+
+    .attr-table td{
+      padding:.6rem .2rem;
+      vertical-align:top;
+    }
+
+    .attr-table td:first-child{
+      color:var(--blue);
+      width:34%;
+    }
+
+    .attr-table td:last-child{
+      color:var(--muted);
+    }
+
+    .code-wrap{
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      background:var(--white);
+      box-shadow: 0 8px 24px rgba(0,0,0,.03);
+    }
+
+    .code-head{
+      background:var(--bg);
+      border-bottom:1px solid var(--border);
+      padding:.7rem 1rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      font-family:var(--mono);
+      font-size:.74rem;
+      color:var(--muted);
+    }
+
+    .dots{
+      display:inline-flex;
+      gap:.35rem;
+      margin-right:.35rem;
+      vertical-align:middle;
+    }
+
+    .dots span{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+    }
+
+    pre{
+      margin:0;
+      background:var(--code-bg);
+      color:var(--code-fg);
+      padding:1.25rem 1.35rem;
+      overflow:auto;
+      font-family:var(--mono);
+      font-size:.82rem;
+      line-height:1.68;
+      tab-size:4;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .kw { color:#7c3aed; }
+    .fn { color:#1a56db; }
+    .cl { color:#0d6640; font-style:italic; }
+    .str{ color:#92500a; }
+    .cm { color:#9c9488; font-style:italic; }
+    .ann{ color:#0f6b8a; }
+    .num{ color:#c2410c; }
+
+    .copy-btn{
+      background:transparent;
+      border:1px solid var(--border2);
+      color:var(--muted);
+      font-family:var(--mono);
+      font-size:.72rem;
+      border-radius:6px;
+      padding:.28rem .68rem;
+      transition:.2s ease;
+    }
+
+    .copy-btn:hover{
+      color:var(--blue);
+      border-color:var(--blue);
+      background:#fff;
+    }
+
+    .copy-btn.ok{
+      color:var(--green);
+      border-color:var(--green-bd);
+      background:var(--green-bg);
+    }
+
+    .concept-card{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:1.2rem;
+      height:100%;
+      position:relative;
+      overflow:hidden;
+      box-shadow: 0 8px 22px rgba(0,0,0,.028);
+      transition:.2s ease;
+    }
+
+    .concept-card:hover{
+      transform:translateY(-2px);
+      box-shadow: 0 14px 28px rgba(0,0,0,.05);
+    }
+
+    .concept-card::before{
+      content:'';
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:4px;
+    }
+
+    .cc-blue::before{ background:var(--blue); }
+    .cc-green::before{ background:var(--green); }
+    .cc-amber::before{ background:var(--amber); }
+    .cc-red::before{ background:var(--red); }
+
+    .concept-card h5{
+      font-family:var(--serif);
+      color:var(--ink);
+      font-size:1rem;
+      font-weight:600;
+      margin-bottom:.45rem;
+    }
+
+    .concept-card p{
+      font-size:.87rem;
+      color:var(--muted);
+      margin:0;
+    }
+
+    .concept-card code,
+    .inline-code{
+      font-family:var(--mono);
+      font-size:.78rem;
+      background:var(--code-bg);
+      color:var(--ink2);
+      border-radius:4px;
+      padding:.08rem .36rem;
+    }
+
+    .console-demo{
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,.03);
+      height:100%;
+    }
+
+    .console-bar{
+      background:var(--bg);
+      border-bottom:1px solid var(--border);
+      padding:.65rem 1rem;
+      font-family:var(--mono);
+      font-size:.74rem;
+      color:var(--muted);
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+
+    .console-body{
+      background:#1e1e1e;
+      padding:1.1rem 1.35rem;
+      font-family:var(--mono);
+      font-size:.8rem;
+      line-height:1.9;
+      min-height: 280px;
+    }
+
+    .con-head{ color:#e5c07b; }
+    .con-num { color:#61afef; }
+    .con-opt { color:#abb2bf; }
+    .con-div { color:#3e4451; }
+    .con-pmt { color:#98c379; }
+    .con-col { color:#61afef; }
+    .con-row { color:#abb2bf; }
+    .con-ok  { color:#98c379; }
+
+    .timeline{
+      position:relative;
+    }
+
+    .timeline-item{
+      display:flex;
+      gap:1rem;
+      position:relative;
+      padding-bottom:2rem;
+    }
+
+    .timeline-item:last-child{
+      padding-bottom:0;
+    }
+
+    .timeline-left{
+      width:40px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      flex-shrink:0;
+    }
+
+    .timeline-dot{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      border:2px solid var(--border2);
+      background:#fff;
+      color:var(--muted);
+      font-family:var(--mono);
+      font-size:.75rem;
+      font-weight:600;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:.2s ease;
+    }
+
+    .timeline-item:hover .timeline-dot{
+      border-color:var(--blue);
+      color:var(--blue);
+      background:var(--blue-bg);
+    }
+
+    .timeline-line{
+      flex:1;
+      width:1px;
+      background:var(--border);
+      margin-top:4px;
+    }
+
+    .timeline-item:last-child .timeline-line{
+      display:none;
+    }
+
+    .timeline-body{
+      flex:1;
+      padding-top:.2rem;
+    }
+
+    .timeline-body h4{
+      font-family:var(--serif);
+      color:var(--ink);
+      font-size:1.08rem;
+      font-weight:600;
+      margin-bottom:.4rem;
+    }
+
+    .timeline-body p{
+      font-size:.9rem;
+      color:var(--muted);
+      margin-bottom:.7rem;
+    }
+
+    .tl-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.45rem;
+    }
+
+    .tl-tag{
+      font-family:var(--mono);
+      font-size:.69rem;
+      padding:.2rem .62rem;
+      border-radius:5px;
+      background:var(--bg);
+      border:1px solid var(--border2);
+      color:var(--muted);
+    }
+
+    .eval-item{
+      display:flex;
+      align-items:flex-start;
+      gap:.7rem;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:.9rem 1rem;
+      height:100%;
+      font-size:.9rem;
+      transition:.2s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,.02);
+    }
+
+    .eval-item:hover{
+      background:var(--green-bg);
+      border-color:var(--green-bd);
+    }
+
+    .eval-tick{
+      color:var(--green);
+      margin-top:.1rem;
+      flex-shrink:0;
+    }
+
+    .extra-item{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:.92rem 1rem;
+      display:flex;
+      align-items:center;
+      gap:.65rem;
+      height:100%;
+      font-size:.9rem;
+      box-shadow: 0 8px 18px rgba(0,0,0,.02);
+      transition:.2s ease;
+    }
+
+    .extra-item:hover{
+      background:var(--bg2);
+      border-color:var(--border2);
+    }
+
+    .extra-arrow{
+      font-family:var(--mono);
+      color:var(--blue);
+      font-size:.8rem;
+      flex-shrink:0;
+    }
+
+    .footer-note{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:1.6rem;
+      box-shadow: 0 10px 24px rgba(0,0,0,.03);
+    }
+
+    .footer-note h3{
+      font-family:var(--serif);
+      color:var(--ink);
+      font-size:1.18rem;
+      font-weight:600;
+      margin-bottom:.45rem;
+    }
+
+    .footer-note p{
+      color:var(--muted);
+      font-size:.9rem;
+      margin-bottom:0;
+    }
+
+    .footer-tag{
+      display:inline-block;
+      margin-top:1rem;
+      font-family:var(--mono);
+      font-size:.73rem;
+      color:var(--muted);
+      background:var(--bg);
+      border:1px solid var(--border);
+      padding:.35rem .8rem;
+      border-radius:999px;
+    }
+
+    .accordion-item{
+      border:1px solid var(--border) !important;
+      border-radius:14px !important;
+      overflow:hidden;
+      background:#fff;
+      margin-bottom:.8rem;
+    }
+
+    .accordion-button{
+      background:#fff;
+      font-family:var(--sans);
+      color:var(--ink);
+      font-weight:600;
+      box-shadow:none !important;
+    }
+
+    .accordion-button:not(.collapsed){
+      background:var(--blue-bg);
+      color:var(--blue);
+    }
+
+    .accordion-body{
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .table-soft{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow: 0 8px 22px rgba(0,0,0,.02);
+    }
+
+    .table-soft thead th{
+      background:var(--bg2);
+      color:var(--ink);
+      font-weight:700;
+      font-size:.88rem;
+      border-bottom:1px solid var(--border);
+    }
+
+    .table-soft td{
+      color:var(--muted);
+      font-size:.9rem;
+      vertical-align:middle;
+    }
+
+    @media (max-width: 767.98px){
+      .hero{
+        padding:1.6rem;
+      }
+
+      .hero h1{
+        font-size:2rem;
+      }
+
+      .sec-title{
+        font-size:1.28rem;
+      }
+
+      .console-body{
+        min-height:auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-lg-5">
+  <div class="page">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="eyebrow">
+        <i class="bi bi-code-square"></i>
+        Actividad orientada a DAW 1 · Módulo de Programación
+      </div>
+
+      <h1>CRUD en Java con interfaces y ficheros de texto</h1>
+
+      <p>
+        Propuesta práctica para enlazar el tema anterior de <strong>interfaces</strong> con el nuevo bloque de
+        <strong>flujos de caracteres, apertura y cierre de ficheros, lectura y escritura en texto</strong>
+        y <strong>formato de salida en consola</strong>.
+      </p>
+
+      <div class="hero-tags">
+        <span class="hero-tag">Java</span>
+        <span class="hero-tag">CRUD</span>
+        <span class="hero-tag">Interfaces</span>
+        <span class="hero-tag">FileReader / FileWriter</span>
+        <span class="hero-tag">BufferedReader / BufferedWriter</span>
+        <span class="hero-tag">printf</span>
+      </div>
+    </section>
+
+    <!-- 01 OBJETIVOS -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">01</span>
+        <div>
+          <h2 class="sec-title">Objetivos didácticos</h2>
+          <div class="sec-sub">Qué va a aprender el alumnado con esta actividad</div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-4">
+          <div class="concept-card cc-blue">
+            <h5>Definir interfaces</h5>
+            <p>Representar un contrato común con operaciones CRUD reutilizables.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="concept-card cc-green">
+            <h5>Trabajar con objetos</h5>
+            <p>Diseñar una clase <code>Tarea</code> con atributos, constructor, getters, setters y métodos auxiliares.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="concept-card cc-amber">
+            <h5>Persistir en texto</h5>
+            <p>Guardar y recuperar datos desde un fichero usando flujos de caracteres.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="concept-card cc-red">
+            <h5>Usar apertura y cierre</h5>
+            <p>Aplicar <code>try-with-resources</code> y diferenciar entre sobreescritura y modo append.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="concept-card cc-blue">
+            <h5>Leer y escribir líneas</h5>
+            <p>Usar <code>readLine()</code>, <code>write()</code> y <code>newLine()</code> con un formato coherente.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="concept-card cc-green">
+            <h5>Formatear la salida</h5>
+            <p>Presentar la información por consola de forma clara usando <code>printf</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 ENUNCIADO -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">02</span>
+        <div>
+          <h2 class="sec-title">Enunciado de la actividad</h2>
+          <div class="sec-sub">Qué hay que desarrollar</div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="soft-card p-4 h-100">
+            <div class="card-title-custom">
+              <i class="bi bi-grid-3x2-gap" style="color:var(--blue)"></i>
+              Operaciones CRUD
+            </div>
+
+            <div class="ops">
+              <span class="op op-c">CREATE · crear</span>
+              <span class="op op-r">READ · listar</span>
+              <span class="op op-r">READ · buscar</span>
+              <span class="op op-u">UPDATE · actualizar</span>
+              <span class="op op-d">DELETE · eliminar</span>
+            </div>
+
+            <div class="persist-note">
+              Los datos se guardan en
+              <code class="inline-code">tareas.txt</code>
+              mediante flujos de caracteres. Al relanzar la aplicación, los datos
+              <strong>persisten</strong>.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="soft-card p-4 h-100">
+            <div class="card-title-custom">
+              <i class="bi bi-braces" style="color:var(--green)"></i>
+              Atributos de <code class="inline-code">Tarea</code>
+            </div>
+
+            <table class="attr-table">
+              <tr><td>id</td><td>int — identificador único</td></tr>
+              <tr><td>titulo</td><td>String — nombre breve de la tarea</td></tr>
+              <tr><td>modulo</td><td>String — asignatura o módulo profesional</td></tr>
+              <tr><td>estado</td><td>PENDIENTE / EN_PROCESO / HECHA</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="soft-card p-4 mt-4">
+        <div class="card-title-custom mb-3">
+          <i class="bi bi-journal-text" style="color:var(--amber)"></i>
+          Redacción para el alumnado
+        </div>
+
+        <p class="mb-0">
+          Desarrolla una aplicación en <strong>Java</strong> para gestionar tareas académicas de un estudiante de
+          <strong>DAW</strong>. La aplicación funcionará por consola y permitirá realizar un
+          <strong>CRUD completo</strong>. Los datos deberán almacenarse en un fichero de texto llamado
+          <code class="inline-code">tareas.txt</code>. Cada tarea incluirá un identificador, un título,
+          un módulo y un estado. El programa deberá usar interfaces, clases, flujos de caracteres y salida
+          formateada en consola.
+        </p>
+      </div>
+    </section>
+
+    <!-- 03 REQUISITOS -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">03</span>
+        <div>
+          <h2 class="sec-title">Requisitos de la práctica</h2>
+          <div class="sec-sub">Qué debe implementar el alumnado</div>
+        </div>
+      </div>
+
+      <div class="accordion" id="accRequisitos">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#req1" aria-expanded="true">
+              1. Clase de modelo
+            </button>
+          </h2>
+          <div id="req1" class="accordion-collapse collapse show" data-bs-parent="#accRequisitos">
+            <div class="accordion-body">
+              Crear una clase <code class="inline-code">Tarea</code> con atributos privados, constructor,
+              getters, setters, <code class="inline-code">toString()</code>,
+              <code class="inline-code">toLinea()</code> y <code class="inline-code">desdeLinea()</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#req2">
+              2. Interfaz CRUD
+            </button>
+          </h2>
+          <div id="req2" class="accordion-collapse collapse" data-bs-parent="#accRequisitos">
+            <div class="accordion-body">
+              Definir una interfaz genérica <code class="inline-code">Crud&lt;T&gt;</code> con operaciones
+              de crear, buscar, listar, actualizar y eliminar.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#req3">
+              3. Clase de servicio
+            </button>
+          </h2>
+          <div id="req3" class="accordion-collapse collapse" data-bs-parent="#accRequisitos">
+            <div class="accordion-body">
+              Crear una clase <code class="inline-code">TareaServicio</code> que implemente la interfaz
+              y gestione el fichero <code class="inline-code">tareas.txt</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#req4">
+              4. Menú por consola
+            </button>
+          </h2>
+          <div id="req4" class="accordion-collapse collapse" data-bs-parent="#accRequisitos">
+            <div class="accordion-body">
+              Implementar un menú con opciones para crear, listar, buscar, actualizar, eliminar y salir.
+              La interacción se realizará con <code class="inline-code">Scanner</code>.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item mb-0">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#req5">
+              5. Uso correcto de ficheros
+            </button>
+          </h2>
+          <div id="req5" class="accordion-collapse collapse" data-bs-parent="#accRequisitos">
+            <div class="accordion-body">
+              Emplear flujos de caracteres, apertura y cierre adecuados, modo añadir cuando corresponda
+              y salida formateada con <code class="inline-code">printf</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 ESTRUCTURA DEL PROYECTO -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">04</span>
+        <div>
+          <h2 class="sec-title">Estructura del proyecto</h2>
+          <div class="sec-sub">Código orientativo para empezar la actividad</div>
+        </div>
+      </div>
+
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="code-wrap h-100">
+            <div class="code-head">
+              <span>
+                <span class="dots">
+                  <span style="background:#fc5f57"></span>
+                  <span style="background:#fdbc2c"></span>
+                  <span style="background:#33c748"></span>
+                </span>
+                Crud.java
+              </span>
+              <button class="copy-btn" data-id="cc1" type="button" aria-label="Copiar código Crud.java">Copiar</button>
+            </div>
+            <pre id="cc1"><span class="cm">// Contrato común para operaciones CRUD</span>
+<span class="kw">public interface</span> <span class="cl">Crud</span>&lt;<span class="cl">T</span>&gt; {
+    <span class="kw">void</span>    <span class="fn">crear</span>(<span class="cl">T</span> objeto);
+    <span class="cl">T</span>       <span class="fn">buscarPorId</span>(<span class="kw">int</span> id);
+    <span class="cl">T</span>[]     <span class="fn">listar</span>();
+    <span class="kw">boolean</span> <span class="fn">actualizar</span>(<span class="kw">int</span> id, <span class="cl">T</span> nuevo);
+    <span class="kw">boolean</span> <span class="fn">eliminar</span>(<span class="kw">int</span> id);
+}</pre>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="code-wrap h-100">
+            <div class="code-head">
+              <span>
+                <span class="dots">
+                  <span style="background:#fc5f57"></span>
+                  <span style="background:#fdbc2c"></span>
+                  <span style="background:#33c748"></span>
+                </span>
+                Tarea.java
+              </span>
+              <button class="copy-btn" data-id="cc2" type="button" aria-label="Copiar código Tarea.java">Copiar</button>
+            </div>
+            <pre id="cc2"><span class="kw">public class</span> <span class="cl">Tarea</span> {
+    <span class="kw">private int</span> id;
+    <span class="kw">private</span> <span class="cl">String</span> titulo;
+    <span class="kw">private</span> <span class="cl">String</span> modulo;
+    <span class="kw">private</span> <span class="cl">String</span> estado;
+
+    <span class="kw">public</span> <span class="fn">Tarea</span>(<span class="kw">int</span> id, <span class="cl">String</span> titulo, <span class="cl">String</span> modulo, <span class="cl">String</span> estado) {
+        <span class="kw">this</span>.id = id;
+        <span class="kw">this</span>.titulo = titulo;
+        <span class="kw">this</span>.modulo = modulo;
+        <span class="kw">this</span>.estado = estado;
+    }
+
+    <span class="kw">public int</span> <span class="fn">getId</span>() { <span class="kw">return</span> id; }
+    <span class="kw">public void</span> <span class="fn">setId</span>(<span class="kw">int</span> id) { <span class="kw">this</span>.id = id; }
+
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">getTitulo</span>() { <span class="kw">return</span> titulo; }
+    <span class="kw">public void</span> <span class="fn">setTitulo</span>(<span class="cl">String</span> titulo) { <span class="kw">this</span>.titulo = titulo; }
+
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">getModulo</span>() { <span class="kw">return</span> modulo; }
+    <span class="kw">public void</span> <span class="fn">setModulo</span>(<span class="cl">String</span> modulo) { <span class="kw">this</span>.modulo = modulo; }
+
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">getEstado</span>() { <span class="kw">return</span> estado; }
+    <span class="kw">public void</span> <span class="fn">setEstado</span>(<span class="cl">String</span> estado) { <span class="kw">this</span>.estado = estado; }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">toString</span>() {
+        <span class="kw">return</span> <span class="cl">String</span>.<span class="fn">format</span>(
+            <span class="str">"%-4d | %-25s | %-20s | %-12s"</span>,
+            id, titulo, modulo, estado);
+    }
+
+    <span class="kw">public</span> <span class="cl">String</span> <span class="fn">toLinea</span>() {
+        <span class="kw">return</span> id + <span class="str">";"</span> + titulo + <span class="str">";"</span> + modulo + <span class="str">";"</span> + estado;
+    }
+
+    <span class="kw">public static</span> <span class="cl">Tarea</span> <span class="fn">desdeLinea</span>(<span class="cl">String</span> linea) {
+        <span class="cl">String</span>[] p = linea.<span class="fn">split</span>(<span class="str">";"</span>);
+        <span class="kw">return new</span> <span class="cl">Tarea</span>(
+            <span class="cl">Integer</span>.<span class="fn">parseInt</span>(p[<span class="num">0</span>]),
+            p[<span class="num">1</span>], p[<span class="num">2</span>], p[<span class="num">3</span>]
+        );
+    }
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-wrap mb-4">
+        <div class="code-head">
+          <span>
+            <span class="dots">
+              <span style="background:#fc5f57"></span>
+              <span style="background:#fdbc2c"></span>
+              <span style="background:#33c748"></span>
+            </span>
+            TareaServicio.java — el alumnado completa los métodos
+          </span>
+          <button class="copy-btn" data-id="cc3" type="button" aria-label="Copiar código TareaServicio.java">Copiar</button>
+        </div>
+        <pre id="cc3"><span class="kw">import</span> java.io.*;
+
+<span class="kw">public class</span> <span class="cl">TareaServicio</span> <span class="kw">implements</span> <span class="cl">Crud</span>&lt;<span class="cl">Tarea</span>&gt; {
+
+    <span class="kw">private final</span> <span class="cl">String</span> FICHERO = <span class="str">"tareas.txt"</span>;
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> <span class="fn">crear</span>(<span class="cl">Tarea</span> tarea) {
+        <span class="cm">// Abrir en modo append y escribir tarea.toLinea()</span>
+        <span class="kw">try</span> (<span class="cl">BufferedWriter</span> bw = <span class="kw">new</span> <span class="cl">BufferedWriter</span>(
+                <span class="kw">new</span> <span class="cl">FileWriter</span>(FICHERO, <span class="kw">true</span>))) {
+            bw.<span class="fn">write</span>(tarea.<span class="fn">toLinea</span>());
+            bw.<span class="fn">newLine</span>();
+        } <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+            <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Error al escribir: "</span> + e.<span class="fn">getMessage</span>());
+        }
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cl">Tarea</span> <span class="fn">buscarPorId</span>(<span class="kw">int</span> id) {
+        <span class="cm">// TODO: leer línea a línea y devolver la Tarea cuyo id coincida</span>
+        <span class="kw">return null</span>;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public</span> <span class="cl">Tarea</span>[] <span class="fn">listar</span>() {
+        <span class="cm">// TODO: leer todas las líneas y devolver array de Tarea</span>
+        <span class="kw">return new</span> <span class="cl">Tarea</span>[<span class="num">0</span>];
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public boolean</span> <span class="fn">actualizar</span>(<span class="kw">int</span> id, <span class="cl">Tarea</span> nueva) {
+        <span class="cm">// TODO: cargar todas, sustituir la correcta, reescribir fichero</span>
+        <span class="kw">return false</span>;
+    }
+
+    <span class="ann">@Override</span>
+    <span class="kw">public boolean</span> <span class="fn">eliminar</span>(<span class="kw">int</span> id) {
+        <span class="cm">// TODO: reescribir el fichero omitiendo la tarea con ese id</span>
+        <span class="kw">return false</span>;
+    }
+}</pre>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-head">
+          <span>Patrón de lectura con flujo de caracteres</span>
+          <button class="copy-btn" data-id="cc4" type="button" aria-label="Copiar patrón de lectura">Copiar</button>
+        </div>
+        <pre id="cc4"><span class="cm">// try-with-resources garantiza el cierre automático del flujo</span>
+<span class="kw">try</span> (<span class="cl">BufferedReader</span> br = <span class="kw">new</span> <span class="cl">BufferedReader</span>(
+        <span class="kw">new</span> <span class="cl">FileReader</span>(<span class="str">"tareas.txt"</span>))) {
+
+    <span class="cl">String</span> linea;
+    <span class="kw">while</span> ((linea = br.<span class="fn">readLine</span>()) != <span class="kw">null</span>) {
+        <span class="cl">Tarea</span> t = <span class="cl">Tarea</span>.<span class="fn">desdeLinea</span>(linea);
+        <span class="cm">// operar con t…</span>
+    }
+
+} <span class="kw">catch</span> (<span class="cl">IOException</span> e) {
+    <span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"Error al leer: "</span> + e.<span class="fn">getMessage</span>());
+}</pre>
+      </div>
+    </section>
+
+    <!-- 05 CONTENIDOS DEL TEMA -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">05</span>
+        <div>
+          <h2 class="sec-title">Contenidos del tema que se trabajan</h2>
+          <div class="sec-sub">Flujos de caracteres aplicados a una situación real</div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6 col-xl-3">
+          <div class="concept-card cc-blue">
+            <h5>Apertura y cierre</h5>
+            <p>Uso de <code>try-with-resources</code>. Java cierra el flujo automáticamente al salir del bloque.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+          <div class="concept-card cc-green">
+            <h5>Modos de acceso</h5>
+            <p><code>new FileWriter("tareas.txt", true)</code> abre en modo <em>append</em>: añade sin borrar el contenido previo.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+          <div class="concept-card cc-amber">
+            <h5>Lectura eficiente</h5>
+            <p><code>BufferedReader</code> envuelve a <code>FileReader</code> para leer líneas completas con <code>readLine()</code>.</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+          <div class="concept-card cc-red">
+            <h5>Escritura estructurada</h5>
+            <p>Cada tarea ocupa una línea separada por <code>;</code>. Es sencillo de guardar, revisar y parsear.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 INTERFAZ POR CONSOLA -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">06</span>
+        <div>
+          <h2 class="sec-title">Interfaz por consola</h2>
+          <div class="sec-sub">Menú de navegación y salida formateada</div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="console-demo">
+            <div class="console-bar">
+              <i class="bi bi-terminal-fill"></i>
+              Salida esperada — menú principal
+            </div>
+            <div class="console-body">
+              <div class="con-head">╔══════════════════════════════╗</div>
+              <div class="con-head">║   Gestión de Tareas · DAW1   ║</div>
+              <div class="con-head">╚══════════════════════════════╝</div>
+              <div class="con-opt"><span class="con-num">1.</span> Crear tarea</div>
+              <div class="con-opt"><span class="con-num">2.</span> Listar tareas</div>
+              <div class="con-opt"><span class="con-num">3.</span> Buscar por ID</div>
+              <div class="con-opt"><span class="con-num">4.</span> Actualizar tarea</div>
+              <div class="con-opt"><span class="con-num">5.</span> Eliminar tarea</div>
+              <div class="con-opt"><span class="con-num">6.</span> Salir</div>
+              <div class="con-div">──────────────────────────────</div>
+              <div class="con-pmt">▶ Selecciona una opción: _</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="console-demo">
+            <div class="console-bar">
+              <i class="bi bi-table"></i>
+              Salida esperada — listado
+            </div>
+            <div class="console-body">
+              <div class="con-col">ID   │ TÍTULO                    │ MÓDULO               │ ESTADO</div>
+              <div class="con-div">─────┼───────────────────────────┼──────────────────────┼────────────</div>
+              <div class="con-row">1    │ Actividad CRUD            │ Programación         │ EN_PROCESO</div>
+              <div class="con-row">2    │ Examen CSS                │ LMSGI                │ PENDIENTE</div>
+              <div class="con-row">3    │ Entrega BD                │ Bases de Datos       │ HECHA</div>
+              <div class="con-div">─────┴───────────────────────────┴──────────────────────┴────────────</div>
+              <div class="con-ok">✔  3 tarea(s) encontrada(s).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-wrap mt-4">
+        <div class="code-head">
+          <span>Cabecera de tabla con printf</span>
+          <button class="copy-btn" data-id="cc5" type="button" aria-label="Copiar cabecera con printf">Copiar</button>
+        </div>
+        <pre id="cc5"><span class="cl">System</span>.out.<span class="fn">printf</span>(<span class="str">"%-4s | %-25s | %-20s | %-12s%n"</span>,
+        <span class="str">"ID"</span>, <span class="str">"TÍTULO"</span>, <span class="str">"MÓDULO"</span>, <span class="str">"ESTADO"</span>);
+<span class="cl">System</span>.out.<span class="fn">println</span>(<span class="str">"─"</span>.<span class="fn">repeat</span>(<span class="num">68</span>));</pre>
+      </div>
+    </section>
+
+    <!-- 07 TEMPORALIZACIÓN -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">07</span>
+        <div>
+          <h2 class="sec-title">Temporalización</h2>
+          <div class="sec-sub">Propuesta de desarrollo en tres sesiones</div>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-left">
+            <div class="timeline-dot">1</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-body">
+            <h4>Diseño de la solución</h4>
+            <p>
+              Presentación del problema. Diseño de la interfaz
+              <code class="inline-code">Crud&lt;T&gt;</code> y creación de la clase
+              <code class="inline-code">Tarea</code> con sus atributos y métodos.
+            </p>
+            <div class="tl-tags">
+              <span class="tl-tag">Interface</span>
+              <span class="tl-tag">Tarea.java</span>
+              <span class="tl-tag">toLinea / desdeLinea</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-left">
+            <div class="timeline-dot">2</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-body">
+            <h4>Persistencia en fichero</h4>
+            <p>
+              Implementación de <strong>crear</strong>, <strong>listar</strong> y <strong>buscar</strong>
+              con lectura y escritura en <code class="inline-code">tareas.txt</code>.
+            </p>
+            <div class="tl-tags">
+              <span class="tl-tag">FileReader</span>
+              <span class="tl-tag">FileWriter</span>
+              <span class="tl-tag">BufferedReader</span>
+              <span class="tl-tag">try-with-resources</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-left">
+            <div class="timeline-dot">3</div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-body">
+            <h4>Operaciones completas y mejora final</h4>
+            <p>
+              Implementación de <strong>actualizar</strong> y <strong>eliminar</strong>.
+              Menú completo, salida formateada con <code class="inline-code">printf</code>
+              y comprobación final del funcionamiento.
+            </p>
+            <div class="tl-tags">
+              <span class="tl-tag">Actualizar</span>
+              <span class="tl-tag">Eliminar</span>
+              <span class="tl-tag">printf</span>
+              <span class="tl-tag">Scanner</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 EVALUACIÓN -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">08</span>
+        <div>
+          <h2 class="sec-title">Criterios de evaluación</h2>
+          <div class="sec-sub">Aspectos observables en la entrega o en la práctica guiada</div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6 col-xl-4">
+          <div class="eval-item">
+            <span class="eval-tick"><i class="bi bi-check-circle-fill"></i></span>
+            Define correctamente una interfaz genérica.
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="eval-item">
+            <span class="eval-tick"><i class="bi bi-check-circle-fill"></i></span>
+            Implementa el contrato en una clase de servicio.
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="eval-item">
+            <span class="eval-tick"><i class="bi bi-check-circle-fill"></i></span>
+            Usa flujos de caracteres de forma adecuada.
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="eval-item">
+            <span class="eval-tick"><i class="bi bi-check-circle-fill"></i></span>
+            Abre y cierra ficheros correctamente.
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="eval-item">
+            <span class="eval-tick"><i class="bi bi-check-circle-fill"></i></span>
+            Lee y escribe datos textuales con coherencia.
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="eval-item">
+            <span class="eval-tick"><i class="bi bi-check-circle-fill"></i></span>
+            Presenta una salida legible y ordenada por consola.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 RÚBRICA BREVE -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">09</span>
+        <div>
+          <h2 class="sec-title">Rúbrica breve orientativa</h2>
+          <div class="sec-sub">Una posible distribución simple de la calificación</div>
+        </div>
+      </div>
+
+      <div class="table-responsive table-soft">
+        <table class="table mb-0 align-middle">
+          <thead>
+            <tr>
+              <th>Criterio</th>
+              <th>Peso</th>
+              <th>Qué se espera</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Modelo e interfaz</td>
+              <td>20%</td>
+              <td>Clase <code class="inline-code">Tarea</code> bien definida e interfaz <code class="inline-code">Crud&lt;T&gt;</code> correcta.</td>
+            </tr>
+            <tr>
+              <td>Lectura y escritura</td>
+              <td>25%</td>
+              <td>Uso correcto de flujos de caracteres para guardar y recuperar datos.</td>
+            </tr>
+            <tr>
+              <td>Operaciones CRUD</td>
+              <td>30%</td>
+              <td>Crear, listar, buscar, actualizar y eliminar funcionando.</td>
+            </tr>
+            <tr>
+              <td>Salida por consola</td>
+              <td>15%</td>
+              <td>Menú claro y listado formateado con <code class="inline-code">printf</code>.</td>
+            </tr>
+            <tr>
+              <td>Orden y buenas prácticas</td>
+              <td>10%</td>
+              <td>Nombres adecuados, código legible y tratamiento básico de errores.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 10 AMPLIACIONES -->
+    <section class="sec">
+      <div class="sec-header">
+        <span class="sec-num">10</span>
+        <div>
+          <h2 class="sec-title">Ampliaciones opcionales</h2>
+          <div class="sec-sub">Para el alumnado que avance más rápido</div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6 col-xl-4">
+          <div class="extra-item"><span class="extra-arrow">→</span>Validar que el ID no se repita</div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="extra-item"><span class="extra-arrow">→</span>Ordenar tareas por módulo o estado</div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="extra-item"><span class="extra-arrow">→</span>Añadir copia de seguridad del fichero</div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="extra-item"><span class="extra-arrow">→</span>Generar estadísticas simples por módulo</div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="extra-item"><span class="extra-arrow">→</span>Validar datos introducidos por teclado</div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+          <div class="extra-item"><span class="extra-arrow">→</span>Separar lógica y persistencia en capas</div>
+        </div>
+      </div>
+
+      <div class="footer-note mt-4">
+        <h3>Adaptación a otros contextos DAW/DAM</h3>
+        <p>
+          La misma mecánica puede aplicarse cambiando el modelo: <strong>incidencias del aula</strong>,
+          <strong>libros de biblioteca</strong>, <strong>usuarios del sistema</strong>,
+          <strong>equipos informáticos</strong> o <strong>recursos del laboratorio</strong>.
+          El contrato de la interfaz y la persistencia en fichero siguen funcionando igual.
+        </p>
+        <span class="footer-tag">Programación · DAW1</span>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Copiar código
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const el = document.getElementById(btn.dataset.id);
+      const texto = el ? el.innerText : '';
+
+      try {
+        await navigator.clipboard.writeText(texto);
+        const original = btn.textContent;
+        btn.textContent = '✓ Copiado';
+        btn.classList.add('ok');
+
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove('ok');
+        }, 1500);
+      } catch (e) {
+        btn.textContent = 'No se pudo copiar';
+        setTimeout(() => {
+          btn.textContent = 'Copiar';
+        }, 1500);
+      }
+    });
+  });
+
+  // Animación suave al hacer scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.sec').forEach((sec, i) => {
+    sec.style.transitionDelay = `${i * 0.04}s`;
+    observer.observe(sec);
+  });
+</script>
+</body>
+</html>

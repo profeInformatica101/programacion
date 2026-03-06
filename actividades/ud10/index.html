@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programación (Java) – Boletín 10: Ficheros de Texto</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.55;
+      margin: 0;
+      padding: 24px;
+      background: #f7f9fc;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+      color: #283593;
+    }
+    p.meta {
+      margin: 0;
+      color: #333;
+    }
+    details {
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #fff;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      list-style: none;
+      font-size: 1.05em;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::before {
+      content: "▶ ";
+      font-size: 0.9em;
+      color: #283593;
+    }
+    details[open] summary::before { content: "▼ "; }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    pre {
+      background: #f6f8fa;
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+      border: 1px solid #e2e6ee;
+    }
+    ul { margin-top: 8px; }
+    .tag {
+      display: inline-block;
+      font-size: 0.85em;
+      border: 1px solid #d0d7de;
+      background: #f6f8fa;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-left: 8px;
+      color: #222;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Boletín de Ejercicios – Ficheros de Texto en Java</h1>
+      <p class="meta">
+        Objetivo: practicar <strong>lectura y escritura de ficheros de texto</strong>,
+        <strong>FileReader / FileWriter</strong>, <strong>BufferedReader / BufferedWriter</strong>,
+        <strong>procesamiento secuencial</strong>, <strong>búsqueda</strong>, <strong>conteo</strong>,
+        <strong>comparación de archivos</strong> y <strong>persistencia sencilla</strong>.
+        Recomendación: crea un paquete por actividad o un proyecto con subpaquetes.
+      </p>
+    </header>
+
+    <details>
+      <summary>Actividad 1 📄 Mostrar el contenido de un fichero <span class="tag">lectura básica</span></summary>
+      <p>Realiza un programa que solicite al usuario el nombre de un fichero de texto y muestre su contenido en pantalla.</p>
+      <ul>
+        <li>Si el usuario no introduce ningún nombre, usa por defecto <code>prueba.txt</code>.</li>
+        <li>Muestra el contenido línea a línea.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 2 👤 Guardar nombre y edad <span class="tag">escritura básica</span></summary>
+      <p>Diseña una aplicación que pida al usuario su <code>nombre</code> y su <code>edad</code>.</p>
+      <ul>
+        <li>Guarda estos datos en el fichero <code>datos.txt</code>.</li>
+        <li>Si el fichero ya existe, debe borrarse su contenido antes de escribir.</li>
+        <li>Si no existe, debe crearse.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 3 📑 Duplicar ficheros de texto <span class="tag">copias</span></summary>
+      <p>Crea un programa que duplique el contenido de un fichero. Realiza dos versiones:</p>
+      <ul>
+        <li><strong>a)</strong> Duplicar <code>original.txt</code> en <code>copia.txt</code>.</li>
+        <li><strong>b)</strong> Pedir el nombre del fichero fuente y copiarlo en otro con el mismo nombre, añadiendo el prefijo <code>copia_de_</code>.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 4 🔢 Contar caracteres, líneas y palabras <span class="tag">procesamiento</span></summary>
+      <p>Realiza un programa que lea un fichero de texto llamado <code>carta.txt</code> y cuente:</p>
+      <ul>
+        <li>número de caracteres</li>
+        <li>número de líneas</li>
+        <li>número de palabras</li>
+      </ul>
+      <p>Para facilitar el procesamiento, supondremos que cada palabra está separada de otra por un único espacio en blanco.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 5 📈 Menor y mayor valor en un fichero <span class="tag">números</span></summary>
+      <p>En el archivo <code>numeros.txt</code> disponemos de una serie de números, uno por cada línea.</p>
+      <p>Diseña un programa que procese el fichero y muestre:</p>
+      <ul>
+        <li>el menor número</li>
+        <li>el mayor número</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 6 ✍️ Libro de firmas <span class="tag">persistencia</span></summary>
+      <p>Crea una aplicación para gestionar un libro de firmas almacenado en <code>firmas.txt</code>.</p>
+      <ul>
+        <li>Debe permitir mostrar todas las firmas.</li>
+        <li>Debe permitir insertar un nuevo nombre.</li>
+        <li>Antes de insertar, comprueba que el nombre no esté repetido.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 7 📚 Comando “more” <span class="tag">lectura paginada</span></summary>
+      <p>En Linux existe el comando <code>more</code>, que muestra un fichero poco a poco.</p>
+      <p>Implementa un programa que funcione de forma similar:</p>
+      <ul>
+        <li>muestra el contenido de un fichero de texto</li>
+        <li>cada 24 líneas debe pausar la salida</li>
+        <li>el usuario decidirá si quiere continuar</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 8 👥 Mezclar dos listados ordenados <span class="tag">fusión ordenada</span></summary>
+      <p>Disponemos de dos ficheros, <code>perso1.txt</code> y <code>perso2.txt</code>, ambos con nombres de personas ordenados alfabéticamente.</p>
+      <p>Realiza un programa que:</p>
+      <ul>
+        <li>lea ambos ficheros</li>
+        <li>genere un tercer fichero llamado <code>todos.txt</code></li>
+        <li>guarde en él todos los nombres ordenados alfabéticamente</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 9 🔐 Encriptador con alfabeto de sustitución <span class="tag">codificación</span></summary>
+      <p>Diseña un programa que lea un fichero de texto, lo codifique y cree un nuevo archivo con el mensaje cifrado.</p>
+      <p>El alfabeto de codificación se encontrará en el fichero <code>codec.txt</code>.</p>
+      <p>Ejemplo de alfabeto:</p>
+      <pre><code>Alfabeto: a b c d e f g h i j k l m n o p q r s t u v w x y z
+Cifrado : e m s r c y j n f x i w t a k o z d l q v b h u p g</code></pre>
+    </details>
+
+    <details>
+      <summary>Actividad 10 🔓 Decodificador <span class="tag">decodificación</span></summary>
+      <p>Utilizando el fichero <code>codec.txt</code> del ejercicio anterior, diseña un programa decodificador.</p>
+      <ul>
+        <li>Debe leer un fichero codificado.</li>
+        <li>Debe reconstruir el texto original.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 11 🔲 Transpuesta de una matriz <span class="tag">matrices</span></summary>
+      <p>El fichero <code>matriz.txt</code> contiene los datos de una matriz cuadrada.</p>
+      <p>Realiza un programa que:</p>
+      <ul>
+        <li>lea la matriz desde el fichero</li>
+        <li>muestre por pantalla su matriz transpuesta</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 12 ⚖️ Comparar dos archivos <span class="tag">comparación</span></summary>
+      <p>Algunos sistemas operativos disponen del comando <code>comp</code>, que compara dos archivos e indica si son iguales o distintos.</p>
+      <p>Diseña este comando de forma que, además:</p>
+      <ul>
+        <li>indique en qué línea aparece la primera diferencia</li>
+        <li>indique en qué carácter aparece esa diferencia</li>
+      </ul>
+      <p>Utiliza los ficheros <code>texto1.txt</code> y <code>texto2.txt</code>.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 13 ☎️ Agenda persistente <span class="tag">proyecto mini</span></summary>
+      <p>Diseña una pequeña agenda con el siguiente funcionamiento:</p>
+      <pre><code>1. Nuevo contacto
+2. Buscar por nombre
+3. Mostrar todos
+4. Salir</code></pre>
+      <p>Condiciones de la agenda:</p>
+      <ul>
+        <li>Guardará <strong>nombre</strong> y <strong>teléfono</strong> de un máximo de 20 personas.</li>
+        <li>La opción 1 permite insertar un nuevo contacto siempre que la agenda no esté llena.</li>
+        <li>No se deben permitir nombres repetidos.</li>
+        <li>La opción 2 debe mostrar todos los teléfonos cuyos nombres coincidan con una cadena parcial.  
+          Ejemplo: si se busca <code>Pe</code>, puede mostrar Pedro, Pepe y Petunia.</li>
+        <li>La opción 3 mostrará todos los contactos ordenados alfabéticamente por el nombre.</li>
+        <li>La opción 4 guardará todos los datos en el fichero <code>agenda.txt</code>.</li>
+        <li>La próxima vez que se ejecute el programa, debe cargar automáticamente los datos guardados.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 14 🧮 Contador de palabras mejorado <span class="tag">tokenización</span></summary>
+      <p>Repite el ejercicio de contar palabras, pero ahora sabiendo que una palabra no está separada de otra únicamente por un espacio en blanco.</p>
+      <p>Considera como separadores:</p>
+      <ul>
+        <li>espacio en blanco</li>
+        <li>tabuladores</li>
+        <li>punto</li>
+        <li>coma</li>
+        <li>punto y coma</li>
+        <li>paréntesis</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 15 🔎 Buscar ocurrencias en un fichero <span class="tag">búsqueda textual</span></summary>
+      <p>Diseña un programa al que se le proporcione:</p>
+      <ul>
+        <li>el nombre de un fichero de texto</li>
+        <li>una cadena de búsqueda</li>
+      </ul>
+      <p>Debe localizar todas las ocurrencias de la cadena en el fichero, indicando:</p>
+      <ul>
+        <li>la fila donde aparece</li>
+        <li>la columna donde aparece</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Actividad 16 🧹 Eliminar comentarios de código Java <span class="tag">procesamiento de código</span></summary>
+      <p>Escribe un programa que pida el nombre de un fichero de texto que contenga código fuente en Java.</p>
+      <p>El programa debe crear un nuevo fichero cuyo nombre sea el original con el prefijo <code>sin_comentarios_</code>.</p>
+      <p>El contenido del nuevo fichero será el código fuente original, pero sin ningún tipo de comentario.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 17 ✂️ Particionar un fichero grande <span class="tag">fragmentación</span></summary>
+      <p>Crea una aplicación a la que se le proporciona:</p>
+      <ul>
+        <li>un fichero de texto</li>
+        <li>un tamaño máximo para cada fragmento</li>
+      </ul>
+      <p>El tamaño podrá expresarse en:</p>
+      <ul>
+        <li><code>b</code> → bytes</li>
+        <li><code>k</code> → kilobytes</li>
+        <li><code>m</code> → megabytes</li>
+      </ul>
+      <p>La aplicación debe fragmentar el fichero original en tantos ficheros como sea necesario.  
+      Los nombres de los nuevos ficheros tendrán el prefijo <code>parte999_</code>, donde <code>999</code> será el número de volumen.</p>
+    </details>
+
+    <details>
+      <summary>Actividad 18 🧩 Reconstruir un fichero fragmentado <span class="tag">recomposición</span></summary>
+      <p>Escribe un programa que, a partir de los ficheros generados en el ejercicio anterior, reconstruya el fichero original.</p>
+      <ul>
+        <li>Debe leer todas las partes en el orden correcto.</li>
+        <li>Debe generar nuevamente el fichero completo.</li>
+      </ul>
+    </details>
+
+  </main>
+</body>
+</html>
