@@ -152,15 +152,36 @@ default double precioFinal(double porcentaje) {
       <p>Extra: si el precio empata, desempata por <code>nombre</code>.</p>
     </details>
 
-    <details>
-      <summary>Actividad 7 🏁 Ordenación con <code>Comparator</code> <span class="tag">Comparator</span></summary>
-      <p>Con la misma clase <code>Producto</code>, crea dos <code>Comparator</code>:</p>
+       <details>
+      <summary>Actividad 7 🏁 Ordenación de productos <span class="tag">Comparable + Comparator</span></summary>
+      <p>Con la clase <code>Producto</code> de la actividad anterior, realiza los siguientes apartados:</p>
       <ul>
-        <li>Orden por <strong>nombre</strong> (A-Z)</li>
-        <li>Orden por <strong>precio descendente</strong></li>
+        <li>
+          <strong>a) Comparable:</strong>
+          haz que <code>Producto</code> implemente <code>Comparable&lt;Producto&gt;</code> para definir su
+          <strong>orden natural por nombre (A-Z)</strong>.
+        </li>
+        <li>
+          <strong>b) Comparator:</strong>
+          crea un <code>Comparator&lt;Producto&gt;</code> para ordenar por
+          <strong>precio descendente</strong>.
+        </li>
+        <li>
+          <strong>c) Comparator:</strong>
+          crea otro <code>Comparator&lt;Producto&gt;</code> para ordenar por
+          <strong>código (A-Z)</strong>.
+        </li>
+        <li>
+          <strong>d) Pruebas en main:</strong>
+          crea una lista con varios productos, muéstrala sin ordenar, ordénala con
+          <code>Collections.sort(lista)</code> usando el <code>Comparable</code>, y después vuelve a ordenarla
+          con cada uno de los <code>Comparator</code>.
+        </li>
       </ul>
-      <p>Aplica ambos usando <code>list.sort(...)</code> y muestra el resultado.</p>
-      <p>Extra: permite elegir orden con un menú por consola (1/2/3).</p>
+      <p>
+        <strong>Extra:</strong> permite al usuario elegir por consola qué criterio aplicar:
+        <code>1 = orden natural</code>, <code>2 = precio descendente</code>, <code>3 = código</code>.
+      </p>
     </details>
 
     <details>
@@ -241,7 +262,6 @@ String mensajeError();</code></pre>
       <p>Implementa varias reglas para <code>Usuario</code> (email válido, password fuerte, edad mínima, etc.). Si falla, devuelve lista de errores.</p>
       <p>Extra: usa expresiones lambda para crear reglas rápidamente (si te apetece).</p>
     </details>
-
   </main>
 </body>
 </html>
