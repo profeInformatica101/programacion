@@ -193,132 +193,220 @@ for (int i = 0; i &lt; productos.length - 1; i++) {
   <p><strong>Extra (opcional):</strong> crea un método estático que reciba un <code>Valorable[]</code>:</p>
   <pre><code>static void ordenarPorPrecioAscYNombre(Valorable[] arr) { ... }</code></pre>
 </details>
-
 <details>
-  <summary>Actividad 7 🏁 Ordenación alternativa (con interfaz) <span class="tag">polimorfismo + arrays</span></summary>
+  <summary>Actividad 7 🏁 Ordenación con Comparable, Comparator y una interfaz de apoyo <span class="tag">Comparable + Comparator + interfaces + arrays</span></summary>
 
-  <p><strong>Interfaz a usar:</strong> reutiliza la interfaz <code>Valorable</code> de la actividad 6.</p>
+  <p><strong>Clase a reutilizar:</strong> usa la clase <code>Producto</code>.</p>
 
-  <p><strong>Obligatorio:</strong> vuelve a usar un array de <code>Producto</code>, pero trabajando mediante el tipo <code>Valorable[]</code>
-  (polimorfismo).</p>
+  <p><strong>Interfaz relacionada con la práctica:</strong> crea una interfaz <code>Mostrable</code> con el método:</p>
+  <pre><code>String mostrar();</code></pre>
 
-  <p>Crea dos métodos estáticos de ordenación que reciban un <code>Valorable[]</code>:</p>
+  <p>Haz que la clase <code>Producto</code> implemente:</p>
   <ul>
-    <li><code>ordenarPorNombreAZ(Valorable[] arr)</code> (A–Z)</li>
-    <li><code>ordenarPorPrecioDesc(Valorable[] arr)</code> (mayor → menor)</li>
+    <li><code>Comparable&lt;Producto&gt;</code>, para definir su <strong>orden natural</strong>.</li>
+    <li><code>Mostrable</code>, para poder mostrar su información de forma uniforme.</li>
   </ul>
 
-  <p>En <code>main</code>:</p>
+  <p><strong>Apartado a) Comparable:</strong> define el orden natural de <code>Producto</code> por <strong>nombre A–Z</strong>.  
+  Si dos productos tienen el mismo nombre, desempata por <strong>precio ascendente</strong>.</p>
+
+  <p><strong>Apartado b) Comparator:</strong> crea un <code>Comparator&lt;Producto&gt;</code> para ordenar por <strong>precio descendente</strong>.</p>
+
+  <p><strong>Apartado c) Comparator:</strong> crea otro <code>Comparator&lt;Producto&gt;</code> para ordenar por <strong>código A–Z</strong>.</p>
+
+  <p><strong>Apartado d) Array y pruebas:</strong> trabaja con un <code>Producto[]</code> y realiza lo siguiente en <code>main</code>:</p>
   <ul>
-    <li>Muestra el array original</li>
-    <li>Ordena por nombre A–Z y muestra</li>
-    <li>Ordena por precio descendente y muestra</li>
+    <li>Muestra el array original usando el método <code>mostrar()</code>.</li>
+    <li>Ordénalo con <code>Arrays.sort(productos)</code> usando el <code>Comparable</code>.</li>
+    <li>Ordénalo con <code>Arrays.sort(productos, comparadorPrecioDesc)</code>.</li>
+    <li>Ordénalo con <code>Arrays.sort(productos, comparadorCodigoAZ)</code>.</li>
+    <li>Muestra el resultado tras cada ordenación.</li>
   </ul>
 
-  <p><strong>Extra:</strong> permite elegir el orden desde un menú por consola (1/2/3):</p>
+  <p><strong>Extra:</strong> permite elegir el criterio desde un menú por consola:</p>
   <ul>
-    <li>1: Nombre A–Z</li>
-    <li>2: Precio DESC</li>
-    <li>3: Ambos (mostrar ambos resultados)</li>
+    <li><code>1</code>: orden natural por nombre A–Z</li>
+    <li><code>2</code>: precio descendente</li>
+    <li><code>3</code>: código A–Z</li>
+    <li><code>4</code>: mostrar todos</li>
   </ul>
 
   <div class="note">
-    <strong>Regla:</strong> sigue sin permitirse <code>Comparator</code> ni <code>Collections</code>.
-    La comparación se hace “a mano” usando <code>getPrecio()</code> y <code>getNombre()</code> definidos en <code>Valorable</code>.
+    <strong>Regla importante:</strong> en esta actividad deben usarse obligatoriamente
+    <code>Comparable</code>, <code>Comparator</code> y la interfaz <code>Mostrable</code>.
+    La ordenación se realizará con <code>Arrays.sort(...)</code>.
   </div>
 </details>
 
+<details>
+  <summary>Actividad 8 🧠 “Validable” y “Mostrable” (reglas de negocio) <span class="tag">interfaces + excepciones + polimorfismo</span></summary>
 
-    <details>
-      <summary>Actividad 8 🧠 “Validable” (reglas de negocio) <span class="tag">interfaces + excepciones + arrays</span></summary>
-      <p>Interfaz <code>Validable</code>:</p>
-      <pre><code>void validar() throws IllegalArgumentException;</code></pre>
-      <p>Crea:</p>
-      <ul>
-        <li><code>Usuario</code> (email, password)</li>
-        <li><code>Reserva</code> (fecha, numPersonas)</li>
-      </ul>
-      <p>Implementa <code>validar()</code> con reglas (ej.: email contiene “@”; password mínimo 8; numPersonas &gt; 0).</p>
-      <p>En <code>main</code> valida un <code>Validable[]</code> capturando excepciones y mostrando mensajes claros.</p>
-    </details>
+  <p>Define una interfaz <code>Validable</code> con el método:</p>
+  <pre><code>void validar() throws IllegalArgumentException;</code></pre>
 
-    <details>
-      <summary>Actividad 9 🎵 “Reproducible” (interfaces y composición) <span class="tag">composición</span></summary>
-      <p>Interfaz <code>Reproducible</code>:</p>
-      <pre><code>void play();
+  <p>Reutiliza también la interfaz <code>Mostrable</code> de la actividad anterior:</p>
+  <pre><code>String mostrar();</code></pre>
+
+  <p>Crea las clases:</p>
+  <ul>
+    <li><code>Usuario</code> (email, password)</li>
+    <li><code>Reserva</code> (fecha, numPersonas)</li>
+  </ul>
+
+  <p>Haz que ambas clases implementen <code>Validable</code> y <code>Mostrable</code>.</p>
+
+  <p>Implementa <code>validar()</code> aplicando reglas de negocio, por ejemplo:</p>
+  <ul>
+    <li>el email debe contener <code>@</code>,</li>
+    <li>la contraseña debe tener al menos 8 caracteres,</li>
+    <li>el número de personas debe ser mayor que 0.</li>
+  </ul>
+
+  <p>En <code>main</code>, guarda los objetos en un <code>Validable[]</code>, valida cada uno capturando excepciones y muestra mensajes claros.  
+  Después, muestra su información llamando a <code>mostrar()</code>.</p>
+</details>
+
+<details>
+  <summary>Actividad 9 🎵 “Reproducible” y “Mostrable” (interfaces y composición) <span class="tag">composición + polimorfismo</span></summary>
+
+  <p>Define una interfaz <code>Reproducible</code> con los métodos:</p>
+  <pre><code>void play();
 void pause();
 void stop();</code></pre>
-      <p>Crea clases <code>Cancion</code> y <code>Podcast</code> que implementen la interfaz.</p>
-      <p>Crea una clase <code>Reproductor</code> que reciba un <code>Reproducible</code> y lo controle (play/pause/stop).</p>
-      <p>En <code>main</code>, cambia de pista varias veces.</p>
-      <p><em>Opcional:</em> guarda varias pistas en un <code>Reproducible[]</code> e intercambia el elemento actual por índice.</p>
-    </details>
 
-    <details>
-      <summary>Actividad 10 🧩 Interfaces múltiples (roles) <span class="tag">multi-implements</span></summary>
-      <p>Define:</p>
-      <ul>
-        <li><code>interface Trabajador { void trabajar(); }</code></li>
-        <li><code>interface Estudiante { void estudiar(); }</code></li>
-      </ul>
-      <p>Crea clases:</p>
-      <ul>
-        <li><code>Persona</code> (nombre) – clase base</li>
-        <li><code>Becario</code> que extienda <code>Persona</code> e implemente <code>Trabajador</code> y <code>Estudiante</code></li>
-      </ul>
-      <p>En <code>main</code>, trata el objeto como <code>Trabajador</code> y como <code>Estudiante</code> (referencias distintas) y llama a los métodos.</p>
-    </details>
+  <p>Reutiliza también la interfaz <code>Mostrable</code>.</p>
 
-    <details>
-      <summary>Actividad 11 🗂️ Repositorio genérico (contrato) <span class="tag">genéricos + arrays</span></summary>
-      <p>Interfaz genérica <code>Repositorio&lt;T&gt;</code>:</p>
-      <pre><code>void add(T item);
+  <p>Crea las clases <code>Cancion</code> y <code>Podcast</code>, ambas implementando <code>Reproducible</code> y <code>Mostrable</code>.</p>
+
+  <p>Crea una clase <code>Reproductor</code> que reciba un <code>Reproducible</code> y lo controle con los métodos
+  <code>play()</code>, <code>pause()</code> y <code>stop()</code>.</p>
+
+  <p>En <code>main</code>:</p>
+  <ul>
+    <li>Crea varias pistas.</li>
+    <li>Muestra su información con <code>mostrar()</code>.</li>
+    <li>Reprodúcelas usando un objeto <code>Reproductor</code>.</li>
+  </ul>
+
+  <p><em>Opcional:</em> guarda varias pistas en un <code>Reproducible[]</code> y cambia el elemento actual por índice.</p>
+</details>
+
+<details>
+  <summary>Actividad 10 🧩 Interfaces múltiples (roles) <span class="tag">multi-implements + polimorfismo</span></summary>
+
+  <p>Define las interfaces:</p>
+  <ul>
+    <li><code>interface Trabajador { void trabajar(); }</code></li>
+    <li><code>interface Estudiante { void estudiar(); }</code></li>
+    <li><code>interface Mostrable { String mostrar(); }</code></li>
+  </ul>
+
+  <p>Crea las clases:</p>
+  <ul>
+    <li><code>Persona</code> (nombre) – clase base</li>
+    <li><code>Becario</code> que extienda <code>Persona</code> e implemente <code>Trabajador</code>, <code>Estudiante</code> y <code>Mostrable</code></li>
+  </ul>
+
+  <p>En <code>main</code>, trata el objeto como:</p>
+  <ul>
+    <li><code>Trabajador</code></li>
+    <li><code>Estudiante</code></li>
+    <li><code>Mostrable</code></li>
+  </ul>
+
+  <p>Llama a los métodos correspondientes para comprobar el polimorfismo.</p>
+</details>
+
+<details>
+  <summary>Actividad 11 🗂️ Repositorio genérico (contrato) <span class="tag">genéricos + arrays + interfaces</span></summary>
+
+  <p>Define una interfaz genérica <code>Repositorio&lt;T&gt;</code>:</p>
+  <pre><code>void add(T item);
 boolean remove(T item);
 T findById(String id);
 int size();</code></pre>
-      <p>Para poder hacer <code>findById</code>, define una interfaz:</p>
-      <pre><code>interface Identificable { String getId(); }</code></pre>
-      <p>Implementa <code>RepositorioMemoria&lt;T extends Identificable&gt;</code> usando un <strong>array interno</strong> y un contador.</p>
-      <ul>
-        <li>Empieza con un array de tamaño fijo (ej.: 10).</li>
-        <li>Cuando se llene, puedes (opcional) crear otro array más grande y copiar.</li>
-      </ul>
-      <p>Prueba con una clase <code>Alumno</code> o <code>Producto</code>.</p>
-    </details>
 
-    <details>
-      <summary>Actividad 12 🧪 “Loggeable” con método <code>static</code> <span class="tag">static methods</span></summary>
-      <p>Crea interfaz <code>Loggeable</code> con:</p>
-      <pre><code>void log(String msg);
+  <p>Para poder buscar por identificador, define la interfaz:</p>
+  <pre><code>interface Identificable {
+  String getId();
+}</code></pre>
+
+  <p>Además, para mostrar los elementos recuperados, reutiliza la interfaz <code>Mostrable</code>.</p>
+
+  <p>Implementa <code>RepositorioMemoria&lt;T extends Identificable&gt;</code> usando un <strong>array interno</strong> y un contador.</p>
+
+  <ul>
+    <li>Empieza con un array de tamaño fijo, por ejemplo 10.</li>
+    <li>Opcionalmente, si se llena, crea uno nuevo más grande y copia los elementos.</li>
+  </ul>
+
+  <p>Prueba el repositorio con una clase <code>Alumno</code> o <code>Producto</code> que implemente <code>Identificable</code> y <code>Mostrable</code>.</p>
+</details>
+
+<details>
+  <summary>Actividad 12 🧪 “Loggeable” con método static <span class="tag">static methods + interfaces</span></summary>
+
+  <p>Crea la interfaz <code>Loggeable</code> con:</p>
+  <pre><code>void log(String msg);
 
 static String now() {
   return java.time.LocalDateTime.now().toString();
 }</code></pre>
-      <p>Implementa <code>log</code> en <code>ConsolaLogger</code> (imprime por consola con fecha).</p>
-      <p>En <code>main</code>, registra eventos de varias clases usando <code>Loggeable</code>.</p>
-      <p>Extra: añade niveles <code>INFO/WARN/ERROR</code> (como texto) y formatea el mensaje.</p>
-    </details>
 
-    <details>
-      <summary>Actividad 13 🧱 “Copiable” (copia profunda con arrays) <span class="tag">diseño</span></summary>
-      <p>Diseña una interfaz <code>Copiable&lt;T&gt;</code>:</p>
-      <pre><code>T copia();</code></pre>
-      <p>Crea una clase <code>Documento</code> (titulo, contenido, etiquetas: <code>String[]</code>) que implemente <code>Copiable&lt;Documento&gt;</code>.</p>
-      <p>La copia debe ser “profunda” para el array de etiquetas (crear un array nuevo y copiar elemento a elemento).</p>
-      <p>En <code>main</code>, crea un documento, cópialo, modifica etiquetas en el original y comprueba que la copia no cambia.</p>
-    </details>
+  <p>Implementa <code>log</code> en una clase <code>ConsolaLogger</code>, que imprima el mensaje por consola acompañado de la fecha y hora actuales.</p>
 
-    <details>
-      <summary>Actividad 14 🧠 Proyecto mini: “Motor de reglas” (sin colecciones) <span class="tag">nivel pro + arrays</span></summary>
-      <p>Crea una interfaz <code>Regla&lt;T&gt;</code>:</p>
-      <pre><code>boolean cumple(T obj);
+  <p>Haz que <code>ConsolaLogger</code> implemente también <code>Mostrable</code>, devolviendo una breve descripción del logger.</p>
+
+  <p>En <code>main</code>, registra eventos producidos por varias clases de la práctica.</p>
+
+  <p><strong>Extra:</strong> añade niveles de log como <code>INFO</code>, <code>WARN</code> y <code>ERROR</code>.</p>
+</details>
+
+<details>
+  <summary>Actividad 13 🧱 “Copiable” (copia profunda con arrays) <span class="tag">diseño + arrays + interfaces</span></summary>
+
+  <p>Diseña una interfaz genérica <code>Copiable&lt;T&gt;</code>:</p>
+  <pre><code>T copia();</code></pre>
+
+  <p>Reutiliza la interfaz <code>Mostrable</code>.</p>
+
+  <p>Crea una clase <code>Documento</code> con:</p>
+  <ul>
+    <li><code>titulo</code></li>
+    <li><code>contenido</code></li>
+    <li><code>etiquetas</code> de tipo <code>String[]</code></li>
+  </ul>
+
+  <p>Haz que implemente <code>Copiable&lt;Documento&gt;</code> y <code>Mostrable</code>.</p>
+
+  <p>La copia debe ser <strong>profunda</strong> para el array de etiquetas, es decir, debe crearse un array nuevo y copiarse elemento a elemento.</p>
+
+  <p>En <code>main</code>, crea un documento, haz una copia, modifica las etiquetas del original y comprueba que la copia no cambia.</p>
+</details>
+
+<details>
+  <summary>Actividad 14 🧠 Proyecto mini: “Motor de reglas” <span class="tag">nivel pro + arrays + interfaces</span></summary>
+
+  <p>Crea una interfaz genérica <code>Regla&lt;T&gt;</code>:</p>
+  <pre><code>boolean cumple(T obj);
 String mensajeError();</code></pre>
-      <p>Crea una clase <code>Validador&lt;T&gt;</code> que contenga un <code>Regla&lt;T&gt;[]</code> y tenga:</p>
-      <pre><code>String[] validar(T obj);</code></pre>
-      <p>Implementa varias reglas para <code>Usuario</code> (email válido, password fuerte, edad mínima, etc.).</p>
-      <p>Si falla, devuelve un array de errores (puedes devolver un array con tamaño fijo y un contador, o devolver un array ajustado al final).</p>
-      <p>Extra: crea reglas con clases anónimas si te apetece.</p>
-    </details>
+
+  <p>Crea una clase <code>Validador&lt;T&gt;</code> que contenga un <code>Regla&lt;T&gt;[]</code> y tenga el método:</p>
+  <pre><code>String[] validar(T obj);</code></pre>
+
+  <p>Haz que la clase <code>Usuario</code> implemente también <code>Mostrable</code> para poder mostrar los datos validados de forma homogénea.</p>
+
+  <p>Implementa varias reglas para <code>Usuario</code>, por ejemplo:</p>
+  <ul>
+    <li>email válido,</li>
+    <li>contraseña fuerte,</li>
+    <li>edad mínima.</li>
+  </ul>
+
+  <p>Si el objeto no cumple las reglas, devuelve un array de errores.</p>
+
+  <p><strong>Extra:</strong> crea algunas reglas mediante clases anónimas.</p>
+</details>
 
   </main>
 </body>
