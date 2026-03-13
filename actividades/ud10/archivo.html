@@ -1,0 +1,1029 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archivos de Texto en Java: Creación y Lectura de Datos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --surface: #ffffff;
+      --border: #dbe4f0;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary-soft: #e8f1ff;
+      --code-bg: #0f172a;
+      --code-border: #1e293b;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+
+    .navbar {
+      backdrop-filter: blur(10px);
+      background: rgba(15, 23, 42, 0.92) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 50%, #0ea5e9 100%);
+      color: white;
+      padding: 7rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(10px);
+      opacity: 0.18;
+    }
+
+    .hero::before {
+      width: 340px;
+      height: 340px;
+      background: #ffffff;
+      top: -60px;
+      right: -80px;
+    }
+
+    .hero::after {
+      width: 280px;
+      height: 280px;
+      background: #38bdf8;
+      bottom: -100px;
+      left: -60px;
+    }
+
+    .hero-badge {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(4px);
+    }
+
+    .section-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-icon {
+      width: 52px;
+      height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, #1d4ed8, #0ea5e9);
+      color: white;
+      box-shadow: 0 10px 22px rgba(29, 78, 216, 0.22);
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .lead-muted {
+      color: var(--muted);
+      max-width: 900px;
+    }
+
+    .mini-card {
+      height: 100%;
+      border: 1px solid #e5edf7;
+      border-radius: 1rem;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .mini-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.10);
+    }
+
+    .code-wrapper {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 14px 28px rgba(2, 6, 23, 0.18);
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: #111827;
+      border-bottom: 1px solid #22304a;
+      color: #cbd5e1;
+      font-size: 0.92rem;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+    }
+
+    .code-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .code-dots span:nth-child(1) { background: #ef4444; }
+    .code-dots span:nth-child(2) { background: #f59e0b; }
+    .code-dots span:nth-child(3) { background: #10b981; }
+
+    pre {
+      margin: 0;
+      padding: 1.25rem;
+      overflow-x: auto;
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    code {
+      font-family: "Fira Code", "Cascadia Code", Consolas, monospace;
+    }
+
+    .table thead th {
+      background: var(--primary-soft);
+      color: #1e3a8a;
+      border-bottom: 0;
+    }
+
+    .toc-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      text-decoration: none;
+      color: #0f172a;
+      background: white;
+      border: 1px solid #dbe4f0;
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.05);
+      transition: all 0.2s ease;
+    }
+
+    .toc-pill:hover {
+      transform: translateY(-1px);
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .step-list li { margin-bottom: 0.55rem; }
+
+    .footer-box {
+      background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+      color: #e5e7eb;
+      border-radius: 1.25rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .sticky-summary {
+      position: sticky;
+      top: 90px;
+    }
+
+    @media (max-width: 991.98px) {
+      .sticky-summary { position: static; }
+      .hero { padding-top: 6rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="#inicio">
+        <i class="bi bi-file-earmark-code me-2"></i>Archivos de Texto en Java
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTutorial" aria-controls="navbarTutorial" aria-expanded="false" aria-label="Mostrar navegación">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTutorial">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#introduccion">Introducción</a></li>
+          <li class="nav-item"><a class="nav-link" href="#conceptos">Conceptos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ejemplos">Ejemplos</a></li>
+          <li class="nav-item"><a class="nav-link" href="#proyecto">Proyecto</a></li>
+          <li class="nav-item"><a class="nav-link" href="#maven">Maven</a></li>
+          <li class="nav-item"><a class="nav-link" href="#conclusion">Conclusión</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="inicio">
+    <div class="container position-relative" style="z-index:2;">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <span class="badge rounded-pill hero-badge px-3 py-2 mb-3">
+            <i class="bi bi-journal-code me-2"></i>Tutorial profesional para DAW / DAM
+          </span>
+          <h1 class="display-5 fw-bold mb-3">Archivos de Texto en Java: Creación y Lectura de Datos</h1>
+          <p class="lead mb-4">Aprende a trabajar con ficheros <code>.txt</code> en Java con una base sólida, ejemplos completos y un mini proyecto final orientado a buenas prácticas reales de desarrollo.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="#introduccion" class="btn btn-light btn-lg rounded-pill px-4">
+              <i class="bi bi-play-circle me-2"></i>Comenzar tutorial
+            </a>
+            <a href="#ejemplos" class="btn btn-outline-light btn-lg rounded-pill px-4">
+              <i class="bi bi-code-slash me-2"></i>Ir a ejemplos
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="section-card p-4 bg-white text-dark">
+            <h5 class="fw-bold mb-3"><i class="bi bi-diagram-3 me-2 text-primary"></i>Qué vas a dominar</h5>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i>Creación de archivos de texto</li>
+              <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i>Escritura y lectura línea a línea</li>
+              <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i>Conversión entre objetos y texto</li>
+              <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i>Uso correcto de <code>try-with-resources</code></li>
+              <li><i class="bi bi-check2-circle text-success me-2"></i>Mini proyecto con <code>tareas.txt</code></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container py-5">
+    <section class="mb-5">
+      <div class="d-flex flex-wrap gap-2">
+        <a class="toc-pill" href="#introduccion"><i class="bi bi-info-circle"></i>Introducción</a>
+        <a class="toc-pill" href="#conceptos"><i class="bi bi-box-seam"></i>Conceptos</a>
+        <a class="toc-pill" href="#ejemplo1"><i class="bi bi-file-earmark-plus"></i>Ejemplo 1</a>
+        <a class="toc-pill" href="#ejemplo2"><i class="bi bi-file-earmark-text"></i>Ejemplo 2</a>
+        <a class="toc-pill" href="#ejemplo3"><i class="bi bi-list-task"></i>Ejemplo 3</a>
+        <a class="toc-pill" href="#ejemplo4"><i class="bi bi-arrow-repeat"></i>Ejemplo 4</a>
+        <a class="toc-pill" href="#proyecto"><i class="bi bi-kanban"></i>Proyecto</a>
+        <a class="toc-pill" href="#maven"><i class="bi bi-box"></i>Maven</a>
+        <a class="toc-pill" href="#conclusion"><i class="bi bi-bookmark-check"></i>Conclusión</a>
+      </div>
+    </section>
+
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <section id="introduccion" class="section-card p-4 p-lg-5 mb-4">
+          <div class="section-title">
+            <div class="section-icon"><i class="bi bi-info-lg"></i></div>
+            <div>
+              <h2 class="h3 fw-bold mb-1">Introducción</h2>
+              <p class="lead-muted mb-0">Primeros pasos sólidos para persistir datos con Java sin necesidad de base de datos.</p>
+            </div>
+          </div>
+
+          <p>Un <strong>archivo de texto plano</strong> es un fichero que almacena información en forma de caracteres legibles, normalmente codificados en UTF-8 o similares. Su extensión más habitual es <code>.txt</code>, aunque también pueden usarse otros formatos de texto simples como <code>.csv</code> o <code>.log</code>.</p>
+
+          <p>En programación se utilizan para guardar información de manera sencilla: configuraciones, listados, registros, exportaciones, pequeños sistemas persistentes o pruebas iniciales antes de pasar a soluciones más complejas.</p>
+
+          <div class="alert alert-primary border-0 shadow-sm" role="alert">
+            <h5 class="alert-heading"><i class="bi bi-lightbulb me-2"></i>¿Por qué empezar por archivos de texto?</h5>
+            <p class="mb-0">Porque permiten entender el flujo completo de persistencia: el programa crea datos, los transforma a texto, los guarda, los recupera y reconstruye la información posteriormente.</p>
+          </div>
+
+          <div class="row g-3 mt-1">
+            <div class="col-md-4">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">Simplicidad</h5>
+                <p class="text-secondary mb-0">No requieren instalación de servicios externos ni configuración compleja.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">Legibilidad</h5>
+                <p class="text-secondary mb-0">Se pueden abrir con un editor cualquiera y revisar su contenido fácilmente.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">Didáctica</h5>
+                <p class="text-secondary mb-0">Ayudan a comprender entrada, salida, formato y recuperación de datos.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="conceptos" class="section-card p-4 p-lg-5 mb-4">
+          <div class="section-title">
+            <div class="section-icon"><i class="bi bi-mortarboard"></i></div>
+            <div>
+              <h2 class="h3 fw-bold mb-1">Conceptos básicos</h2>
+              <p class="lead-muted mb-0">Clases esenciales de Java para trabajar con archivos de texto.</p>
+            </div>
+          </div>
+
+          <h3 class="h5 fw-bold mt-3">¿Qué es un archivo <code>.txt</code>?</h3>
+          <p>Es un fichero que contiene texto sin formato enriquecido. No guarda colores, estilos o estructuras avanzadas como un documento de Word. Esto lo hace ideal para almacenar líneas simples, registros separados por delimitadores o información temporal.</p>
+
+          <div class="table-responsive mt-4">
+            <table class="table table-bordered align-middle">
+              <thead>
+                <tr>
+                  <th>Clase</th>
+                  <th>Función principal</th>
+                  <th>Uso típico</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>File</code></td>
+                  <td>Representa un archivo o directorio del sistema</td>
+                  <td>Comprobar existencia, crear rutas, consultar propiedades</td>
+                </tr>
+                <tr>
+                  <td><code>FileWriter</code></td>
+                  <td>Escribe caracteres en un archivo</td>
+                  <td>Guardar texto simple o sobrescribir contenido</td>
+                </tr>
+                <tr>
+                  <td><code>BufferedWriter</code></td>
+                  <td>Escritura más eficiente mediante buffer</td>
+                  <td>Escribir múltiples líneas con mayor comodidad</td>
+                </tr>
+                <tr>
+                  <td><code>FileReader</code></td>
+                  <td>Lee caracteres desde un archivo</td>
+                  <td>Lecturas básicas</td>
+                </tr>
+                <tr>
+                  <td><code>BufferedReader</code></td>
+                  <td>Permite leer línea a línea</td>
+                  <td>Procesar registros de texto de forma cómoda</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card mini-card p-4 mt-4">
+            <h3 class="h5 fw-bold mb-3"><i class="bi bi-link-45deg me-2 text-primary"></i>Enlaces a la API oficial de Java</h3>
+            <p class="text-secondary">Documentación oficial de Oracle para Java 17 de las clases utilizadas en este tutorial:</p>
+            <div class="list-group list-group-flush">
+              <a class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferrer" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html">
+                <strong>File</strong> <span class="text-secondary">— representación de rutas y archivos</span>
+              </a>
+              <a class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferrer" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FileWriter.html">
+                <strong>FileWriter</strong> <span class="text-secondary">— escritura de caracteres en archivo</span>
+              </a>
+              <a class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferrer" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/BufferedWriter.html">
+                <strong>BufferedWriter</strong> <span class="text-secondary">— escritura con buffer</span>
+              </a>
+              <a class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferrer" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FileReader.html">
+                <strong>FileReader</strong> <span class="text-secondary">— lectura de caracteres desde archivo</span>
+              </a>
+              <a class="list-group-item list-group-item-action" target="_blank" rel="noopener noreferrer" href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/BufferedReader.html">
+                <strong>BufferedReader</strong> <span class="text-secondary">— lectura línea a línea</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="alert alert-warning border-0 shadow-sm mt-4" role="alert">
+            <strong><i class="bi bi-exclamation-triangle me-2"></i>Consejo importante:</strong>
+            para la mayoría de ejercicios académicos y pequeños proyectos, <code>BufferedReader</code> y <code>BufferedWriter</code> resultan más cómodos que trabajar directamente carácter a carácter.
+          </div>
+        </section>
+
+        <section id="ejemplos" class="mb-4">
+          <div class="section-card p-4 p-lg-5 mb-4" id="ejemplo1">
+            <div class="section-title">
+              <div class="section-icon"><i class="bi bi-file-earmark-plus"></i></div>
+              <div>
+                <h2 class="h3 fw-bold mb-1">Ejemplo 1: Crear y escribir en un archivo</h2>
+                <p class="lead-muted mb-0">Primer escenario: generar un archivo y guardar varias líneas de texto.</p>
+              </div>
+            </div>
+
+            <p>En este ejemplo vamos a crear un archivo llamado <code>datos.txt</code> y escribir dentro varias líneas. Se utiliza <code>BufferedWriter</code> junto con <code>FileWriter</code> para mejorar claridad y rendimiento.</p>
+
+            <h3 class="h5 fw-bold">Paso a paso</h3>
+            <ol class="step-list">
+              <li>Se crea un objeto de escritura asociado al archivo.</li>
+              <li>Se escriben varias líneas con <code>write()</code>.</li>
+              <li>Se usa <code>newLine()</code> para separar registros.</li>
+              <li>Al terminar, el recurso se cierra automáticamente gracias a <code>try-with-resources</code>.</li>
+            </ol>
+
+            <div class="code-wrapper mt-4">
+              <div class="code-header">
+                <span>Ejemplo1CrearArchivo.java</span>
+                <div class="code-dots"><span></span><span></span><span></span></div>
+              </div>
+              <pre><code>import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Ejemplo1CrearArchivo {
+    public static void main(String[] args) {
+        // try-with-resources cierra automáticamente el writer
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("datos.txt"))) {
+
+            // Escribimos varias líneas en el archivo
+            writer.write("Java");
+            writer.newLine();
+            writer.write("Archivos de texto");
+            writer.newLine();
+            writer.write("DAW y DAM");
+
+            System.out.println("Archivo creado y datos escritos correctamente.");
+
+        } catch (IOException e) {
+            System.out.println("Error al escribir el archivo: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="alert alert-info border-0 shadow-sm mt-4" role="alert">
+              <strong><i class="bi bi-info-circle me-2"></i>Observación:</strong>
+              si el archivo no existe, <code>FileWriter</code> lo crea. Si ya existe, por defecto sobrescribe su contenido.
+            </div>
+          </div>
+
+          <div class="section-card p-4 p-lg-5 mb-4" id="ejemplo2">
+            <div class="section-title">
+              <div class="section-icon"><i class="bi bi-file-earmark-text"></i></div>
+              <div>
+                <h2 class="h3 fw-bold mb-1">Ejemplo 2: Leer datos de un archivo</h2>
+                <p class="lead-muted mb-0">Lectura línea a línea para procesar información textual de forma limpia.</p>
+              </div>
+            </div>
+
+            <p>Una de las operaciones más habituales es recuperar el contenido del archivo. Para ello, <code>BufferedReader</code> permite leer línea por línea mediante <code>readLine()</code>.</p>
+
+            <div class="code-wrapper mt-4">
+              <div class="code-header">
+                <span>Ejemplo2LeerArchivo.java</span>
+                <div class="code-dots"><span></span><span></span><span></span></div>
+              </div>
+              <pre><code>import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Ejemplo2LeerArchivo {
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("datos.txt"))) {
+
+            String linea;
+
+            // Leemos hasta que no queden más líneas
+            while ((linea = reader.readLine()) != null) {
+                System.out.println("Línea leída: " + linea);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+
+            <h3 class="h5 fw-bold mt-4">¿Qué ocurre aquí?</h3>
+            <ul>
+              <li><code>FileReader</code> abre el archivo para lectura.</li>
+              <li><code>BufferedReader</code> añade un buffer para leer con más comodidad.</li>
+              <li><code>readLine()</code> devuelve una línea completa o <code>null</code> si se alcanzó el final.</li>
+            </ul>
+          </div>
+
+          <div class="section-card p-4 p-lg-5 mb-4" id="ejemplo3">
+            <div class="section-title">
+              <div class="section-icon"><i class="bi bi-list-task"></i></div>
+              <div>
+                <h2 class="h3 fw-bold mb-1">Ejemplo 3: Guardar objetos en un archivo</h2>
+                <p class="lead-muted mb-0">Pasamos de texto suelto a persistencia estructurada de objetos.</p>
+              </div>
+            </div>
+
+            <p>Un uso muy común consiste en guardar objetos como líneas de texto. Para ello, definimos una clase <code>Tarea</code> y convertimos cada objeto a una línea con un formato delimitado por punto y coma:</p>
+
+            <div class="alert alert-secondary border-0 shadow-sm" role="alert">
+              <strong>Formato elegido:</strong> <code>id;titulo;modulo;estado</code>
+            </div>
+
+            <div class="code-wrapper mt-4">
+              <div class="code-header">
+                <span>Tarea.java</span>
+                <div class="code-dots"><span></span><span></span><span></span></div>
+              </div>
+              <pre><code>public class Tarea {
+    private int id;
+    private String titulo;
+    private String modulo;
+    private String estado;
+
+    public Tarea(int id, String titulo, String modulo, String estado) {
+        this.id = id;
+        this.titulo = titulo;
+        this.modulo = modulo;
+        this.estado = estado;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getModulo() {
+        return modulo;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    // Convierte el objeto a una línea de texto lista para guardar
+    public String toLinea() {
+        return id + ";" + titulo + ";" + modulo + ";" + estado;
+    }
+}</code></pre>
+            </div>
+
+            <div class="code-wrapper mt-4">
+              <div class="code-header">
+                <span>GuardarTareas.java</span>
+                <div class="code-dots"><span></span><span></span><span></span></div>
+              </div>
+              <pre><code>import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class GuardarTareas {
+    public static void main(String[] args) {
+        Tarea t1 = new Tarea(1, "Crear formulario", "Programación", "pendiente");
+        Tarea t2 = new Tarea(2, "Leer archivo", "Entornos", "hecha");
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("tareas.txt"))) {
+            writer.write(t1.toLinea());
+            writer.newLine();
+            writer.write(t2.toLinea());
+            writer.newLine();
+
+            System.out.println("Tareas guardadas correctamente.");
+        } catch (IOException e) {
+            System.out.println("Error al guardar tareas: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+
+            <p class="mt-4 mb-0">Este enfoque es muy útil porque separa claramente la lógica del objeto y la forma en la que se almacena.</p>
+          </div>
+
+          <div class="section-card p-4 p-lg-5 mb-4" id="ejemplo4">
+            <div class="section-title">
+              <div class="section-icon"><i class="bi bi-arrow-repeat"></i></div>
+              <div>
+                <h2 class="h3 fw-bold mb-1">Ejemplo 4: Leer archivo y reconstruir objetos</h2>
+                <p class="lead-muted mb-0">Ahora hacemos el camino inverso: de línea de texto a objeto Java.</p>
+              </div>
+            </div>
+
+            <p>Cuando leemos cada línea, podemos dividirla con <code>split(";")</code> y crear una instancia de <code>Tarea</code> con esos valores.</p>
+
+            <div class="code-wrapper mt-4">
+              <div class="code-header">
+                <span>LeerTareas.java</span>
+                <div class="code-dots"><span></span><span></span><span></span></div>
+              </div>
+              <pre><code>import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class LeerTareas {
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("tareas.txt"))) {
+            String linea;
+
+            while ((linea = reader.readLine()) != null) {
+                String[] partes = linea.split(";");
+
+                int id = Integer.parseInt(partes[0]);
+                String titulo = partes[1];
+                String modulo = partes[2];
+                String estado = partes[3];
+
+                Tarea tarea = new Tarea(id, titulo, modulo, estado);
+
+                System.out.println("ID: " + tarea.getId());
+                System.out.println("Título: " + tarea.getTitulo());
+                System.out.println("Módulo: " + tarea.getModulo());
+                System.out.println("Estado: " + tarea.getEstado());
+                System.out.println("--------------------------");
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error al leer tareas: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="alert alert-warning border-0 shadow-sm mt-4" role="alert">
+              <strong><i class="bi bi-shield-exclamation me-2"></i>Precaución:</strong>
+              este formato funciona bien si los datos no contienen el delimitador <code>;</code>. En sistemas más grandes conviene validar o usar formatos más robustos como CSV bien tratado, JSON o base de datos.
+            </div>
+          </div>
+        </section>
+
+        <section id="proyecto" class="section-card p-4 p-lg-5 mb-4">
+          <div class="section-title">
+            <div class="section-icon"><i class="bi bi-kanban"></i></div>
+            <div>
+              <h2 class="h3 fw-bold mb-1">Mini Proyecto: Sistema simple de tareas</h2>
+              <p class="lead-muted mb-0">Aplicación básica orientada a consolidar escritura, lectura y reconstrucción de objetos.</p>
+            </div>
+          </div>
+
+          <p>El proyecto consiste en un pequeño sistema por consola que utiliza un archivo <code>tareas.txt</code> como almacenamiento persistente. Al arrancar, se leen las tareas ya guardadas. Durante la ejecución, el usuario puede añadir nuevas tareas y mostrarlas. En esta versión no se usan colecciones, sino un <strong>array de objetos</strong> y un contador, porque es una solución más adecuada para alumnado que todavía no ha trabajado con <code>List</code> o <code>ArrayList</code>.</p>
+
+          <div class="alert alert-info border-0 shadow-sm mb-4" role="alert">
+            <strong><i class="bi bi-info-circle me-2"></i>Enfoque didáctico:</strong>
+            este mini proyecto está resuelto únicamente con <code>arrays</code>, posiciones y un contador, para adaptarse a un momento del curso en el que todavía no se han trabajado las colecciones.
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6 col-xl-3">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">1. Añadir tarea</h5>
+                <p class="text-secondary mb-0">Recoger datos del usuario y crear el objeto <code>Tarea</code>.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">2. Mostrar tareas</h5>
+                <p class="text-secondary mb-0">Recorrer el array en memoria y enseñar su contenido.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">3. Guardar en archivo</h5>
+                <p class="text-secondary mb-0">Convertir cada tarea en una línea y persistirla.</p>
+              </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">4. Leer al iniciar</h5>
+                <p class="text-secondary mb-0">Reconstruir el estado previo desde <code>tareas.txt</code>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-wrapper mt-4">
+            <div class="code-header">
+              <span>GestorTareas.java</span>
+              <div class="code-dots"><span></span><span></span><span></span></div>
+            </div>
+            <pre><code>import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class GestorTareas {
+
+    private static final String NOMBRE_ARCHIVO = "tareas.txt";
+    private static final int CAPACIDAD_MAXIMA = 100;
+    private static final Tarea[] tareas = new Tarea[CAPACIDAD_MAXIMA];
+    private static int totalTareas = 0;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        cargarTareas();
+
+        int opcion;
+        do {
+            System.out.println("\n=== MENÚ DE TAREAS ===");
+            System.out.println("1. Añadir tarea");
+            System.out.println("2. Mostrar tareas");
+            System.out.println("3. Guardar tareas");
+            System.out.println("0. Salir");
+            System.out.print("Elige una opción: ");
+            opcion = Integer.parseInt(sc.nextLine());
+
+            switch (opcion) {
+                case 1:
+                    anadirTarea(sc);
+                    break;
+                case 2:
+                    mostrarTareas();
+                    break;
+                case 3:
+                    guardarTareas();
+                    break;
+                case 0:
+                    guardarTareas();
+                    System.out.println("Saliendo del programa...");
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+            }
+        } while (opcion != 0);
+
+        sc.close();
+    }
+
+    private static void anadirTarea(Scanner sc) {
+        if (totalTareas >= CAPACIDAD_MAXIMA) {
+            System.out.println("No se pueden añadir más tareas. Array lleno.");
+            return;
+        }
+
+        System.out.print("ID: ");
+        int id = Integer.parseInt(sc.nextLine());
+
+        System.out.print("Título: ");
+        String titulo = sc.nextLine();
+
+        System.out.print("Módulo: ");
+        String modulo = sc.nextLine();
+
+        System.out.print("Estado: ");
+        String estado = sc.nextLine();
+
+        tareas[totalTareas] = new Tarea(id, titulo, modulo, estado);
+        totalTareas++;
+        System.out.println("Tarea añadida correctamente.");
+    }
+
+    private static void mostrarTareas() {
+        if (totalTareas == 0) {
+            System.out.println("No hay tareas registradas.");
+            return;
+        }
+
+        for (int i = 0; i < totalTareas; i++) {
+            System.out.println(tareas[i].toLinea());
+        }
+    }
+
+    private static void guardarTareas() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(NOMBRE_ARCHIVO))) {
+            for (int i = 0; i < totalTareas; i++) {
+                writer.write(tareas[i].toLinea());
+                writer.newLine();
+            }
+            System.out.println("Tareas guardadas en archivo.");
+        } catch (IOException e) {
+            System.out.println("Error al guardar: " + e.getMessage());
+        }
+    }
+
+    private static void cargarTareas() {
+        File archivo = new File(NOMBRE_ARCHIVO);
+
+        if (!archivo.exists()) {
+            System.out.println("No existe archivo previo. Se iniciará vacío.");
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = reader.readLine()) != null && totalTareas < CAPACIDAD_MAXIMA) {
+                String[] partes = linea.split(";");
+                int id = Integer.parseInt(partes[0]);
+                String titulo = partes[1];
+                String modulo = partes[2];
+                String estado = partes[3];
+
+                tareas[totalTareas] = new Tarea(id, titulo, modulo, estado);
+                totalTareas++;
+            }
+        } catch (IOException e) {
+            System.out.println("Error al cargar tareas: " + e.getMessage());
+        }
+    }
+}</code></pre>
+          </div>
+
+          <h3 class="h5 fw-bold mt-4">Qué conceptos consolida este mini proyecto</h3>
+          <ul>
+            <li>Uso de un array de objetos y un contador para gestionar los elementos en memoria.</li>
+            <li>Persistencia simple basada en archivo de texto.</li>
+            <li>Separación entre lectura inicial, gestión de datos y guardado final.</li>
+            <li>Formato de serialización manual mediante delimitadores.</li>
+          </ul>
+        </section>
+
+        <section class="section-card p-4 p-lg-5 mb-4">
+          <div class="section-title">
+            <div class="section-icon"><i class="bi bi-shield-check"></i></div>
+            <div>
+              <h2 class="h3 fw-bold mb-1">Buenas prácticas</h2>
+              <p class="lead-muted mb-0">La diferencia entre un ejemplo funcional y un código profesional suele estar aquí.</p>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">Manejo de excepciones</h5>
+                <p class="text-secondary mb-0">Captura <code>IOException</code> y comunica errores útiles al usuario o al desarrollador.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">Cerrar archivos</h5>
+                <p class="text-secondary mb-0">Nunca dejes recursos abiertos. Puede provocar bloqueos o pérdida de datos.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card mini-card p-3">
+                <h5 class="fw-semibold">Try-with-resources</h5>
+                <p class="text-secondary mb-0">Es la forma moderna, segura y recomendada para gestionar streams y readers/writers.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-success border-0 shadow-sm mt-4" role="alert">
+            <h5 class="alert-heading"><i class="bi bi-check2-square me-2"></i>Recomendación docente y profesional</h5>
+            <p class="mb-0">Empieza con archivos de texto para comprender el mecanismo. Después evoluciona hacia clases utilitarias, validación de datos, separación por capas y, cuando el proyecto lo requiera, persistencia con base de datos.</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="sticky-summary d-flex flex-column gap-4">
+          <div class="section-card p-4">
+            <h3 class="h5 fw-bold mb-3"><i class="bi bi-clipboard-data me-2 text-primary"></i>Resumen rápido</h3>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item px-0">Un archivo <code>.txt</code> guarda texto plano.</li>
+              <li class="list-group-item px-0"><code>FileWriter</code> y <code>BufferedWriter</code> permiten escribir.</li>
+              <li class="list-group-item px-0"><code>FileReader</code> y <code>BufferedReader</code> permiten leer.</li>
+              <li class="list-group-item px-0">Los objetos pueden convertirse a líneas de texto.</li>
+              <li class="list-group-item px-0">Con <code>split(";")</code> se reconstruyen objetos.</li>
+            </ul>
+          </div>
+
+          <div class="section-card p-4">
+            <h3 class="h5 fw-bold mb-3"><i class="bi bi-folder2-open me-2 text-primary"></i>Estructura sugerida</h3>
+            <div class="code-wrapper">
+              <div class="code-header">
+                <span>Proyecto Java</span>
+                <div class="code-dots"><span></span><span></span><span></span></div>
+              </div>
+              <pre><code>mi-proyecto/
+├── src/
+│   ├── Tarea.java
+│   └── GestorTareas.java
+├── tareas.txt
+└── README.md</code></pre>
+            </div>
+          </div>
+
+          <div class="section-card p-4">
+            <h3 class="h5 fw-bold mb-3"><i class="bi bi-terminal me-2 text-primary"></i>Idea clave</h3>
+            <p class="mb-0 text-secondary">Persistir en archivos de texto no solo sirve para guardar datos: también enseña a diseñar formatos, validar información y mantener consistencia entre memoria y almacenamiento. Además, este enfoque con arrays permite reforzar contenidos previos antes de dar el salto a las colecciones.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="maven" class="section-card p-4 p-lg-5 mt-4 mb-4">
+      <div class="section-title">
+        <div class="section-icon"><i class="bi bi-box"></i></div>
+        <div>
+          <h2 class="h3 fw-bold mb-1">Crear el proyecto con Maven</h2>
+          <p class="lead-muted mb-0">Antes de programar, conviene generar una base de proyecto limpia y profesional.</p>
+        </div>
+      </div>
+
+      <p>Una forma recomendada de comenzar es crear el proyecto con <strong>Maven</strong>, ya que permite organizar el código, gestionar dependencias y mantener una estructura estándar. Con el siguiente comando se genera un proyecto Java listo para empezar a trabajar:</p>
+
+      <div class="alert alert-primary border-0 shadow-sm" role="alert">
+        <strong><i class="bi bi-terminal me-2"></i>Ventaja:</strong>
+        usar Maven desde el inicio ayuda al alumnado a familiarizarse con una estructura profesional de proyecto, especialmente útil en DAW y DAM.
+      </div>
+
+      <div class="code-wrapper mt-4">
+        <div class="code-header">
+          <span>Comando Maven</span>
+          <div class="code-dots"><span></span><span></span><span></span></div>
+        </div>
+        <pre><code>mvn archetype:generate \
+  -DarchetypeGroupId=org.apache.maven.archetypes \
+  -DarchetypeArtifactId=maven-archetype-quickstart \
+  -DarchetypeVersion=1.5 \
+  -DgroupId=es.iescamas \
+  -DartifactId=Archivos \
+  -Dversion=1.0.0-SNAPSHOT \
+  -DjavaCompilerVersion=17 \
+  -DjunitVersion=5.11.0 \
+  -DinteractiveMode=false</code></pre>
+      </div>
+
+      <h3 class="h5 fw-bold mt-4">¿Qué hace este comando?</h3>
+      <div class="table-responsive mt-3">
+        <table class="table table-bordered align-middle">
+          <thead>
+            <tr>
+              <th>Parámetro</th>
+              <th>Significado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>-DarchetypeGroupId</code></td>
+              <td>Indica el grupo del arquetipo Maven que se va a usar como plantilla.</td>
+            </tr>
+            <tr>
+              <td><code>-DarchetypeArtifactId</code></td>
+              <td>Selecciona la plantilla concreta del proyecto, en este caso <code>maven-archetype-quickstart</code>.</td>
+            </tr>
+            <tr>
+              <td><code>-DarchetypeVersion</code></td>
+              <td>Fija la versión del arquetipo.</td>
+            </tr>
+            <tr>
+              <td><code>-DgroupId</code></td>
+              <td>Define el paquete base del proyecto, aquí <code>es.iescamas</code>.</td>
+            </tr>
+            <tr>
+              <td><code>-DartifactId</code></td>
+              <td>Nombre del proyecto Maven: <code>Archivos</code>.</td>
+            </tr>
+            <tr>
+              <td><code>-Dversion</code></td>
+              <td>Versión inicial del proyecto.</td>
+            </tr>
+            <tr>
+              <td><code>-DjavaCompilerVersion</code></td>
+              <td>Configura Java 17 como versión de compilación.</td>
+            </tr>
+            <tr>
+              <td><code>-DjunitVersion</code></td>
+              <td>Establece la versión de JUnit para pruebas.</td>
+            </tr>
+            <tr>
+              <td><code>-DinteractiveMode=false</code></td>
+              <td>Evita preguntas interactivas y genera el proyecto directamente.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="h5 fw-bold mt-4">Estructura generada</h3>
+      <p>Después de ejecutar el comando, Maven creará una carpeta llamada <code>Archivos</code> con una estructura muy parecida a esta:</p>
+
+      <div class="code-wrapper mt-3">
+        <div class="code-header">
+          <span>Estructura Maven</span>
+          <div class="code-dots"><span></span><span></span><span></span></div>
+        </div>
+        <pre><code>Archivos/
+├── pom.xml
+└── src/
+    ├── main/
+    │   └── java/
+    │       └── es/
+    │           └── iescamas/
+    │               └── App.java
+    └── test/
+        └── java/
+            └── es/
+                └── iescamas/
+                    └── AppTest.java</code></pre>
+      </div>
+
+      <div class="alert alert-warning border-0 shadow-sm mt-4" role="alert">
+        <strong><i class="bi bi-wrench-adjustable me-2"></i>Recomendación:</strong>
+        una vez generado el proyecto, puedes renombrar <code>App.java</code> por una clase más representativa, como <code>GestorTareas.java</code>, y empezar a organizar mejor el código según el dominio del ejercicio.
+      </div>
+    </section>
+
+    <section id="conclusion" class="footer-box p-4 p-lg-5 mt-4">
+      <h2 class="h3 fw-bold mb-3">Conclusión</h2>
+      <p>En este tutorial has visto cómo crear y leer archivos de texto en Java, cómo utilizar las clases principales del paquete de entrada y salida, cómo guardar objetos en formato textual y cómo reconstruirlos posteriormente.</p>
+      <p>También has trabajado un mini proyecto realista basado en <code>tareas.txt</code>, que sirve como puente perfecto entre ejercicios básicos y aplicaciones más estructuradas.</p>
+      <p class="mb-0">El siguiente paso natural es mejorar este sistema con validaciones, búsqueda, borrado lógico, actualización de tareas y separación en clases de servicio o repositorio.</p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
