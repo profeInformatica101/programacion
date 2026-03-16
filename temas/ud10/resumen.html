@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cheat Sheet Java - Ficheros de Texto</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+    .hero {
+      background: linear-gradient(135deg, #0d6efd, #4f8dfd);
+      color: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(13, 110, 253, 0.25);
+    }
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+    .code-box {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: .75rem;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: Consolas, Monaco, monospace;
+      font-size: .92rem;
+    }
+    .badge-soft {
+      background: #e7f1ff;
+      color: #0d6efd;
+      border: 1px solid #cfe2ff;
+    }
+    .section-title {
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .table thead th {
+      background: #e9f2ff;
+    }
+    .tip {
+      background: #fff8e1;
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      border-radius: .5rem;
+    }
+    footer {
+      color: #6b7280;
+      font-size: .9rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-lg-5">
+
+  <section class="hero mb-4">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8">
+        <h1 class="display-6 fw-bold mb-3">
+          <i class="bi bi-file-earmark-text me-2"></i>
+          Cheat Sheet Java: Ficheros de Texto
+        </h1>
+        <p class="lead mb-3">
+          Guía rápida para leer, escribir y gestionar archivos de texto en Java.
+        </p>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge rounded-pill badge-soft">java.nio.file.Files</span>
+          <span class="badge rounded-pill badge-soft">Path</span>
+          <span class="badge rounded-pill badge-soft">BufferedReader</span>
+          <span class="badge rounded-pill badge-soft">BufferedWriter</span>
+          <span class="badge rounded-pill badge-soft">UTF-8</span>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center">
+        <i class="bi bi-folder2-open" style="font-size: 5rem;"></i>
+      </div>
+    </div>
+  </section>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="section-title h4">
+            <i class="bi bi-lightning-charge-fill text-primary me-2"></i>
+            Imports más usados
+          </h2>
+          <div class="code-box">
+<pre class="mb-0"><code>import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.StandardOpenOption;
+import java.util.List;</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="section-title h4">
+            <i class="bi bi-bookmark-check-fill text-success me-2"></i>
+            Idea clave
+          </h2>
+          <ul class="mb-0">
+            <li><strong>Path</strong>: representa la ruta del archivo.</li>
+            <li><strong>Files</strong>: permite leer, escribir y comprobar archivos.</li>
+            <li><strong>BufferedReader</strong>: lectura línea a línea.</li>
+            <li><strong>BufferedWriter</strong>: escritura eficiente de texto.</li>
+            <li><strong>UTF-8</strong>: codificación recomendada.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="mt-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="section-title h4">
+          <i class="bi bi-table text-primary me-2"></i>
+          Métodos más importantes
+        </h2>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead>
+              <tr>
+                <th>Elemento</th>
+                <th>Uso</th>
+                <th>Ejemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Path.of("archivo.txt")</code></td>
+                <td>Crea una ruta</td>
+                <td><code>Path ruta = Path.of("datos.txt");</code></td>
+              </tr>
+              <tr>
+                <td><code>Files.readString(path)</code></td>
+                <td>Lee todo el texto</td>
+                <td><code>String texto = Files.readString(ruta);</code></td>
+              </tr>
+              <tr>
+                <td><code>Files.readAllLines(path)</code></td>
+                <td>Lee todas las líneas</td>
+                <td><code>List&lt;String&gt; lineas = Files.readAllLines(ruta);</code></td>
+              </tr>
+              <tr>
+                <td><code>Files.writeString(path, texto)</code></td>
+                <td>Escribe texto</td>
+                <td><code>Files.writeString(ruta, "Hola");</code></td>
+              </tr>
+              <tr>
+                <td><code>Files.exists(path)</code></td>
+                <td>Comprueba si existe</td>
+                <td><code>if (Files.exists(ruta)) { ... }</code></td>
+              </tr>
+              <tr>
+                <td><code>BufferedReader</code></td>
+                <td>Lee línea a línea</td>
+                <td><code>br.readLine()</code></td>
+              </tr>
+              <tr>
+                <td><code>BufferedWriter</code></td>
+                <td>Escribe línea a línea</td>
+                <td><code>bw.write("texto")</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-5">
+    <div class="row g-4">
+      <div class="col-12 col-xl-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h2 class="section-title h4">
+              <i class="bi bi-file-earmark-arrow-down text-primary me-2"></i>
+              Leer un archivo completo
+            </h2>
+            <div class="code-box">
+<pre class="mb-0"><code>import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class LeerArchivo {
+    public static void main(String[] args) {
+        try {
+            Path ruta = Path.of("datos.txt");
+            String contenido = Files.readString(ruta);
+            System.out.println(contenido);
+        } catch (Exception e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h2 class="section-title h4">
+              <i class="bi bi-file-earmark-arrow-up text-success me-2"></i>
+              Escribir un archivo
+            </h2>
+            <div class="code-box">
+<pre class="mb-0"><code>import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class EscribirArchivo {
+    public static void main(String[] args) {
+        try {
+            Path ruta = Path.of("salida.txt");
+            Files.writeString(ruta, "Hola desde Java");
+            System.out.println("Archivo guardado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al escribir: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h2 class="section-title h4">
+              <i class="bi bi-list-ul text-warning me-2"></i>
+              Leer línea a línea
+            </h2>
+            <div class="code-box">
+<pre class="mb-0"><code>import java.io.BufferedReader;
+import java.io.FileReader;
+
+public class LeerLineas {
+    public static void main(String[] args) {
+        try (BufferedReader br = new BufferedReader(new FileReader("datos.txt"))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                System.out.println(linea);
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="card h-100">
+          <div class="card-body">
+            <h2 class="section-title h4">
+              <i class="bi bi-plus-square text-danger me-2"></i>
+              Añadir texto al final
+            </h2>
+            <div class="code-box">
+<pre class="mb-0"><code>import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+
+public class AnadirTexto {
+    public static void main(String[] args) {
+        try {
+            Path ruta = Path.of("salida.txt");
+            Files.writeString(
+                ruta,
+                "\nNueva línea añadida",
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND
+            );
+            System.out.println("Texto añadido.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="section-title h4">
+          <i class="bi bi-diagram-3 text-primary me-2"></i>
+          Flujo típico de trabajo
+        </h2>
+        <div class="row g-3 text-center">
+          <div class="col-md-3">
+            <div class="p-3 bg-light rounded-4 border h-100">
+              <div class="fs-2 mb-2">1</div>
+              <strong>Crear ruta</strong>
+              <p class="mb-0 mt-2"><code>Path.of("datos.txt")</code></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="p-3 bg-light rounded-4 border h-100">
+              <div class="fs-2 mb-2">2</div>
+              <strong>Comprobar existencia</strong>
+              <p class="mb-0 mt-2"><code>Files.exists(path)</code></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="p-3 bg-light rounded-4 border h-100">
+              <div class="fs-2 mb-2">3</div>
+              <strong>Leer o escribir</strong>
+              <p class="mb-0 mt-2"><code>Files.readString / writeString</code></p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="p-3 bg-light rounded-4 border h-100">
+              <div class="fs-2 mb-2">4</div>
+              <strong>Controlar errores</strong>
+              <p class="mb-0 mt-2"><code>try-catch</code></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-5">
+    <div class="row g-4">
+      <div class="col-12 col-lg-7">
+        <div class="card h-100">
+          <div class="card-body">
+            <h2 class="section-title h4">
+              <i class="bi bi-code-slash text-primary me-2"></i>
+              Ejemplo completo
+            </h2>
+            <div class="code-box">
+<pre class="mb-0"><code>import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+public class EjemploFicheros {
+    public static void main(String[] args) {
+        try {
+            Path ruta = Path.of("alumnos.txt");
+
+            // Escribir contenido inicial
+            Files.writeString(ruta, "Ana\nLuis\nMarta");
+
+            // Leer todas las líneas
+            List&lt;String&gt; alumnos = Files.readAllLines(ruta);
+
+            System.out.println("Listado de alumnos:");
+            for (String alumno : alumnos) {
+                System.out.println("- " + alumno);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Se produjo un error: " + e.getMessage());
+        }
+    }
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-5">
+        <div class="card h-100">
+          <div class="card-body">
+            <h2 class="section-title h4">
+              <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+              Errores frecuentes
+            </h2>
+            <ul class="mb-3">
+              <li>No usar <code>try-catch</code>.</li>
+              <li>Escribir una ruta incorrecta.</li>
+              <li>No saber si el archivo se sobrescribe o se añade.</li>
+              <li>Olvidar cerrar flujos en clases clásicas de <code>java.io</code>.</li>
+              <li>No tener en cuenta la codificación del texto.</li>
+            </ul>
+            <div class="tip">
+              <strong>Consejo:</strong> para ejemplos sencillos y modernos en clase, usa
+              <code>Path</code> + <code>Files</code>. Para enseñar el funcionamiento interno,
+              muestra también <code>BufferedReader</code> y <code>BufferedWriter</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-5">
+    <div class="card">
+      <div class="card-body">
+        <h2 class="section-title h4">
+          <i class="bi bi-journal-text text-primary me-2"></i>
+          Resumen rápido
+        </h2>
+        <div class="row g-3">
+          <div class="col-md-6 col-xl-3">
+            <div class="border rounded-4 p-3 h-100 bg-light">
+              <strong>Leer todo</strong>
+              <div><code>Files.readString(path)</code></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="border rounded-4 p-3 h-100 bg-light">
+              <strong>Leer líneas</strong>
+              <div><code>Files.readAllLines(path)</code></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="border rounded-4 p-3 h-100 bg-light">
+              <strong>Escribir</strong>
+              <div><code>Files.writeString(path, texto)</code></div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="border rounded-4 p-3 h-100 bg-light">
+              <strong>Añadir</strong>
+              <div><code>APPEND + CREATE</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="text-center mt-5 pt-3">
+    Cheat Sheet de Java para ficheros de texto · HTML + Bootstrap
+  </footer>
+</div>
+
+</body>
+</html>
