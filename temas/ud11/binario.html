@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficheros Binarios en Java</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-bg:#f7f4ef;
+  --c-surface:#ffffff;
+  --c-border:#e2ddd6;
+  --c-border2:#ccc7be;
+  --c-text:#1a1714;
+  --c-muted:#7a7268;
+  --c-accent:#c45c1a;
+  --c-accent2:#2563eb;
+  --c-accent3:#15803d;
+  --c-accent-light:#fff1e8;
+  --c-blue-light:#eff6ff;
+  --c-green-light:#f0fdf4;
+  --ff-display:'Lora',Georgia,serif;
+  --ff-body:'Outfit',sans-serif;
+  --ff-mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--c-bg);color:var(--c-text);font-family:var(--ff-body);font-weight:300;line-height:1.7;font-size:15px}
+
+.site-header{background:var(--c-surface);border-bottom:1.5px solid var(--c-border);padding:3.5rem 0 2.5rem;position:relative;overflow:hidden}
+.site-header::after{content:'';position:absolute;right:-60px;top:-40px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(196,92,26,.08) 0%,transparent 70%);pointer-events:none}
+.header-eyebrow{font-family:var(--ff-mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--c-accent);margin-bottom:.7rem}
+.header-h1{font-family:var(--ff-display);font-weight:600;font-size:clamp(2rem,4.5vw,3rem);line-height:1.1;color:var(--c-text);margin-bottom:.75rem}
+.header-h1 em{font-style:italic;color:var(--c-accent)}
+.header-sub{color:var(--c-muted);font-size:.95rem;max-width:520px}
+.chip{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--ff-mono);font-size:.68rem;background:var(--c-accent-light);color:var(--c-accent);border:1px solid #f0cdb0;border-radius:99px;padding:.25rem .7rem}
+
+.top-nav{background:var(--c-surface);border-bottom:1px solid var(--c-border);position:sticky;top:0;z-index:200}
+.top-nav .nav-link{font-family:var(--ff-mono);font-size:.73rem;color:var(--c-muted);padding:.8rem 1rem;border-bottom:2px solid transparent;border-radius:0;white-space:nowrap;transition:color .15s,border-color .15s}
+.top-nav .nav-link:hover{color:var(--c-text)}
+.top-nav .nav-link.active{color:var(--c-accent);border-bottom-color:var(--c-accent);background:none}
+.nav-scroller{overflow-x:auto;scrollbar-width:none}
+.nav-scroller::-webkit-scrollbar{display:none}
+
+.sec{padding:4rem 0}
+.sec+.sec{border-top:1px solid var(--c-border)}
+.sec-num{font-family:var(--ff-display);font-size:3.8rem;font-weight:400;font-style:italic;color:rgba(196,92,26,.15);line-height:1;user-select:none}
+.sec-title{font-family:var(--ff-display);font-weight:600;font-size:1.55rem;color:var(--c-text);line-height:1.2;margin-bottom:.25rem}
+.sec-sub{font-size:.82rem;color:var(--c-muted)}
+.tag{display:inline-block;font-family:var(--ff-mono);font-size:.65rem;border-radius:99px;padding:.18rem .6rem;border:1px solid}
+.tag-o{color:var(--c-accent);border-color:#f0cdb0;background:var(--c-accent-light)}
+.tag-b{color:var(--c-accent2);border-color:#bfdbfe;background:var(--c-blue-light)}
+.tag-g{color:var(--c-accent3);border-color:#bbf7d0;background:var(--c-green-light)}
+
+.card{background:var(--c-surface)!important;border:1px solid var(--c-border)!important;border-radius:10px!important}
+.card:hover{border-color:var(--c-border2)!important}
+
+pre{background:#faf9f7!important;border:1px solid var(--c-border);border-radius:8px;padding:1.1rem 1.3rem;overflow-x:auto;margin:0}
+code{font-family:var(--ff-mono)!important;font-size:.79rem;line-height:1.8;color:var(--c-text)}
+.kw{color:#9d1c1c;font-weight:500}
+.cls{color:#c45c1a}
+.str{color:#166534}
+.cmt{color:#9d9388;font-style:italic}
+.num{color:#1d4ed8}
+.met{color:#6d28d9}
+.ic{font-family:var(--ff-mono);font-size:.8em;background:var(--c-blue-light);color:var(--c-accent2);border:1px solid #bfdbfe;border-radius:4px;padding:.1em .35em}
+
+.callout{border-left:3px solid var(--c-accent);background:var(--c-accent-light);border-radius:0 6px 6px 0;padding:.8rem 1rem;font-size:.85rem;color:#8b3a0e;line-height:1.5}
+.callout.info{border-color:var(--c-accent2);background:var(--c-blue-light);color:#1e3a8a}
+.callout.success{border-color:var(--c-accent3);background:var(--c-green-light);color:#14532d}
+
+.api-btn{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--ff-mono);font-size:.72rem;color:var(--c-accent2);border:1px solid #bfdbfe;background:var(--c-blue-light);border-radius:6px;padding:.33rem .75rem;text-decoration:none;transition:background .15s}
+.api-btn:hover{background:#dbeafe;color:var(--c-accent2)}
+
+.mtable td,.mtable th{font-size:.8rem;padding:.5rem .75rem;border-color:var(--c-border)!important;vertical-align:top}
+.mtable thead th{background:#faf9f7;color:var(--c-muted);font-family:var(--ff-mono);font-size:.7rem;letter-spacing:.04em;font-weight:500}
+.mtable .mname{font-family:var(--ff-mono);color:#6d28d9;font-size:.75rem}
+.mtable .mdesc{color:var(--c-muted);font-size:.82rem}
+
+/* CAROUSEL */
+.demo-car{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--c-border);background:var(--c-surface)}
+.demo-car .carousel-item{padding:1.5rem 3rem}
+.demo-car .carousel-item img{border-radius:8px;max-height:200px;object-fit:contain;display:block;margin:0 auto}
+.carousel-control-prev,.carousel-control-next{width:36px;height:36px;top:50%;transform:translateY(-50%);bottom:auto;border-radius:50%;background:var(--c-surface);border:1px solid var(--c-border);opacity:1}
+.carousel-control-prev{left:10px}
+.carousel-control-next{right:10px}
+.carousel-control-prev-icon,.carousel-control-next-icon{width:12px;height:12px;filter:none;background-image:none}
+.carousel-control-prev-icon::after,.carousel-control-next-icon::after{content:'';display:block;width:8px;height:8px;border-top:2px solid var(--c-accent);border-right:2px solid var(--c-accent);position:absolute;top:50%;left:50%}
+.carousel-control-prev-icon::after{transform:translate(-30%,-50%) rotate(-135deg)}
+.carousel-control-next-icon::after{transform:translate(-70%,-50%) rotate(45deg)}
+.carousel-indicators{bottom:6px;margin:0}
+.carousel-indicators [data-bs-target]{background:var(--c-accent);width:6px;height:6px;border-radius:50%;border:none;opacity:.3;margin:0 3px}
+.carousel-indicators .active{opacity:1}
+.slide-cap{font-family:var(--ff-mono);font-size:.73rem;color:var(--c-muted);margin-top:.75rem;text-align:center;line-height:1.5}
+
+/* FILTER DEMO */
+.filter-label{font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);margin-bottom:.3rem;letter-spacing:.04em;text-transform:uppercase}
+.filter-wrap{border-radius:8px;overflow:hidden;background:#f0ece6;border:1px solid var(--c-border)}
+.filter-wrap canvas{display:block;width:100%;height:auto}
+
+/* AUDIO PLAYER */
+.audio-card{background:var(--c-accent-light);border:1px solid #f0cdb0;border-radius:10px;padding:1.1rem 1.25rem}
+.audio-card .trk-title{font-family:var(--ff-display);font-size:1rem;font-weight:600;color:var(--c-text)}
+.audio-card .trk-meta{font-family:var(--ff-mono);font-size:.67rem;color:var(--c-muted)}
+.audio-card .ctrls{display:flex;align-items:center;gap:.6rem;margin-top:.8rem}
+.btn-play{width:38px;height:38px;border-radius:50%;background:var(--c-accent);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s}
+.btn-play:hover{background:#a8460f}
+.prog-wrap{flex:1;height:4px;background:rgba(196,92,26,.2);border-radius:99px;cursor:pointer;position:relative}
+.prog-fill{height:100%;background:var(--c-accent);border-radius:99px;width:0%;transition:width .1s linear}
+.time-lbl{font-family:var(--ff-mono);font-size:.63rem;color:var(--c-muted);white-space:nowrap;min-width:80px;text-align:right}
+.vol-row{display:flex;align-items:center;gap:.5rem;margin-top:.6rem}
+.vol-row i{font-size:.8rem;color:var(--c-muted)}
+.vol-row input{flex:1;accent-color:var(--c-accent)}
+.wv-canvas{display:block;width:100%;height:55px;border-radius:6px;background:#fff8f4;border:1px solid #f0cdb0;margin-top:.6rem}
+
+/* BMP SEEK DEMO */
+.bmp-strip{display:flex;gap:3px;overflow-x:auto;padding:.3rem 0;scrollbar-width:none}
+.bmp-strip::-webkit-scrollbar{display:none}
+.bmp-cell{flex-shrink:0;background:#faf9f7;border:1px solid var(--c-border);border-radius:5px;padding:.35rem .55rem;font-family:var(--ff-mono);font-size:.63rem;color:var(--c-muted);line-height:1.3;min-width:56px;text-align:center;cursor:pointer;transition:all .15s}
+.bmp-cell:hover{border-color:var(--c-border2)}
+.bmp-cell.hl{background:var(--c-accent-light);border-color:#f0cdb0;color:var(--c-accent)}
+.bmp-cell .boff{font-size:.55rem;opacity:.55;display:block;margin-bottom:1px}
+
+/* PRACTICES */
+.pr-item{display:flex;gap:.85rem;align-items:flex-start;padding:.85rem 0;border-bottom:1px solid var(--c-border)}
+.pr-item:last-child{border-bottom:none}
+.pr-num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--c-accent-light);border:1px solid #f0cdb0;display:flex;align-items:center;justify-content:center;font-family:var(--ff-mono);font-size:.67rem;color:var(--c-accent);font-weight:500;margin-top:.15rem}
+.pr-text{font-size:.88rem;color:var(--c-muted);line-height:1.55}
+.pr-text strong{color:var(--c-text);font-weight:500}
+
+/* FLOW */
+.flow{display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto;padding:.2rem 0;gap:0}
+.fbox{flex-shrink:0;background:#faf9f7;border:1px solid var(--c-border);border-radius:6px;padding:.38rem .8rem;font-family:var(--ff-mono);font-size:.69rem;color:var(--c-text);text-align:center;line-height:1.3}
+.fbox.hl{background:var(--c-accent-light);border-color:#f0cdb0;color:var(--c-accent)}
+.farr{flex-shrink:0;color:var(--c-border2);font-size:.8rem;padding:0 .3rem}
+
+.site-footer{background:var(--c-surface);border-top:1.5px solid var(--c-border);padding:2rem 0;font-family:var(--ff-mono);font-size:.72rem;color:var(--c-muted);text-align:center}
+.site-footer a{color:var(--c-accent2);text-decoration:none}
+.site-footer a:hover{text-decoration:underline}
+
+@media(max-width:576px){.sec-num{font-size:2.5rem}.sec-title{font-size:1.2rem}.demo-car .carousel-item{padding:1rem 2.5rem}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <div class="header-eyebrow"><i class="bi bi-hdd-fill me-1"></i>Programación DAM · Unidad 6</div>
+        <h1 class="header-h1">Ficheros <em>binarios</em><br>en Java</h1>
+        <p class="header-sub mb-3">E/S binaria: imágenes, audio, serialización y acceso aleatorio. Ejemplos interactivos incluidos.</p>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="chip"><i class="bi bi-braces"></i>Java 17+</span>
+          <span class="chip"><i class="bi bi-archive"></i>java.io</span>
+          <span class="chip"><i class="bi bi-image"></i>javax.imageio</span>
+          <span class="chip"><i class="bi bi-speaker"></i>javax.sound</span>
+        </div>
+      </div>
+      <div class="col-lg-4 d-none d-lg-flex justify-content-end">
+        <div style="font-family:var(--ff-mono);font-size:.68rem;color:#d4cec7;line-height:2;text-align:right;user-select:none">
+          42 4D 36 00 10 00 00 00<br>
+          89 50 4E 47 0D 0A 1A 0A<br>
+          52 49 46 46 24 08 00 00<br>
+          AC ED 00 05 73 72 00 07<br>
+          FF D8 FF E0 00 10 4A 46
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <div class="container">
+    <div class="nav-scroller">
+      <ul class="nav" id="mainNav">
+        <li class="nav-item"><a class="nav-link active" href="#s1">01 · Intro</a></li>
+        <li class="nav-item"><a class="nav-link" href="#s2">02 · ImageIO</a></li>
+        <li class="nav-item"><a class="nav-link" href="#s3">03 · FileInputStream</a></li>
+        <li class="nav-item"><a class="nav-link" href="#s4">04 · Serialización</a></li>
+        <li class="nav-item"><a class="nav-link" href="#s5">05 · RandomAccessFile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#s6">06 · Audio WAV</a></li>
+        <li class="nav-item"><a class="nav-link" href="#s7">07 · Buenas prácticas</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+
+<!-- S1 INTRO -->
+<section id="s1" class="sec">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-3 text-lg-end">
+      <div class="sec-num">01</div>
+      <div class="sec-title">Introducción</div>
+      <div class="sec-sub mt-1">¿Qué es un fichero binario?</div>
+      <div class="mt-3 d-flex flex-wrap gap-1 justify-content-lg-end">
+        <span class="tag tag-o">Fundamentos</span>
+        <span class="tag tag-b">java.io</span>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="mb-3" style="font-size:.93rem">Todo fichero es una secuencia de bytes. Los <strong>ficheros binarios</strong> codifican los datos en formatos específicos — píxeles de imagen, muestras de audio, objetos Java — que no son texto legible directamente.</p>
+          <div class="flow mb-3">
+            <div class="fbox">Objeto Java</div><span class="farr">→</span>
+            <div class="fbox hl">Bytes<br><span style="font-size:.6rem;opacity:.7">0x4A 0xFE…</span></div><span class="farr">→</span>
+            <div class="fbox">Fichero<br><span style="font-size:.6rem;opacity:.7">.dat / .bmp / .wav</span></div>
+          </div>
+          <div class="callout info"><i class="bi bi-info-circle me-2"></i><strong>Jerarquía de streams</strong> · <span class="ic">InputStream</span> / <span class="ic">OutputStream</span> son la raíz de toda la E/S binaria en Java.</div>
+        </div>
+      </div>
+      <!-- SLIDER intro -->
+      <div class="card">
+        <div class="card-body">
+          <p class="mb-2" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">EJEMPLOS DE FICHEROS BINARIOS</p>
+          <div id="cIntro" class="carousel slide demo-car border-0" data-bs-ride="false">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#cIntro" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#cIntro" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#cIntro" data-bs-slide-to="2"></button>
+              <button type="button" data-bs-target="#cIntro" data-bs-slide-to="3"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/240px-PNG_transparency_demonstration_1.png" alt="PNG" style="background:#e8e4df">
+                <div class="slide-cap"><span class="tag tag-b">PNG</span> &nbsp;Compresión sin pérdida · Canal alpha · Cabecera 8 bytes + chunks IHDR/IDAT</div>
+              </div>
+              <div class="carousel-item text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/JPEG_example_flower.jpg/240px-JPEG_example_flower.jpg" alt="JPEG">
+                <div class="slide-cap"><span class="tag tag-o">JPEG</span> &nbsp;Compresión con pérdida basada en DCT · Bloques 8×8 píxeles</div>
+              </div>
+              <div class="carousel-item text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/240px-Camponotus_flavomarginatus_ant.jpg" alt="BMP">
+                <div class="slide-cap"><span class="tag tag-g">BMP</span> &nbsp;Sin compresión · Píxeles en bruto · Cabecera fija de 54 bytes (ideal para <span class="ic">RandomAccessFile</span>)</div>
+              </div>
+              <div class="carousel-item text-center">
+                <div style="height:160px;display:flex;align-items:center;justify-content:center;background:#f0ece6;border-radius:8px">
+                  <i class="bi bi-file-earmark-binary" style="font-size:5rem;color:var(--c-accent);opacity:.4"></i>
+                </div>
+                <div class="slide-cap"><span class="tag tag-o">.dat / .bin</span> &nbsp;Objetos Java serializados — formato binario propietario de la JVM</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#cIntro" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+            <button class="carousel-control-next" type="button" data-bs-target="#cIntro" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S2 IMAGEIO -->
+<section id="s2" class="sec">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-3 text-lg-end">
+      <div class="sec-num">02</div>
+      <div class="sec-title">ImageIO</div>
+      <div class="sec-sub mt-1">Leer y escribir imágenes</div>
+      <div class="mt-3 d-flex flex-wrap gap-1 justify-content-lg-end">
+        <span class="tag tag-o">javax.imageio</span>
+        <span class="tag tag-g">PNG · JPEG · BMP</span>
+      </div>
+      <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/imageio/ImageIO.html" target="_blank" class="api-btn mt-3 d-inline-flex"><i class="bi bi-book"></i> Javadoc</a>
+    </div>
+    <div class="col-lg-9">
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="mb-3" style="font-size:.9rem;color:var(--c-muted)"><span class="ic">ImageIO</span> soporta PNG, JPEG y BMP sin dependencias externas. Devuelve un <span class="ic">BufferedImage</span> con acceso a nivel de píxel.</p>
+          <pre><code><span class="kw">import</span> javax.imageio.<span class="cls">ImageIO</span>;
+<span class="kw">import</span> java.awt.image.<span class="cls">BufferedImage</span>;
+<span class="kw">import</span> java.io.<span class="cls">File</span>;
+
+<span class="cls">BufferedImage</span> img = <span class="cls">ImageIO</span>.<span class="met">read</span>(<span class="kw">new</span> <span class="cls">File</span>(<span class="str">"imagen.png"</span>));
+System.out.<span class="met">println</span>(img.<span class="met">getWidth</span>() + <span class="str">"x"</span> + img.<span class="met">getHeight</span>());
+
+<span class="cmt">// Leer color de un píxel (int ARGB)</span>
+<span class="kw">int</span> rgb  = img.<span class="met">getRGB</span>(<span class="num">10</span>, <span class="num">20</span>);
+<span class="kw">int</span> rojo = (rgb &gt;&gt; <span class="num">16</span>) &amp; <span class="num">0xFF</span>;
+
+<span class="cmt">// Guardar en otro formato</span>
+<span class="cls">ImageIO</span>.<span class="met">write</span>(img, <span class="str">"jpg"</span>, <span class="kw">new</span> <span class="cls">File</span>(<span class="str">"salida.jpg"</span>));</code></pre>
+        </div>
+      </div>
+
+      <!-- DEMO FILTROS DE IMAGEN -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="mb-3" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">DEMO INTERACTIVA · Manipulación de píxeles con getRGB / setRGB</p>
+          <div class="row g-3 align-items-start">
+            <div class="col-md-7">
+              <div class="filter-wrap"><canvas id="imgCanvas" width="320" height="213"></canvas></div>
+            </div>
+            <div class="col-md-5">
+              <div class="mb-3">
+                <div class="filter-label">Brillo</div>
+                <input type="range" class="form-range" id="sBright" min="-100" max="100" value="0" style="accent-color:var(--c-accent)">
+                <div style="font-family:var(--ff-mono);font-size:.67rem;color:var(--c-muted);text-align:right" id="vBright">0</div>
+              </div>
+              <div class="mb-3">
+                <div class="filter-label">Contraste</div>
+                <input type="range" class="form-range" id="sContr" min="0.2" max="3" step="0.05" value="1" style="accent-color:var(--c-accent)">
+                <div style="font-family:var(--ff-mono);font-size:.67rem;color:var(--c-muted);text-align:right" id="vContr">1.00×</div>
+              </div>
+              <div class="mb-2">
+                <div class="filter-label">Efecto</div>
+                <div class="d-flex flex-wrap gap-1 mt-1" id="fBtns">
+                  <button data-f="normal" class="fbtn active">Normal</button>
+                  <button data-f="gray" class="fbtn">Grises</button>
+                  <button data-f="sepia" class="fbtn">Sepia</button>
+                  <button data-f="invert" class="fbtn">Invertir</button>
+                </div>
+              </div>
+              <div class="callout mt-2" style="font-size:.77rem">
+                <span class="ic" style="font-size:.75em">img.getRGB(x,y)</span><br>
+                Bits 16–23 = Rojo<br>Bits 8–15 = Verde<br>Bits 0–7 = Azul
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDER FORMATOS -->
+      <div class="card">
+        <div class="card-body">
+          <p class="mb-2" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">COMPARATIVA DE FORMATOS DE IMAGEN</p>
+          <div id="cFmt" class="carousel slide demo-car border-0" data-bs-ride="false">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#cFmt" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#cFmt" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#cFmt" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/220px-PNG_transparency_demonstration_1.png" alt="PNG" style="background:#e8e4df">
+                <div class="slide-cap"><span class="tag tag-b">PNG</span> &nbsp;Sin pérdida · Alpha · <span class="ic">ImageIO.read()</span> · Ideal para iconos y gráficos</div>
+              </div>
+              <div class="carousel-item text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/JPEG_example_flower.jpg/220px-JPEG_example_flower.jpg" alt="JPEG">
+                <div class="slide-cap"><span class="tag tag-o">JPEG</span> &nbsp;Con pérdida · Sin alpha · Compresión configurable · Fotos y fotografías</div>
+              </div>
+              <div class="carousel-item text-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Felis_silvestris_silvestris_small_gradual_decrease.png/220px-Felis_silvestris_silvestris_small_gradual_decrease.png" alt="BMP">
+                <div class="slide-cap"><span class="tag tag-g">BMP</span> &nbsp;Sin compresión · Cabecera 54 bytes · Ideal para <span class="ic">RandomAccessFile</span> y prácticas</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#cFmt" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+            <button class="carousel-control-next" type="button" data-bs-target="#cFmt" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 FILEINPUTSTREAM -->
+<section id="s3" class="sec">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-3 text-lg-end">
+      <div class="sec-num">03</div>
+      <div class="sec-title">FileInputStream</div>
+      <div class="sec-sub mt-1">Lectura secuencial de bytes</div>
+      <div class="mt-3 d-flex flex-wrap gap-1 justify-content-lg-end">
+        <span class="tag tag-o">java.io</span>
+        <span class="tag tag-b">try-with-resources</span>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="mb-3" style="font-size:.9rem;color:var(--c-muted)">Lee el fichero byte a byte (o en bloques). Siempre leer en <strong style="color:var(--c-text)">bloques</strong> y usar <strong style="color:var(--c-text)">try-with-resources</strong>.</p>
+          <pre><code><span class="kw">try</span> (<span class="cls">FileInputStream</span> fis = <span class="kw">new</span> <span class="cls">FileInputStream</span>(<span class="str">"imagen.bmp"</span>)) {
+    <span class="kw">byte</span>[] buffer = <span class="kw">new</span> <span class="kw">byte</span>[<span class="num">4096</span>];
+    <span class="kw">int</span> leidos;
+    <span class="kw">while</span> ((leidos = fis.<span class="met">read</span>(buffer)) != -<span class="num">1</span>) {
+        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; leidos; i++) {
+            System.out.<span class="met">printf</span>(<span class="str">"%02X "</span>, buffer[i] &amp; <span class="num">0xFF</span>);
+        }
+    }
+} <span class="cmt">// fis.close() automático</span></code></pre>
+        </div>
+      </div>
+      <!-- DEMO HEX VIEWER -->
+      <div class="card">
+        <div class="card-body">
+          <p class="mb-3" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">DEMO · Visor hexadecimal de cabecera BMP (54 bytes)</p>
+          <div id="hexViewer" style="font-family:var(--ff-mono);font-size:.71rem;background:#faf9f7;border:1px solid var(--c-border);border-radius:8px;padding:1rem;line-height:2;overflow-x:auto"></div>
+          <div class="mt-2 d-flex flex-wrap gap-2">
+            <span style="font-size:.7rem;font-family:var(--ff-mono)"><span style="background:#fff1e8;border:1px solid #f0cdb0;border-radius:3px;padding:.1rem .4rem;color:var(--c-accent)">■</span> Firma/Tamaño</span>
+            <span style="font-size:.7rem;font-family:var(--ff-mono)"><span style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:3px;padding:.1rem .4rem;color:var(--c-accent2)">■</span> Offset píxeles</span>
+            <span style="font-size:.7rem;font-family:var(--ff-mono)"><span style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:3px;padding:.1rem .4rem;color:var(--c-accent3)">■</span> Ancho / Alto</span>
+          </div>
+          <div class="callout mt-3" style="font-size:.8rem"><i class="bi bi-exclamation-triangle me-2"></i>BMP usa <strong>little-endian</strong>: el byte menos significativo va primero. Necesitas <span class="ic">Integer.reverseBytes()</span> para leer enteros correctamente.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S4 SERIALIZACIÓN -->
+<section id="s4" class="sec">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-3 text-lg-end">
+      <div class="sec-num">04</div>
+      <div class="sec-title">Serialización</div>
+      <div class="sec-sub mt-1">Persistir objetos completos</div>
+      <div class="mt-3 d-flex flex-wrap gap-1 justify-content-lg-end">
+        <span class="tag tag-b">ObjectOutputStream</span>
+        <span class="tag tag-o">Serializable</span>
+      </div>
+      <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/ObjectOutputStream.html" target="_blank" class="api-btn mt-3 d-inline-flex"><i class="bi bi-book"></i> Javadoc</a>
+    </div>
+    <div class="col-lg-9">
+      <div class="card mb-3">
+        <div class="card-body">
+          <pre><code><span class="kw">public class</span> <span class="cls">Empresa</span> <span class="kw">implements</span> <span class="cls">Serializable</span> {
+    <span class="kw">private static final long</span> serialVersionUID = <span class="num">1L</span>;
+    <span class="kw">private</span> <span class="cls">String</span> nombre;
+    <span class="kw">private transient</span> <span class="cls">String</span> passTemp; <span class="cmt">// excluida</span>
+}
+<span class="cmt">// Guardar</span>
+<span class="kw">try</span> (<span class="cls">ObjectOutputStream</span> out = <span class="kw">new</span> <span class="cls">ObjectOutputStream</span>(
+        <span class="kw">new</span> <span class="cls">FileOutputStream</span>(<span class="str">"empresa.dat"</span>))) {
+    out.<span class="met">writeObject</span>(miEmpresa);
+}
+<span class="cmt">// Recuperar</span>
+<span class="kw">try</span> (<span class="cls">ObjectInputStream</span> in = <span class="kw">new</span> <span class="cls">ObjectInputStream</span>(
+        <span class="kw">new</span> <span class="cls">FileInputStream</span>(<span class="str">"empresa.dat"</span>))) {
+    <span class="cls">Empresa</span> e = (<span class="cls">Empresa</span>) in.<span class="met">readObject</span>();
+}</code></pre>
+        </div>
+      </div>
+      <!-- SLIDER serialización -->
+      <div class="card">
+        <div class="card-body">
+          <p class="mb-2" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">CONCEPTOS CLAVE</p>
+          <div id="cSer" class="carousel slide demo-car border-0" data-bs-ride="false">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#cSer" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#cSer" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#cSer" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="row g-3 align-items-center">
+                  <div class="col-4 text-center"><i class="bi bi-box-seam" style="font-size:3rem;color:var(--c-accent);opacity:.6"></i><div style="font-family:var(--ff-mono);font-size:.7rem;color:var(--c-accent);margin-top:.3rem">Serializable</div></div>
+                  <div class="col-8"><h6 style="font-family:var(--ff-display);font-weight:600;margin-bottom:.4rem">Interfaz marcador</h6><p style="font-size:.84rem;color:var(--c-muted)">No tiene métodos. Su presencia autoriza a la JVM a serializar el objeto. Sin ella se lanza <span class="ic">NotSerializableException</span>.</p></div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row g-3 align-items-center">
+                  <div class="col-4 text-center"><i class="bi bi-hash" style="font-size:3rem;color:var(--c-accent2);opacity:.6"></i><div style="font-family:var(--ff-mono);font-size:.7rem;color:var(--c-accent2);margin-top:.3rem">serialVersionUID</div></div>
+                  <div class="col-8"><h6 style="font-family:var(--ff-display);font-weight:600;margin-bottom:.4rem">Control de versiones</h6><p style="font-size:.84rem;color:var(--c-muted)">Identifica la versión de la clase. Si cambia sin actualizar el UID, la deserialización lanzará <span class="ic">InvalidClassException</span>.</p></div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row g-3 align-items-center">
+                  <div class="col-4 text-center"><i class="bi bi-eye-slash" style="font-size:3rem;color:var(--c-accent3);opacity:.6"></i><div style="font-family:var(--ff-mono);font-size:.7rem;color:var(--c-accent3);margin-top:.3rem">transient</div></div>
+                  <div class="col-8"><h6 style="font-family:var(--ff-display);font-weight:600;margin-bottom:.4rem">Campos excluidos</h6><p style="font-size:.84rem;color:var(--c-muted)">Excluye el campo del proceso. Útil para contraseñas, conexiones a BD o datos que no deben persistir.</p></div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#cSer" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+            <button class="carousel-control-next" type="button" data-bs-target="#cSer" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S5 RANDOMACCESSFILE -->
+<section id="s5" class="sec">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-3 text-lg-end">
+      <div class="sec-num">05</div>
+      <div class="sec-title">RandomAccessFile</div>
+      <div class="sec-sub mt-1">Acceso directo a cualquier byte</div>
+      <div class="mt-3 d-flex flex-wrap gap-1 justify-content-lg-end">
+        <span class="tag tag-o">seek()</span>
+        <span class="tag tag-b">Little-endian</span>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="card mb-3">
+        <div class="card-body">
+          <pre><code><span class="kw">try</span> (<span class="cls">RandomAccessFile</span> raf =
+        <span class="kw">new</span> <span class="cls">RandomAccessFile</span>(<span class="str">"imagen.bmp"</span>, <span class="str">"rw"</span>)) {
+    raf.<span class="met">seek</span>(<span class="num">18</span>); <span class="cmt">// offset 18 = ancho (little-endian)</span>
+    <span class="kw">int</span> ancho = <span class="cls">Integer</span>.<span class="met">reverseBytes</span>(raf.<span class="met">readInt</span>());
+    raf.<span class="met">seek</span>(<span class="num">22</span>); <span class="cmt">// offset 22 = alto (little-endian)</span>
+    raf.<span class="met">writeInt</span>(<span class="cls">Integer</span>.<span class="met">reverseBytes</span>(<span class="num">50</span>));
+    System.out.<span class="met">println</span>(<span class="str">"Ancho: "</span> + ancho + <span class="str">", bytes: "</span> + raf.<span class="met">length</span>());
+}</code></pre>
+        </div>
+      </div>
+      <!-- DEMO SEEK -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <p class="mb-2" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">DEMO · seek() — explora la cabecera BMP (haz clic en un campo o escribe el offset)</p>
+          <div class="bmp-strip mb-3" id="bmpStrip"></div>
+          <div class="row g-2 align-items-center">
+            <div class="col-auto" style="font-family:var(--ff-mono);font-size:.75rem;color:var(--c-muted)">seek(</div>
+            <div class="col-auto"><input type="number" id="seekPos" class="form-control form-control-sm" value="0" min="0" max="53" style="width:68px;font-family:var(--ff-mono);font-size:.78rem"></div>
+            <div class="col-auto" style="font-family:var(--ff-mono);font-size:.75rem;color:var(--c-muted)">)</div>
+            <div class="col"><div id="seekInfo" style="font-family:var(--ff-mono);font-size:.76rem;background:var(--c-accent-light);border:1px solid #f0cdb0;border-radius:6px;padding:.38rem .8rem;color:var(--c-accent)"></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- SLIDER RAF casos de uso -->
+      <div class="card">
+        <div class="card-body">
+          <p class="mb-2" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">CASOS DE USO DE RandomAccessFile</p>
+          <div id="cRaf" class="carousel slide demo-car border-0" data-bs-ride="false">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#cRaf" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#cRaf" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#cRaf" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active text-center">
+                <i class="bi bi-image" style="font-size:2.8rem;color:var(--c-accent);opacity:.6"></i>
+                <h6 style="font-family:var(--ff-display);font-weight:600;margin:.6rem 0 .4rem">Editar cabecera BMP</h6>
+                <p style="font-size:.84rem;color:var(--c-muted)">Modifica ancho, alto o bits por píxel saltando directamente al offset sin leer todos los datos.</p>
+              </div>
+              <div class="carousel-item text-center">
+                <i class="bi bi-database" style="font-size:2.8rem;color:var(--c-accent2);opacity:.6"></i>
+                <h6 style="font-family:var(--ff-display);font-weight:600;margin:.6rem 0 .4rem">Registros de tamaño fijo</h6>
+                <p style="font-size:.84rem;color:var(--c-muted)">El registro <em>n</em> está en offset <code>n × tamRegistro</code>. Acceso O(1) con <span class="ic">seek()</span>.</p>
+              </div>
+              <div class="carousel-item text-center">
+                <i class="bi bi-music-note-beamed" style="font-size:2.8rem;color:var(--c-accent3);opacity:.6"></i>
+                <h6 style="font-family:var(--ff-display);font-weight:600;margin:.6rem 0 .4rem">Tags ID3 en MP3</h6>
+                <p style="font-size:.84rem;color:var(--c-muted)">Metadatos ID3 en los últimos 128 bytes del MP3. Con <span class="ic">seek(length-128)</span> se leen directamente.</p>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#cRaf" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+            <button class="carousel-control-next" type="button" data-bs-target="#cRaf" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S6 AUDIO WAV -->
+<section id="s6" class="sec">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-3 text-lg-end">
+      <div class="sec-num">06</div>
+      <div class="sec-title">Audio WAV</div>
+      <div class="sec-sub mt-1">javax.sound.sampled</div>
+      <div class="mt-3 d-flex flex-wrap gap-1 justify-content-lg-end">
+        <span class="tag tag-g">Clip</span>
+        <span class="tag tag-b">AudioSystem</span>
+      </div>
+      <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/sound/sampled/package-summary.html" target="_blank" class="api-btn mt-3 d-inline-flex"><i class="bi bi-book"></i> Javadoc</a>
+    </div>
+    <div class="col-lg-9">
+      <div class="card mb-3">
+        <div class="card-body">
+          <pre><code><span class="kw">import</span> javax.sound.sampled.*;
+
+<span class="kw">try</span> (<span class="cls">AudioInputStream</span> audio =
+        <span class="cls">AudioSystem</span>.<span class="met">getAudioInputStream</span>(<span class="kw">new</span> <span class="cls">File</span>(<span class="str">"audio.wav"</span>))) {
+    <span class="cls">AudioFormat</span> fmt = audio.<span class="met">getFormat</span>();
+    System.out.<span class="met">println</span>(<span class="str">"SR: "</span> + fmt.<span class="met">getSampleRate</span>() + <span class="str">" Hz"</span>);
+    <span class="cls">Clip</span> clip = <span class="cls">AudioSystem</span>.<span class="met">getClip</span>();
+    clip.<span class="met">open</span>(audio);
+    clip.<span class="met">start</span>();
+    <span class="cls">Thread</span>.<span class="met">sleep</span>(clip.<span class="met">getMicrosecondLength</span>() / <span class="num">1000</span>);
+    clip.<span class="met">close</span>();
+}</code></pre>
+        </div>
+      </div>
+      <!-- SLIDER REPRODUCTORES AUDIO -->
+      <div class="card">
+        <div class="card-body">
+          <p class="mb-3" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">DEMO · Reproductor con visualización de forma de onda generada por Web Audio API</p>
+          <div id="cAudio" class="carousel slide demo-car border-0" data-bs-ride="false">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#cAudio" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#cAudio" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#cAudio" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="audio-card">
+                  <div class="trk-title">Sinusoide — La4 (440 Hz)</div>
+                  <div class="trk-meta">PCM 16-bit · 44100 Hz · Mono · 2.5 s &nbsp;·&nbsp; <span class="ic" style="font-size:.7em">clip.start()</span></div>
+                  <canvas class="wv-canvas" id="wv1" width="600" height="55"></canvas>
+                  <div class="ctrls">
+                    <button class="btn-play" id="pb1" onclick="toggleAudio(1)"><i class="bi bi-play-fill" id="pi1"></i></button>
+                    <div class="prog-wrap" id="pw1" onclick="seekAudio(1,event)"><div class="prog-fill" id="pf1"></div></div>
+                    <span class="time-lbl" id="tl1">0:00 / 0:00</span>
+                  </div>
+                  <div class="vol-row"><i class="bi bi-volume-down"></i><input type="range" min="0" max="1" step="0.01" value="0.8" oninput="setVol(1,this.value)"><i class="bi bi-volume-up"></i></div>
+                </div>
+                <div class="slide-cap">Onda sinusoidal pura — el tipo de muestra que genera <span class="ic">AudioSystem</span> con formato PCM signed</div>
+              </div>
+              <div class="carousel-item">
+                <div class="audio-card">
+                  <div class="trk-title">Onda cuadrada — 220 Hz</div>
+                  <div class="trk-meta">PCM 16-bit · 44100 Hz · Mono · 2.5 s &nbsp;·&nbsp; <span class="ic" style="font-size:.7em">clip.loop(n)</span></div>
+                  <canvas class="wv-canvas" id="wv2" width="600" height="55"></canvas>
+                  <div class="ctrls">
+                    <button class="btn-play" id="pb2" onclick="toggleAudio(2)"><i class="bi bi-play-fill" id="pi2"></i></button>
+                    <div class="prog-wrap" id="pw2" onclick="seekAudio(2,event)"><div class="prog-fill" id="pf2"></div></div>
+                    <span class="time-lbl" id="tl2">0:00 / 0:00</span>
+                  </div>
+                  <div class="vol-row"><i class="bi bi-volume-down"></i><input type="range" min="0" max="1" step="0.01" value="0.8" oninput="setVol(2,this.value)"><i class="bi bi-volume-up"></i></div>
+                </div>
+                <div class="slide-cap">Cada muestra PCM es un <code>short</code> (±32767). La onda cuadrada alterna entre el máximo y el mínimo.</div>
+              </div>
+              <div class="carousel-item">
+                <div class="audio-card">
+                  <div class="trk-title">Ruido blanco</div>
+                  <div class="trk-meta">PCM 16-bit · 44100 Hz · Mono · 2.5 s &nbsp;·&nbsp; <span class="ic" style="font-size:.7em">Math.random()</span></div>
+                  <canvas class="wv-canvas" id="wv3" width="600" height="55"></canvas>
+                  <div class="ctrls">
+                    <button class="btn-play" id="pb3" onclick="toggleAudio(3)"><i class="bi bi-play-fill" id="pi3"></i></button>
+                    <div class="prog-wrap" id="pw3" onclick="seekAudio(3,event)"><div class="prog-fill" id="pf3"></div></div>
+                    <span class="time-lbl" id="tl3">0:00 / 0:00</span>
+                  </div>
+                  <div class="vol-row"><i class="bi bi-volume-down"></i><input type="range" min="0" max="1" step="0.01" value="0.4" oninput="setVol(3,this.value)"><i class="bi bi-volume-up"></i></div>
+                </div>
+                <div class="slide-cap">Muestras aleatorias — ilustra cómo un fichero binario sin estructura de audio produce ruido</div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#cAudio" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+            <button class="carousel-control-next" type="button" data-bs-target="#cAudio" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S7 BUENAS PRÁCTICAS -->
+<section id="s7" class="sec">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-3 text-lg-end">
+      <div class="sec-num">07</div>
+      <div class="sec-title">Buenas<br>prácticas</div>
+      <div class="sec-sub mt-1">Checklist esencial</div>
+      <div class="mt-3 d-flex flex-wrap gap-1 justify-content-lg-end">
+        <span class="tag tag-g">Rendimiento</span>
+        <span class="tag tag-b">java.nio</span>
+      </div>
+    </div>
+    <div class="col-lg-9">
+      <div class="card mb-3">
+        <div class="card-body p-0 px-1">
+          <div class="pr-item px-3"><div class="pr-num">1</div><div class="pr-text">Usa siempre <strong>try-with-resources</strong> para cerrar streams. Nunca uses <code>.close()</code> explícito sin try/finally.</div></div>
+          <div class="pr-item px-3"><div class="pr-num">2</div><div class="pr-text">Lee en <strong>bloques</strong> (<code>byte[4096]</code> o más). La diferencia respecto a leer byte a byte puede ser de 50× a 200×.</div></div>
+          <div class="pr-item px-3"><div class="pr-num">3</div><div class="pr-text">Declara <strong><code>serialVersionUID</code></strong> en todas las clases <code>Serializable</code>. Sin él Java lo genera y puede cambiar al recompilar.</div></div>
+          <div class="pr-item px-3"><div class="pr-num">4</div><div class="pr-text">Ten en cuenta el <strong>endianness</strong> del formato. BMP y WAV son little-endian: usa <code>Integer.reverseBytes()</code>.</div></div>
+          <div class="pr-item px-3"><div class="pr-num">5</div><div class="pr-text">Para código moderno usa <strong><code>java.nio.file.Files</code></strong>: <code>readAllBytes()</code>, <code>write()</code> y <code>copy()</code> son más seguros y expresivos.</div></div>
+          <div class="pr-item px-3"><div class="pr-num">6</div><div class="pr-text">Valida la existencia y permisos del fichero antes de abrirlo y captura <strong><code>IOException</code></strong> con mensajes descriptivos.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p class="mb-2" style="font-family:var(--ff-mono);font-size:.68rem;color:var(--c-muted);letter-spacing:.04em">ALTERNATIVA MODERNA · java.nio.file</p>
+          <pre><code><span class="kw">import</span> java.nio.file.<span class="cls">Files</span>;
+<span class="kw">import</span> java.nio.file.<span class="cls">Path</span>;
+
+<span class="kw">byte</span>[] datos = <span class="cls">Files</span>.<span class="met">readAllBytes</span>(<span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"imagen.bmp"</span>));
+<span class="cls">Files</span>.<span class="met">write</span>(<span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"copia.bmp"</span>), datos);
+<span class="cls">Files</span>.<span class="met">copy</span>(<span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"origen.bmp"</span>), <span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"destino.bmp"</span>));</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    Ficheros Binarios en Java &nbsp;·&nbsp;
+    <a href="https://docs.oracle.com/en/java/javase/17/docs/api/" target="_blank">Java 17 API</a> &nbsp;·&nbsp;
+    <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/imageio/ImageIO.html" target="_blank">ImageIO</a> &nbsp;·&nbsp;
+    <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/ObjectOutputStream.html" target="_blank">ObjectOutputStream</a> &nbsp;·&nbsp;
+    <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/javax/sound/sampled/package-summary.html" target="_blank">javax.sound.sampled</a>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+/* NAV SPY */
+const secs=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.top-nav .nav-link');
+new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.top-nav a[href="#${e.target.id}"]`);if(a){a.classList.add('active');a.scrollIntoView({inline:'nearest',behavior:'smooth'});}}});},{rootMargin:'-20% 0px -70% 0px'}).observe||(()=>{});
+secs.forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){navLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.top-nav a[href="#${e.target.id}"]`);if(a){a.classList.add('active');a.scrollIntoView({inline:'nearest',behavior:'smooth'});}}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
+navLinks.forEach(l=>l.addEventListener('click',e=>{e.preventDefault();document.querySelector(l.getAttribute('href')).scrollIntoView({behavior:'smooth',block:'start'});}));
+
+/* FILTER BUTTONS */
+const fBtns=document.querySelectorAll('.fbtn');
+fBtns.forEach(b=>{
+  Object.assign(b.style,{fontFamily:'var(--ff-mono)',fontSize:'.7rem',padding:'.25rem .65rem',border:'1px solid var(--c-border)',background:'var(--c-bg)',color:'var(--c-muted)',borderRadius:'6px',cursor:'pointer',transition:'all .15s'});
+});
+function styleFBtns(){fBtns.forEach(b=>{if(b.classList.contains('active')){b.style.background='var(--c-accent)';b.style.color='#fff';b.style.borderColor='var(--c-accent)';}else{b.style.background='var(--c-bg)';b.style.color='var(--c-muted)';b.style.borderColor='var(--c-border)';}});}
+styleFBtns();
+
+/* IMAGE FILTER DEMO */
+const canvas=document.getElementById('imgCanvas'),ctx=canvas.getContext('2d');
+let origData=null,curFilter='normal';
+const imgEl=new Image();imgEl.crossOrigin='anonymous';
+imgEl.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/320px-Camponotus_flavomarginatus_ant.jpg';
+imgEl.onload=()=>{canvas.width=imgEl.naturalWidth;canvas.height=imgEl.naturalHeight;ctx.drawImage(imgEl,0,0);origData=ctx.getImageData(0,0,canvas.width,canvas.height);applyFx();};
+imgEl.onerror=()=>{ctx.fillStyle='#f0ece6';ctx.fillRect(0,0,320,213);ctx.fillStyle='var(--c-accent)';ctx.font='13px IBM Plex Mono';ctx.textAlign='center';ctx.fillText('Carga imagen para ver demo',160,110);};
+function applyFx(){
+  if(!origData)return;
+  const bright=parseInt(document.getElementById('sBright').value);
+  const contr=parseFloat(document.getElementById('sContr').value);
+  document.getElementById('vBright').textContent=(bright>0?'+':'')+bright;
+  document.getElementById('vContr').textContent=contr.toFixed(2)+'×';
+  const s=origData.data,out=ctx.createImageData(canvas.width,canvas.height),d=out.data;
+  for(let i=0;i<s.length;i+=4){
+    let r=s[i],g=s[i+1],b=s[i+2];
+    if(curFilter==='gray'){const v=(r+g+b)/3;r=g=b=v;}
+    else if(curFilter==='sepia'){const nr=r*.393+g*.769+b*.189,ng=r*.349+g*.686+b*.168,nb=r*.272+g*.534+b*.131;r=nr;g=ng;b=nb;}
+    else if(curFilter==='invert'){r=255-r;g=255-g;b=255-b;}
+    d[i]=Math.min(255,Math.max(0,(r-128)*contr+128+bright));
+    d[i+1]=Math.min(255,Math.max(0,(g-128)*contr+128+bright));
+    d[i+2]=Math.min(255,Math.max(0,(b-128)*contr+128+bright));
+    d[i+3]=s[i+3];
+  }
+  ctx.putImageData(out,0,0);
+}
+document.getElementById('sBright').addEventListener('input',applyFx);
+document.getElementById('sContr').addEventListener('input',applyFx);
+document.getElementById('fBtns').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-f]');if(!btn)return;
+  fBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  curFilter=btn.dataset.f;styleFBtns();applyFx();
+});
+
+/* HEX VIEWER */
+const bmpHdr=[
+  {bytes:'42 4D',c:'o'},{bytes:'36 00 10 00',c:'o'},{bytes:'00 00',c:''},{bytes:'00 00',c:''},{bytes:'36 00 00 00',c:'b'},
+  {bytes:'28 00 00 00',c:''},{bytes:'40 00 00 00',c:'g'},{bytes:'30 00 00 00',c:'g'},{bytes:'01 00',c:''},{bytes:'18 00',c:''},
+  {bytes:'00 00 00 00',c:''},{bytes:'00 00 00 00',c:''},{bytes:'00 00 00 00',c:''},{bytes:'00 00 00 00',c:''},
+];
+const hv=document.getElementById('hexViewer');let hexH='',bOff=0;
+bmpHdr.forEach(f=>{f.bytes.split(' ').forEach(b=>{
+  let s='display:inline-block;padding:.1rem .32rem;margin:.08rem;border-radius:3px;font-size:.7rem;border:1px solid;cursor:default';
+  if(f.c==='o')s+=';background:#fff1e8;border-color:#f0cdb0;color:#8b3a0e';
+  else if(f.c==='b')s+=';background:#eff6ff;border-color:#bfdbfe;color:#1e3a8a';
+  else if(f.c==='g')s+=';background:#f0fdf4;border-color:#bbf7d0;color:#14532d';
+  else s+=';background:#faf9f7;border-color:var(--c-border);color:var(--c-muted)';
+  hexH+=`<span title="Byte ${bOff}" style="${s}">${b}</span>`;bOff++;
+});});
+hv.innerHTML=hexH;
+
+/* BMP SEEK DEMO */
+const bmpF=[
+  {s:0,e:1,l:'Firma BM',d:'Firma del formato BMP (siempre "BM")'},
+  {s:2,e:5,l:'Tamaño',d:'Tamaño total del fichero en bytes (little-endian)'},
+  {s:6,e:9,l:'Reservado',d:'Reservado, siempre 0x00000000'},
+  {s:10,e:13,l:'Offset px',d:'Posición en bytes donde empiezan los datos de píxeles'},
+  {s:14,e:17,l:'Info hdr',d:'Tamaño de la cabecera BITMAPINFOHEADER (siempre 40)'},
+  {s:18,e:21,l:'Ancho',d:'Ancho de la imagen en píxeles (little-endian) — seek(18)'},
+  {s:22,e:25,l:'Alto',d:'Alto de la imagen en píxeles (little-endian) — seek(22)'},
+  {s:26,e:27,l:'Planos',d:'Número de planos de color (siempre 1)'},
+  {s:28,e:29,l:'BPP',d:'Bits por píxel (24 = RGB sin alpha, 32 = ARGB)'},
+  {s:30,e:33,l:'Compres.',d:'Tipo de compresión (0 = BI_RGB, sin compresión)'},
+  {s:34,e:53,l:'Más meta',d:'Resolución, tabla de colores, número de colores importantes'},
+];
+const strip=document.getElementById('bmpStrip');
+bmpF.forEach(f=>{
+  const d=document.createElement('div');d.className='bmp-cell';d.dataset.s=f.s;d.dataset.e=f.e;
+  d.innerHTML=`<span class="boff">${f.s}–${f.e}</span>${f.l}`;
+  d.addEventListener('click',()=>{document.getElementById('seekPos').value=f.s;updateSeek();});
+  strip.appendChild(d);
+});
+const seekIn=document.getElementById('seekPos'),seekInf=document.getElementById('seekInfo');
+function updateSeek(){
+  const p=parseInt(seekIn.value)||0;
+  document.querySelectorAll('.bmp-cell').forEach(c=>c.classList.remove('hl'));
+  const f=bmpF.find(x=>p>=x.s&&p<=x.e);
+  if(f){document.querySelector(`.bmp-cell[data-s="${f.s}"]`).classList.add('hl');seekInf.textContent=`Offset ${p} → "${f.l}": ${f.d}`;}
+}
+seekIn.addEventListener('input',updateSeek);updateSeek();
+
+/* AUDIO ENGINE */
+const AC=window.AudioContext||window.webkitAudioContext;let ac=null;
+const aState={};
+function getAC(){if(!ac)ac=new AC();if(ac.state==='suspended')ac.resume();return ac;}
+function genBuf(type){
+  const a=getAC(),sr=a.sampleRate,dur=2.5,buf=a.createBuffer(1,sr*dur,sr),d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++){const t=i/sr;
+    if(type===1)d[i]=Math.sin(2*Math.PI*440*t)*0.55;
+    else if(type===2)d[i]=Math.sign(Math.sin(2*Math.PI*220*t))*0.35;
+    else d[i]=(Math.random()*2-1)*0.25;
+  }return buf;
+}
+function drawWV(id,type){
+  const c=document.getElementById(id);if(!c)return;
+  const cx=c.getContext('2d'),w=c.width,h=c.height;
+  cx.clearRect(0,0,w,h);
+  cx.strokeStyle='#c45c1a';cx.lineWidth=1.5;cx.beginPath();
+  for(let i=0;i<400;i++){
+    const t=i/400;let y;
+    if(type===1)y=Math.sin(2*Math.PI*440*t*0.06)*(h/2-5);
+    else if(type===2)y=Math.sign(Math.sin(2*Math.PI*22*t))*(h/2-7);
+    else y=(Math.random()*2-1)*(h/2-5);
+    i===0?cx.moveTo(t*w,h/2-y):cx.lineTo(t*w,h/2-y);
+  }cx.stroke();
+}
+drawWV('wv1',1);drawWV('wv2',2);drawWV('wv3',3);
+function fmt(s){return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');}
+function toggleAudio(n){
+  const st=aState[n],pi=document.getElementById('pi'+n);
+  if(st&&st.playing){st.src.stop();st.playing=false;pi.className='bi bi-play-fill';clearInterval(st.timer);return;}
+  const buf=genBuf(n),a=getAC();
+  const gain=a.createGain();gain.gain.value=aState[n]?aState[n].vol||0.8:0.8;gain.connect(a.destination);
+  const src=a.createBufferSource();src.buffer=buf;src.connect(gain);
+  const t0=a.currentTime;src.start();pi.className='bi bi-stop-fill';
+  aState[n]={src,gain,playing:true,t0,dur:buf.duration,vol:gain.gain.value};
+  const pf=document.getElementById('pf'+n),tl=document.getElementById('tl'+n);
+  aState[n].timer=setInterval(()=>{
+    const el=a.currentTime-t0;
+    if(el>=buf.duration){clearInterval(aState[n].timer);aState[n].playing=false;pi.className='bi bi-play-fill';pf.style.width='0%';tl.textContent='0:00 / '+fmt(buf.duration);return;}
+    pf.style.width=(el/buf.duration*100)+'%';tl.textContent=fmt(el)+' / '+fmt(buf.duration);
+  },80);
+  src.onended=()=>{if(aState[n]&&aState[n].playing){clearInterval(aState[n].timer);aState[n].playing=false;pi.className='bi bi-play-fill';pf.style.width='0%';}};
+}
+function seekAudio(n,e){
+  const pw=document.getElementById('pw'+n),ratio=e.offsetX/pw.offsetWidth,st=aState[n];
+  if(!st||!st.playing)return;
+  st.src.stop();clearInterval(st.timer);
+  const buf=genBuf(n),a=getAC();
+  const gain=a.createGain();gain.gain.value=st.vol;gain.connect(a.destination);
+  const src=a.createBufferSource();src.buffer=buf;src.connect(gain);
+  const off=ratio*buf.duration,t0=a.currentTime-off;src.start(0,off);
+  aState[n]={src,gain,playing:true,t0,dur:buf.duration,vol:st.vol};
+  const pf=document.getElementById('pf'+n),tl=document.getElementById('tl'+n),pi=document.getElementById('pi'+n);
+  pi.className='bi bi-stop-fill';
+  aState[n].timer=setInterval(()=>{
+    const el=a.currentTime-t0;
+    if(el>=buf.duration){clearInterval(aState[n].timer);aState[n].playing=false;pi.className='bi bi-play-fill';pf.style.width='0%';return;}
+    pf.style.width=(el/buf.duration*100)+'%';tl.textContent=fmt(el)+' / '+fmt(buf.duration);
+  },80);
+}
+function setVol(n,v){if(!aState[n])aState[n]={};aState[n].vol=parseFloat(v);if(aState[n].gain)aState[n].gain.gain.value=parseFloat(v);}
+</script>
+</body>
+</html>
