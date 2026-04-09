@@ -3,233 +3,475 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ejercicios de Ficheros Binarios</title>
+  <title>Ejercicios de Ficheros Binarios en Java</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     body { padding: 20px; font-family: Arial, sans-serif; }
     .accordion-button::after { font-family: "Font Awesome 6 Free"; font-weight: 900; content: "\f078"; }
     .icon { margin-right: 8px; }
+    .pista { font-size: 0.95em; color: #555; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #0d6efd; margin-top: 10px; border-radius: 4px; }
   </style>
 </head>
 <body>
 
-  <h1 class="mb-4">Ejercicios de Ficheros Binarios en Java</h1>
+<h1 class="mb-4">Ejercicios de Ficheros Binarios en Java</h1>
 
-  <div class="accordion" id="ejerciciosAccordion">
+<div class="accordion" id="ejerciciosAccordion">
 
-    <!-- Ejercicio 1 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading1">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
-          <span class="icon">💾</span> Ejercicio 1: Pedir un double y guardarlo en un archivo binario
-        </button>
-      </h2>
-      <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Leer un número decimal desde consola y guardarlo en un archivo binario usando <code>DataOutputStream</code>.</p>
+  <!-- Ejercicio 1 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading1">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+        <span class="icon">💾</span> Ejercicio 1: Guardar un double en archivo binario
+      </button>
+    </h2>
+    <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Leer un número decimal desde consola y guardarlo usando <code>DataOutputStream</code>.</p>
+        <div class="accordion" id="pistas1">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista1">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista1" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Utiliza <code>FileOutputStream</code> y luego <code>DataOutputStream.writeDouble(valor)</code>. Cierra ambos streams al terminar.
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Ejercicio 2 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading2">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
-          <span class="icon">📥</span> Ejercicio 2: Leer un double desde un archivo binario
-        </button>
-      </h2>
-      <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Usar <code>DataInputStream</code> para leer el número previamente guardado y mostrarlo en consola.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 3 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading3">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
-          <span class="icon">🔢</span> Ejercicio 3: Guardar enteros positivos hasta que se introduzca un negativo
-        </button>
-      </h2>
-      <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Solicitar números enteros positivos y guardarlos en un archivo binario. Al introducir un negativo, terminar la lectura. Luego leer todos los números y mostrarlos.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 4 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading4">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
-          <span class="icon">💾🔢</span> Ejercicio 4: Guardar n números double en una tabla y archivo binario
-        </button>
-      </h2>
-      <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Pedir un entero n, luego n números double. Guardarlos en un array y almacenar la tabla en un archivo binario.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 5 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading5">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
-          <span class="icon">📥🔢</span> Ejercicio 5: Leer tabla de doubles desde un archivo binario
-        </button>
-      </h2>
-      <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Leer un array de números double desde un archivo binario y mostrarlo por consola.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 6 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading6">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
-          <span class="icon">📥🔢</span> Ejercicio 6: Leer todos los doubles de un archivo binario sin conocer el tamaño
-        </button>
-      </h2>
-      <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Usar un bucle hasta <code>EOFException</code> para leer todos los números double de un archivo binario desconocido.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 7 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading7">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7">
-          <span class="icon">📄💾</span> Ejercicio 7: Guardar y recuperar una frase
-        </button>
-      </h2>
-      <div id="collapse7" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Escribir una frase, guardarla en un archivo binario y luego recuperarla para mostrarla por pantalla.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 8 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading8">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8">
-          <span class="icon">📄💾</span> Ejercicio 8: Guardar texto línea a línea
-        </button>
-      </h2>
-      <div id="collapse8" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Guardar líneas de texto en un archivo binario hasta que se introduzca una línea vacía. Leer y mostrar todo el texto.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 9 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading9">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9">
-          <span class="icon">🔢💾</span> Ejercicio 9: Crear tabla de 10 enteros aleatorios ordenados
-        </button>
-      </h2>
-      <div id="collapse9" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Generar 10 enteros aleatorios <100, ordenarlos y guardarlos en un archivo binario. Recuperarlos y mostrarlos.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 10 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading10">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse10">
-          <span class="icon">⚙️💾</span> Ejercicio 10: Registro de llamadas con menú
-        </button>
-      </h2>
-      <div id="collapse10" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Guardar número de llamadas por jornada en un archivo binario. Menú para añadir o ver todos los registros.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 11 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading11">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse11">
-          <span class="icon">🔢💾</span> Ejercicio 11: Fusionar dos ficheros binarios de enteros ordenados
-        </button>
-      </h2>
-      <div id="collapse11" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Leer dos archivos con enteros ordenados y fusionarlos en un tercero manteniendo el orden.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 12 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading12">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12">
-          <span class="icon">⚙️💾</span> Ejercicio 12: Gestión de clientes
-        </button>
-      </h2>
-      <div id="collapse12" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Crear la clase Cliente y un menú para añadir, modificar, dar de baja y listar clientes, guardando la información en un archivo binario.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 13 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading13">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse13">
-          <span class="icon">⚙️📄💾</span> Ejercicio 13: Ampliar Ejercicio 7.1 para guardar toda la información
-        </button>
-      </h2>
-      <div id="collapse13" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Incorporar lectura/escritura completa de la información de la aplicación en un archivo binario.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 14 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading14">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse14">
-          <span class="icon">⚙️📄💾</span> Ejercicio 14: Igual que el anterior, aplicado al Ejercicio 7.2
-        </button>
-      </h2>
-      <div id="collapse14" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Leer y escribir toda la información gestionada por la aplicación en un archivo binario.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ejercicio 15 -->
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="heading15">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse15">
-          <span class="icon">⚙️💾🔢</span> Ejercicio 15: Alta/baja locomotoras y vagones
-        </button>
-      </h2>
-      <div id="collapse15" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
-        <div class="accordion-body">
-          <p>Implementar gestión de locomotoras y vagones con menú, guardando y leyendo los objetos desde disco, mostrando siempre el estado actualizado.</p>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Ejercicio 2 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading2">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+        <span class="icon">📥</span> Ejercicio 2: Leer un double desde un archivo binario
+      </button>
+    </h2>
+    <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Leer el número previamente guardado y mostrarlo en consola usando <code>DataInputStream</code>.</p>
+        <div class="accordion" id="pistas2">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista2">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista2" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa <code>FileInputStream</code> y <code>DataInputStream.readDouble()</code>. Maneja <code>EOFException</code> si es necesario.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 3 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading3">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+        <span class="icon">🔢</span> Ejercicio 3: Guardar enteros positivos hasta negativo
+      </button>
+    </h2>
+    <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Solicitar números enteros positivos y guardarlos en un archivo binario. Terminar al introducir un número negativo y luego mostrar todos los números.</p>
+        <div class="accordion" id="pistas3">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista3">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista3" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa <code>DataOutputStream.writeInt()</code> para guardar y <code>DataInputStream.readInt()</code> para leer. Bucle <code>while(num >= 0)</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 4 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading4">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+        <span class="icon">💾🔢</span> Ejercicio 4: Guardar n números double en tabla
+      </button>
+    </h2>
+    <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Pedir un entero n, luego n números double, guardarlos en un array y almacenar la tabla en un archivo binario.</p>
+        <div class="accordion" id="pistas4">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista4">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista4" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa un <code>for</code> para leer los doubles y <code>DataOutputStream.writeDouble()</code>. Para leer, recorre con <code>for</code> y <code>readDouble()</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 5 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading5">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5">
+        <span class="icon">📥🔢</span> Ejercicio 5: Leer tabla de doubles desde archivo
+      </button>
+    </h2>
+    <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Leer un array de doubles desde un archivo binario y mostrarlo por consola.</p>
+        <div class="accordion" id="pistas5">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista5">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista5" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Guarda primero el tamaño con <code>writeInt()</code> para poder leer correctamente con <code>readInt()</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 6 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading6">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6">
+        <span class="icon">📥🔢</span> Ejercicio 6: Leer doubles sin conocer tamaño
+      </button>
+    </h2>
+    <div id="collapse6" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Usar un bucle hasta <code>EOFException</code> para leer todos los números double de un archivo binario desconocido.</p>
+        <div class="accordion" id="pistas6">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista6">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista6" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Coloca la lectura dentro de un <code>try</code> con <code>catch (EOFException e)</code> para detectar el final del archivo.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 7 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading7">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7">
+        <span class="icon">📄💾</span> Ejercicio 7: Guardar y recuperar una frase
+      </button>
+    </h2>
+    <div id="collapse7" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Escribir una frase, guardarla en un archivo binario y recuperarla.</p>
+        <div class="accordion" id="pistas7">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista7">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista7" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa <code>writeUTF()</code> para guardar y <code>readUTF()</code> para leer. Maneja excepciones de IO.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 8 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading8">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8">
+        <span class="icon">📄💾</span> Ejercicio 8: Guardar texto línea a línea
+      </button>
+    </h2>
+    <div id="collapse8" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Guardar líneas de texto en un archivo binario hasta línea vacía. Leer y mostrar todo el texto.</p>
+        <div class="accordion" id="pistas8">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista8">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista8" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa <code>writeUTF(linea)</code> para cada línea. Para leer, bucle <code>while(true)</code> con <code>readUTF()</code> y EOFException.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 9 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading9">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9">
+        <span class="icon">🔢💾</span> Ejercicio 9: Crear tabla de 10 enteros aleatorios ordenados
+      </button>
+    </h2>
+    <div id="collapse9" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Generar 10 enteros aleatorios <100, ordenarlos y guardarlos en un archivo binario. Recuperarlos y mostrarlos.</p>
+        <div class="accordion" id="pistas9">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista9">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista9" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa <code>Random.nextInt(100)</code> para generar los números. Para ordenar, <code>Arrays.sort(array)</code>. Luego guarda con <code>writeInt()</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 10 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading10">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse10">
+        <span class="icon">⚙️💾</span> Ejercicio 10: Registro de llamadas con menú
+      </button>
+    </h2>
+    <div id="collapse10" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Guardar número de llamadas por jornada en un archivo binario. Menú para añadir o ver registros.</p>
+        <div class="accordion" id="pistas10">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista10">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista10" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Crear clase <code>Registro</code> con <code>Serializable</code>. Usa <code>ObjectOutputStream</code> y <code>ObjectInputStream</code> para persistencia.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 11 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading11">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse11">
+        <span class="icon">👤💾</span> Ejercicio 11: Guardar objetos Persona
+      </button>
+    </h2>
+    <div id="collapse11" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Crear clase <code>Persona</code> con nombre, edad y email. Guardar varios objetos en archivo binario.</p>
+        <div class="accordion" id="pistas11">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista11">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista11" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Implementa <code>Serializable</code> en Persona. Usa <code>ObjectOutputStream.writeObject(objeto)</code> y <code>ObjectInputStream.readObject()</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 12 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading12">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12">
+        <span class="icon">👥💾</span> Ejercicio 12: Leer lista de Personas
+      </button>
+    </h2>
+    <div id="collapse12" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Leer todos los objetos Persona guardados previamente y mostrarlos por consola.</p>
+        <div class="accordion" id="pistas12">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista12">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista12" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa bucle <code>while(true)</code> con <code>readObject()</code> y captura <code>EOFException</code> para terminar la lectura.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 13 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading13">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse13">
+        <span class="icon">📦💾</span> Ejercicio 13: Serializar una clase Completa
+      </button>
+    </h2>
+    <div id="collapse13" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Crear clase <code>Producto</code> con código, nombre y precio. Guardar varios productos usando serialización.</p>
+        <div class="accordion" id="pistas13">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista13">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista13" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Clase <code>Producto</code> implementa <code>Serializable</code>. Usa <code>ObjectOutputStream.writeObject()</code> y <code>ObjectInputStream.readObject()</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 14 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading14">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse14">
+        <span class="icon">🗃️💾</span> Ejercicio 14: Añadir productos a archivo existente
+      </button>
+    </h2>
+    <div id="collapse14" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Añadir nuevos productos a un archivo binario que ya contiene productos.</p>
+        <div class="accordion" id="pistas14">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista14">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista14" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Para añadir objetos a archivo existente, usa <code>FileOutputStream(file,true)</code> con cuidado: si usas <code>ObjectOutputStream</code> directamente, puede corromper el stream. Investiga “Append ObjectOutputStream” para Java.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 15 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading15">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse15">
+        <span class="icon">✏️💾</span> Ejercicio 15: Modificar un producto
+      </button>
+    </h2>
+    <div id="collapse15" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Leer lista de productos y permitir modificar el precio o nombre de un producto identificado por código.</p>
+        <div class="accordion" id="pistas15">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista15">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista15" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Lee todos los objetos a una lista temporal, modifica el que corresponda, y luego vuelve a escribir todo el archivo con <code>ObjectOutputStream</code>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ejercicio 16 -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading16">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse16">
+        <span class="icon">🛠️💾</span> Ejercicio 16: CRUD completo de productos
+      </button>
+    </h2>
+    <div id="collapse16" class="accordion-collapse collapse" data-bs-parent="#ejerciciosAccordion">
+      <div class="accordion-body">
+        <p>Implementar un CRUD completo para la clase <code>Producto</code>: Crear, Leer, Actualizar y Borrar objetos en un archivo binario.</p>
+        <div class="accordion" id="pistas16">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePista16">
+                Pista 🔍
+              </button>
+            </h2>
+            <div id="collapsePista16" class="accordion-collapse collapse">
+              <div class="accordion-body pista">
+                Usa una lista temporal para almacenar todos los objetos mientras realizas operaciones CRUD. Cada acción (alta, baja, modificación) requiere reescribir el archivo binario completo con <code>ObjectOutputStream</code>. Implementa un menú interactivo para cada opción.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Ejercicios 11 a 16 -->
+  <!-- Similar estructura: título, descripción, acordeón de pista -->
+  <!-- Para no alargar demasiado, se puede replicar patrón con iconos y pistas como los anteriores -->
+  
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
