@@ -277,7 +277,193 @@ public class AltaAlumno {
         </div>
     </div>
 </div>
-        
+        <!-- EJEMPLO 9 -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#e9">
+            📋 Ejemplo 9: Listar alumnos (READ)
+        </button>
+    </h2>
+    <div id="e9" class="accordion-collapse collapse">
+        <div class="accordion-body">
+
+<pre><code>
+import java.io.*;
+
+public class Listar {
+    public static void main(String[] args) throws Exception {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alumnos.dat"));
+
+        try{
+            while(true){
+                Alumno a = (Alumno) ois.readObject();
+                System.out.println(a.id + " " + a.nombre + " " + a.nota);
+            }
+        } catch(EOFException e){
+            System.out.println("Fin");
+        }
+
+        ois.close();
+    }
+}
+</code></pre>
+
+        </div>
+    </div>
+</div>
+
+<!-- EJEMPLO 10 -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#e10">
+            🔍 Ejemplo 10: Buscar alumno por ID
+        </button>
+    </h2>
+    <div id="e10" class="accordion-collapse collapse">
+        <div class="accordion-body">
+
+<pre><code>
+import java.io.*;
+
+public class Buscar {
+    public static void main(String[] args) throws Exception {
+        int buscar = 2;
+
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alumnos.dat"));
+
+        try{
+            while(true){
+                Alumno a = (Alumno) ois.readObject();
+                if(a.id == buscar){
+                    System.out.println("Encontrado: " + a.nombre);
+                }
+            }
+        } catch(EOFException e){}
+
+        ois.close();
+    }
+}
+</code></pre>
+
+        </div>
+    </div>
+</div>
+
+<!-- EJEMPLO 11 -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#e11">
+            ✏️ Ejemplo 11: Modificar alumno (UPDATE)
+        </button>
+    </h2>
+    <div id="e11" class="accordion-collapse collapse">
+        <div class="accordion-body">
+
+<pre><code>
+import java.io.*;
+
+public class Modificar {
+    public static void main(String[] args) throws Exception {
+
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alumnos.dat"));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("temp.dat"));
+
+        try{
+            while(true){
+                Alumno a = (Alumno) ois.readObject();
+
+                if(a.id == 2){
+                    a.nota = 10;
+                }
+
+                oos.writeObject(a);
+            }
+        } catch(EOFException e){}
+
+        ois.close();
+        oos.close();
+
+        new File("alumnos.dat").delete();
+        new File("temp.dat").renameTo(new File("alumnos.dat"));
+    }
+}
+</code></pre>
+
+        </div>
+    </div>
+</div>
+
+<!-- EJEMPLO 12 -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#e12">
+            ❌ Ejemplo 12: Borrado lógico
+        </button>
+    </h2>
+    <div id="e12" class="accordion-collapse collapse">
+        <div class="accordion-body">
+
+<pre><code>
+class Alumno implements Serializable {
+    int id;
+    String nombre;
+    double nota;
+    boolean activo = true;
+}
+</code></pre>
+
+<pre><code>
+// En el proceso de modificación:
+if(a.id == 2){
+    a.activo = false;
+}
+</code></pre>
+
+        </div>
+    </div>
+</div>
+
+<!-- EJEMPLO 13 -->
+<div class="accordion-item">
+    <h2 class="accordion-header">
+        <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#e13">
+            🧹 Ejemplo 13: Borrado físico
+        </button>
+    </h2>
+    <div id="e13" class="accordion-collapse collapse">
+        <div class="accordion-body">
+
+<pre><code>
+import java.io.*;
+
+public class BorradoFisico {
+    public static void main(String[] args) throws Exception {
+
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alumnos.dat"));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("temp.dat"));
+
+        try{
+            while(true){
+                Alumno a = (Alumno) ois.readObject();
+
+                if(a.activo){
+                    oos.writeObject(a);
+                }
+            }
+        } catch(EOFException e){}
+
+        ois.close();
+        oos.close();
+
+        new File("alumnos.dat").delete();
+        new File("temp.dat").renameTo(new File("alumnos.dat"));
+    }
+}
+</code></pre>
+
+        </div>
+    </div>
+</div>
     </div>
 </div>
 
