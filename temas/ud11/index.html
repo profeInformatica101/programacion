@@ -2,1046 +2,226 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Tema 11 - Ficheros Binarios</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java I/O Binario | Ficheros y Serialización</title>
+    <!-- Bootstrap 5 CSS + Icons + Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --blue-50: #E6F1FB;
-            --blue-100: #B5D4F4;
-            --blue-600: #185FA5;
-            --blue-800: #0C447C;
-            --blue-900: #042C53;
-            --teal-50: #E1F5EE;
-            --teal-600: #0F6E56;
-            --teal-800: #085041;
-            --amber-50: #FAEEDA;
-            --amber-600: #854F0B;
-            --red-50: #FCEBEB;
-            --red-600: #A32D2D;
-            --green-50: #EAF3DE;
-            --green-600: #3B6D11;
-            --gray-50: #F1EFE8;
-            --gray-100: #D3D1C7;
-            --gray-600: #5F5E5A;
-        }
-
-        * { box-sizing: border-box; }
-
-        body {
-            background: #f6f7f9;
-            font-family: 'Inter', system-ui, sans-serif;
-            font-size: 15px;
-            color: #1a1a1a;
-            line-height: 1.65;
-        }
-
-        .page-wrap { max-width: 900px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-
-        /* ── HEADER ── */
-        .hero {
-            background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-600) 100%);
-            border-radius: 16px;
-            padding: 2.5rem 2rem;
-            color: #fff;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -60px; right: -60px;
-            width: 220px; height: 220px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-        }
-        .hero h1 { font-size: 1.75rem; font-weight: 600; margin: 0 0 .4rem; }
-        .hero p { margin: 0; opacity: .8; font-size: .95rem; }
-        .hero-icon { font-size: 2.2rem; margin-bottom: .75rem; display: block; }
-
-        /* ── TOPIC PILLS ── */
-        .topic-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.75rem; }
-        .pill {
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1.5px solid transparent;
-            transition: all .15s;
-        }
-        .pill-blue  { background: var(--blue-50);  color: var(--blue-800);  border-color: var(--blue-100); }
-        .pill-teal  { background: var(--teal-50);  color: var(--teal-800);  border-color: #9FE1CB; }
-        .pill-amber { background: var(--amber-50); color: var(--amber-600); border-color: #FAC775; }
-        .pill-green { background: var(--green-50); color: var(--green-600); border-color: #C0DD97; }
-        .pill:hover { opacity: .8; transform: translateY(-1px); }
-
-        /* ── ACCORDION ── */
-        .accordion { display: flex; flex-direction: column; gap: 10px; }
-
-        .acc-item {
-            background: #fff;
-            border-radius: 12px;
-            border: 0.5px solid #dde0e6;
-            overflow: hidden;
-        }
-
-        .acc-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 1rem 1.25rem;
-            cursor: pointer;
-            user-select: none;
-            transition: background .15s;
-        }
-        .acc-header:hover { background: var(--gray-50); }
-
-        .acc-num {
-            width: 28px; height: 28px;
-            border-radius: 8px;
-            background: var(--blue-50);
-            color: var(--blue-800);
-            font-size: 12px; font-weight: 600;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .acc-title { flex: 1; font-weight: 500; font-size: .97rem; }
-        .acc-badge {
-            font-size: 10px; font-weight: 600;
-            background: var(--teal-50); color: var(--teal-600);
-            padding: 2px 8px; border-radius: 20px; border: 1px solid #9FE1CB;
-        }
-        .acc-chevron {
-            width: 18px; height: 18px;
-            transition: transform .2s;
-            color: var(--gray-600);
-            flex-shrink: 0;
-        }
-        .acc-item.open .acc-chevron { transform: rotate(180deg); }
-        .acc-item.open .acc-num { background: var(--blue-600); color: #fff; }
-
-        .acc-body {
-            display: none;
-            padding: 0 1.5rem 1.5rem;
-            border-top: 0.5px solid #dde0e6;
-        }
-        .acc-item.open .acc-body { display: block; }
-
-        /* ── CODE BOXES ── */
-        .code-wrap {
-            background: #13171f;
-            border-radius: 10px;
-            margin: 1rem 0;
-            overflow: hidden;
-        }
-        .code-lang {
-            background: #1e2330;
-            color: #7a8499;
-            font-size: 11px;
-            font-weight: 500;
-            padding: 6px 14px;
-            letter-spacing: .04em;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .code-lang::before {
-            content: '';
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: #e86f4f;
-        }
-        .code-wrap pre {
-            margin: 0;
-            padding: 1rem 1.25rem;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.82rem;
-            line-height: 1.7;
-            color: #e2e8f0;
-            overflow-x: auto;
-            white-space: pre;
-        }
-
-        /* Syntax highlighting */
-        .kw  { color: #7ecff5; }
-        .ty  { color: #85e0a3; }
-        .str { color: #fac57d; }
-        .cm  { color: #5c6680; font-style: italic; }
-        .mt  { color: #c4b5fd; }
-        .nu  { color: #f9a875; }
-
-        /* ── CALLOUTS ── */
-        .callout {
-            border-radius: 8px;
-            padding: .85rem 1rem;
-            font-size: .88rem;
-            margin: 1rem 0;
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-            border-left: 3px solid transparent;
-        }
-        .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
-        .callout-info    { background: var(--blue-50);  border-color: var(--blue-600);  color: var(--blue-800); }
-        .callout-warning { background: var(--amber-50); border-color: #BA7517; color: #633806; }
-        .callout-danger  { background: var(--red-50);   border-color: var(--red-600);   color: var(--red-600); }
-        .callout-success { background: var(--green-50); border-color: var(--green-600); color: var(--green-600); }
-
-        /* ── SECTION HEADINGS ── */
-        .section-h {
-            font-size: .95rem;
-            font-weight: 600;
-            color: var(--blue-800);
-            margin: 1.5rem 0 .6rem;
-            padding-bottom: 4px;
-            border-bottom: 1.5px solid var(--blue-50);
-        }
-        .section-h:first-child { margin-top: .75rem; }
-
-        /* ── INFO CARDS ── */
-        .info-card {
-            background: var(--gray-50);
-            border: 0.5px solid var(--gray-100);
-            border-left: 3px solid var(--blue-600);
-            border-radius: 8px;
-            padding: .9rem 1rem;
-            margin: 1rem 0;
-        }
-        .info-card h5 { font-size: .9rem; font-weight: 600; margin: 0 0 .5rem; }
-
-        /* ── TABLES ── */
-        .styled-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: .875rem;
-            margin: 1rem 0;
-        }
-        .styled-table th {
-            background: var(--blue-800);
-            color: #fff;
-            padding: 8px 12px;
-            font-weight: 500;
-            text-align: left;
-        }
-        .styled-table th:first-child { border-radius: 8px 0 0 0; }
-        .styled-table th:last-child  { border-radius: 0 8px 0 0; }
-        .styled-table td {
-            padding: 7px 12px;
-            border-bottom: 0.5px solid #dde0e6;
-            vertical-align: middle;
-        }
-        .styled-table tr:nth-child(even) td { background: #f9fafc; }
-        .styled-table tr:last-child td { border-bottom: none; }
-
-        code {
-            background: var(--blue-50);
-            color: var(--blue-800);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: .8em;
-            padding: 1px 5px;
-            border-radius: 4px;
-        }
-
-        /* ── EXERCISE BOXES ── */
-        .ex-box {
-            border: 0.5px solid #dde0e6;
-            border-radius: 10px;
-            padding: 1.1rem 1.25rem;
-            margin-bottom: 1rem;
-            background: #fafafa;
-        }
-        .ex-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: .5rem;
-        }
-        .ex-num {
-            background: var(--blue-600);
-            color: #fff;
-            width: 26px; height: 26px;
-            border-radius: 6px;
-            font-size: 12px; font-weight: 600;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .ex-title { font-weight: 600; font-size: .93rem; }
-        .ex-desc { font-size: .88rem; color: #4a4a4a; margin-bottom: .75rem; }
-
-        .btn-sol {
-            background: transparent;
-            border: 1.5px solid var(--blue-600);
-            color: var(--blue-600);
-            font-size: .82rem;
-            font-weight: 500;
-            padding: 4px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all .15s;
-        }
-        .btn-sol:hover { background: var(--blue-600); color: #fff; }
-
-        .solution { display: none; margin-top: .75rem; }
-
-        /* ── SUMMARY LIST ── */
-        .summary-list {
-            list-style: none;
-            padding: 0; margin: 0;
-            display: flex; flex-direction: column; gap: 6px;
-        }
-        .summary-list li {
-            padding: 9px 14px;
-            background: #fff;
-            border: 0.5px solid #dde0e6;
-            border-radius: 8px;
-            font-size: .9rem;
-            display: flex; align-items: flex-start; gap: 10px;
-        }
-        .summary-list li::before {
-            content: '→';
-            color: var(--blue-600);
-            font-weight: 600;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-
-        /* ── COMPARE TABLE ── */
-        .compare-wrap { overflow-x: auto; }
-        .compare-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: .8rem;
-            min-width: 700px;
-        }
-        .compare-table th {
-            background: var(--blue-800);
-            color: #fff;
-            padding: 8px 10px;
-            font-weight: 500;
-            text-align: center;
-        }
-        .compare-table th:first-child { text-align: left; border-radius: 8px 0 0 0; }
-        .compare-table th:last-child  { border-radius: 0 8px 0 0; }
-        .compare-table td {
-            padding: 7px 10px;
-            border-bottom: 0.5px solid #dde0e6;
-            text-align: center;
-        }
-        .compare-table td:first-child { text-align: left; font-weight: 500; }
-        .compare-table tr:nth-child(even) td { background: #f9fafc; }
-        .yes { color: var(--green-600); font-weight: 600; }
-        .no  { color: #bbb; }
-
-        /* ── ERROR TABLE ── */
-        .error-badge {
-            display: inline-block;
-            background: var(--red-50);
-            color: var(--red-600);
-            font-size: .78rem;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 5px;
-            border: 1px solid #F7C1C1;
-            white-space: nowrap;
-        }
-
-        @media (max-width: 600px) {
-            .hero { padding: 1.5rem 1.25rem; }
-            .hero h1 { font-size: 1.35rem; }
-            .acc-body { padding: 0 1rem 1.25rem; }
-        }
+        * { font-family: 'Inter', sans-serif; }
+        body { background: linear-gradient(145deg, #f4f7fc 0%, #eef2f5 100%); scroll-behavior: smooth; }
+        .hero-section { background: linear-gradient(135deg, #0B2B40 0%, #1A4A5F 100%); color: white; padding: 4rem 0 3rem; border-bottom-left-radius: 3rem; border-bottom-right-radius: 3rem; box-shadow: 0 15px 30px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; border: none; border-radius: 1.25rem; background: rgba(255,255,255,0.95); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15); }
+        .icon-circle { background: #1A4A5F10; width: 48px; height: 48px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: #1A6F8C; font-size: 1.5rem; }
+        .badge-java { background-color: #e76f00; color: white; font-weight: 500; padding: 0.4rem 0.9rem; border-radius: 30px; }
+        pre.code-block { background: #1e2a32; color: #e2e8f0; padding: 1rem; border-radius: 1rem; font-size: 0.85rem; margin-top: 1rem; overflow-x: auto; }
+        .footer { background: #0a1c24; color: #adb5bd; border-top-left-radius: 2rem; border-top-right-radius: 2rem; margin-top: 3rem; }
+        hr { opacity: 0.2; }
+        .table-custom th { background: #e9ecef; border-bottom: 2px solid #1A6F8C; }
+        .list-icon { color: #1A6F8C; margin-right: 12px; }
+        .proyecto-card { background: linear-gradient(120deg, #ffffff, #fef9e6); border-left: 5px solid #e67e22; }
+        @media (max-width: 768px) { .hero-section { padding: 2rem 0; } }
     </style>
 </head>
 <body>
-<div class="page-wrap">
 
-    <!-- HERO -->
-    <div class="hero">
-        <span class="hero-icon">📁</span>
-        <h1>Tema 11 · Ficheros Binarios</h1>
-        <p>Gestión de datos binarios en Java: flujos, serialización y acceso directo</p>
-    </div>
-
-    <!-- TOPIC PILLS -->
-    <div class="topic-pills">
-        <span class="pill pill-blue">FileInputStream / FileOutputStream</span>
-        <span class="pill pill-teal">ObjectInputStream / ObjectOutputStream</span>
-        <span class="pill pill-amber">RandomAccessFile</span>
-        <span class="pill pill-green">Serialización</span>
-        <span class="pill pill-blue">try-with-resources</span>
-        <span class="pill pill-amber">Endianness</span>
-    </div>
-
-    <div class="accordion" id="acordeon">
-
-        <!-- ══ 1. INTRODUCCIÓN ══ -->
-        <div class="acc-item open" data-index="0">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">1</div>
-                <span class="acc-title">Introducción</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+<!-- Hero -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-md-8">
+                <span class="badge-java mb-3"><i class="fab fa-java me-1"></i> Ficheros Binarios en Java</span>
+                <h1 class="display-4 fw-bold mt-2">Gestión eficiente de datos<br> <span style="color: #FFD966;">bytes, objetos y rendimiento</span></h1>
+                <p class="lead mt-3 opacity-75">Aprende a leer, escribir y serializar información binaria. Domina <strong>FileInputStream, DataOutputStream, ObjectOutputStream</strong> y más.</p>
+                <div class="mt-4 d-flex flex-wrap gap-3">
+                    <span class="bg-white text-dark px-3 py-2 rounded-pill fw-semibold"><i class="fas fa-file-alt me-2 text-primary"></i>Texto vs Binario</span>
+                    <span class="bg-white text-dark px-3 py-2 rounded-pill fw-semibold"><i class="fas fa-microchip me-2 text-success"></i>Máxima eficiencia</span>
+                    <span class="bg-white text-dark px-3 py-2 rounded-pill fw-semibold"><i class="fas fa-database me-2 text-warning"></i>Serialización POJO</span>
+                </div>
             </div>
-            <div class="acc-body">
-                <p>Todos los ficheros son secuencias de bytes, pero podemos distinguir:</p>
-                <ul>
-                    <li><strong>Texto:</strong> interpretados como caracteres (ASCII / UTF).</li>
-                    <li><strong>Binarios:</strong> formatos específicos (imagen, audio, datos de aplicación…).</li>
-                </ul>
-                <p>Para manejar un fichero binario directamente hay que conocer su formato byte a byte. El formato <strong>BMP</strong>, por ejemplo, tiene una cabecera estructurada:</p>
+            <div class="col-md-4 text-center">
+                <i class="fas fa-file-code fa-5x" style="color: #FFD966; opacity: 0.9;"></i>
+                <i class="fas fa-arrow-right fa-3x mx-2" style="color: white;"></i>
+                <i class="fas fa-database fa-5x" style="color: #B0E0E6;"></i>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <table class="styled-table">
-                    <thead><tr><th>Offset</th><th>Bytes</th><th>Contenido</th></tr></thead>
-                    <tbody>
-                        <tr><td>0–1</td><td>2</td><td>Identificador del formato (<code>"BM"</code>)</td></tr>
-                        <tr><td>2–5</td><td>4</td><td>Tamaño del fichero (int, Little Endian)</td></tr>
-                        <tr><td>18–21</td><td>4</td><td>Anchura en píxeles (int, Little Endian)</td></tr>
-                        <tr><td>22–25</td><td>4</td><td>Altura en píxeles (int, Little Endian)</td></tr>
-                    </tbody>
-                </table>
+<div class="container mb-5">
 
-                <div class="callout callout-info">
-                    <span class="callout-icon">💡</span>
-                    <span>Como programadores podemos diseñar nuestros propios formatos binarios. Para formatos estándar existen bibliotecas como <code>javax.imageio</code> que simplifican la lectura y escritura de imágenes.</span>
+    <!-- Texto vs Binario -->
+    <div class="row g-4 mb-5" id="texto-vs-binario">
+        <div class="col-12">
+            <div class="card card-hover p-3">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-3 text-center p-3">
+                        <i class="fas fa-font fa-4x text-secondary"></i> <i class="fas fa-exchange-alt fa-2x mx-2 text-primary"></i> <i class="fas fa-code fa-4x text-info"></i>
+                    </div>
+                    <div class="col-md-9">
+                        <h3 class="fw-bold"><i class="fas fa-balance-scale me-2 text-primary"></i>Texto vs Binario</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="alert alert-light border-start border-4 border-success">
+                                    <i class="fas fa-file-alt text-success me-2"></i><strong>Texto:</strong> Legible por humanos, fácil de depurar. Ocupa más espacio y parseo lento.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="alert alert-light border-start border-4 border-warning">
+                                    <i class="fas fa-binary text-warning me-2"></i><strong>Binario:</strong> Secuencia de bytes, <span class="fw-bold">más eficiente</span> y compacto, no legible directamente.
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-0 text-muted">Los ficheros binarios son ideales para almacenar grandes volúmenes de datos, imágenes, objetos Java y tipos primitivos de forma rápida.</p>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- ══ 2. FLUJOS ══ -->
-        <div class="acc-item" data-index="1">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">2</div>
-                <span class="acc-title">Acceso secuencial — Streams</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-            <div class="acc-body">
-                <p><code>FileInputStream</code> y <code>FileOutputStream</code> son subclases de las clases abstractas <code>InputStream</code> / <code>OutputStream</code> del paquete <code>java.io</code>.</p>
-
-                <div class="section-h">Lectura con FileInputStream</div>
-                <p><code>read()</code> devuelve el byte leído como <code>int</code> (8 bits útiles, resto a cero) o <code>-1</code> al llegar al EOF.</p>
-
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="ty">FileInputStream</span> entrada = <span class="kw">null</span>;
-<span class="kw">try</span> {
-    entrada = <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"fichero.bin"</span>);
-} <span class="kw">catch</span> (<span class="ty">FileNotFoundException</span> e) {
-    <span class="ty">System</span>.err.println(<span class="str">"Error al abrir el fichero"</span>);
-}
-
-<span class="kw">if</span> (entrada != <span class="kw">null</span>) {
-    <span class="kw">try</span> {
-        <span class="kw">while</span> (entrada.<span class="mt">available</span>() > <span class="nu">0</span>) {
-            <span class="ty">String</span> hex = <span class="ty">Integer</span>.<span class="mt">toHexString</span>(entrada.<span class="mt">read</span>());
-            <span class="kw">if</span> (hex.<span class="mt">length</span>() == <span class="nu">1</span>) <span class="ty">System</span>.out.<span class="mt">print</span>(<span class="str">"0"</span>);
-            <span class="ty">System</span>.out.<span class="mt">print</span>(hex + <span class="str">" "</span>);
-        }
-        entrada.<span class="mt">close</span>();
-    } <span class="kw">catch</span> (<span class="ty">IOException</span> e) {
-        <span class="ty">System</span>.err.println(<span class="str">"Error al leer el fichero"</span>);
-    }
-}</pre>
+    <!-- Streams básicos -->
+    <div class="row g-4 mb-5" id="streams-basicos">
+        <div class="col-md-6">
+            <div class="card card-hover h-100 p-3">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="icon-circle"><i class="fas fa-stream"></i></div>
+                    <h3 class="fw-bold mb-0">Streams básicos</h3>
                 </div>
-
-                <div class="section-h">Escritura con FileOutputStream</div>
-                <p>El constructor acepta un segundo argumento <code>append</code>: <code>true</code> añade al final; <code>false</code> (por defecto) sobreescribe. <code>write()</code> solo escribe el byte menos significativo del <code>int</code>.</p>
-
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="ty">FileOutputStream</span> salida = <span class="kw">null</span>;
-<span class="kw">try</span> {
-    salida = <span class="kw">new</span> <span class="ty">FileOutputStream</span>(<span class="str">"nuevo_fichero.bin"</span>);
-} <span class="kw">catch</span> (<span class="ty">FileNotFoundException</span> e) {
-    <span class="ty">System</span>.err.println(<span class="str">"Error al abrir el fichero"</span>);
-}
-
-<span class="kw">if</span> (salida != <span class="kw">null</span>) {
-    <span class="kw">try</span> {
-        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">256</span>; i++) {
-            salida.<span class="mt">write</span>(i);
-        }
-        salida.<span class="mt">close</span>();
-    } <span class="kw">catch</span> (<span class="ty">IOException</span> e) {
-        <span class="ty">System</span>.err.println(<span class="str">"Error al escribir fichero"</span>);
-    }
-}</pre>
+                <p><code>FileInputStream</code> y <code>FileOutputStream</code> permiten leer y escribir <strong>bytes directamente</strong>.</p>
+                <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#ejemplo-stream">Ver ejemplo</button>
+                <div class="collapse" id="ejemplo-stream">
+                    <pre class="code-block">// Ejemplo básico
+FileOutputStream fos = new FileOutputStream("datos.bin");
+fos.write(65);  // escribe el byte 'A'
+fos.close();</pre>
                 </div>
-
-                <div class="callout callout-warning">
-                    <span class="callout-icon">⚠️</span>
-                    <span>Siempre cerrar el fichero con <code>close()</code> para vaciar el buffer y evitar pérdida de datos. Preferir <strong>try-with-resources</strong>.</span>
-                </div>
-
-                <div class="section-h">Leer un array de bytes de golpe</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">byte</span>[] buffer = <span class="kw">new byte</span>[<span class="nu">1024</span>];
-<span class="kw">try</span> (<span class="ty">FileInputStream</span> entrada = <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"datos.bin"</span>)) {
-    <span class="kw">int</span> bytesLeidos = entrada.<span class="mt">read</span>(buffer);
-    <span class="ty">System</span>.out.println(<span class="str">"Bytes leídos: "</span> + bytesLeidos);
-}</pre>
-                </div>
-
-                <div class="section-h">Copiar un fichero binario</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">try</span> (<span class="ty">FileInputStream</span>  origen  = <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"original.bin"</span>);
-     <span class="ty">FileOutputStream</span> destino = <span class="kw">new</span> <span class="ty">FileOutputStream</span>(<span class="str">"copia.bin"</span>)) {
-    <span class="kw">int</span> dato;
-    <span class="kw">while</span> ((dato = origen.<span class="mt">read</span>()) != -<span class="nu">1</span>) {
-        destino.<span class="mt">write</span>(dato);
-    }
-    <span class="ty">System</span>.out.println(<span class="str">"Copia completada."</span>);
-} <span class="kw">catch</span> (<span class="ty">IOException</span> e) {
-    <span class="ty">System</span>.err.println(<span class="str">"Error: "</span> + e.<span class="mt">getMessage</span>());
-}</pre>
-                </div>
+                <div class="mt-2 small text-muted"><i class="fas fa-info-circle"></i> Siempre cerrar flujos o usar try-with-resources.</div>
             </div>
         </div>
-
-        <!-- ══ 3. SERIALIZACIÓN ══ -->
-        <div class="acc-item" data-index="2">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">3</div>
-                <span class="acc-title">Serialización de objetos</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <div class="col-md-6">
+            <div class="card card-hover h-100 p-3">
+                <div class="d-flex align-items-center gap-3 mb-2">
+                    <div class="icon-circle"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="fw-bold mb-0">Tipos primitivos</h3>
+                </div>
+                <div><span class="badge bg-secondary mb-2">DataInputStream / DataOutputStream</span></div>
+                <p>Permiten guardar <code>int, double, boolean, float, long</code> de forma portátil y estructurada.</p>
+                <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#ejemplo-primitivos">Ver ejemplo</button>
+                <div class="collapse" id="ejemplo-primitivos">
+                    <pre class="code-block">DataOutputStream dos = new DataOutputStream(new FileOutputStream("primitivos.bin"));
+dos.writeInt(42);
+dos.writeDouble(3.1416);
+dos.writeBoolean(true);
+dos.close();</pre>
+                </div>
+                <div class="alert alert-warning mt-2 py-2"><i class="fas fa-exclamation-triangle"></i> <strong>IMPORTANTE:</strong> Respetar el orden exacto al leer: writeInt → readInt, writeDouble → readDouble.</div>
             </div>
-            <div class="acc-body">
-                <p>Permite guardar objetos Java completos en un fichero y recuperarlos en sesiones posteriores de forma transparente.</p>
+        </div>
+    </div>
 
-                <div class="info-card">
-                    <h5>Requisitos de una clase serializable</h5>
-                    <ul style="margin:0; padding-left:1.2rem;">
-                        <li>Implementar la interfaz <code>Serializable</code> (solo declarativa, sin métodos)</li>
-                        <li>Tener un <strong>constructor por defecto</strong> (sin parámetros)</li>
-                        <li>Declarar <code>serialVersionUID</code> — evita <code>InvalidClassException</code> entre versiones</li>
-                        <li>Marcar con <code>transient</code> los atributos que <em>no</em> se quieran persistir</li>
+    <!-- Serialización -->
+    <div class="row g-4 mb-5" id="serializacion">
+        <div class="col-12">
+            <div class="card card-hover p-4">
+                <h2 class="fw-bold mb-3"><i class="fas fa-cubes me-2 text-warning"></i>Serialización de objetos</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#ejemplo-clase">Clase Alumno</button>
+                        <div class="collapse" id="ejemplo-clase">
+                            <pre class="code-block">import java.io.Serializable;
+
+class Alumno implements Serializable {
+    private static final long serialVersionUID = 1L;
+    String nombre;
+    int nota;
+    public Alumno(String nombre, int nota) {
+        this.nombre = nombre;
+        this.nota = nota;
+    }
+    @Override
+    public String toString() { return nombre + ": " + nota; }
+}</pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-sm btn-outline-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#ejemplo-guardar">Guardar / Recuperar</button>
+                        <div class="collapse" id="ejemplo-guardar">
+                            <pre class="code-block">// Escritura
+ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("alumnos.ser"));
+oos.writeObject(new Alumno("Lucía", 9));
+oos.close();
+
+// Lectura
+ObjectInputStream ois = new ObjectInputStream(new FileInputStream("alumnos.ser"));
+Alumno a = (Alumno) ois.readObject();
+System.out.println(a);</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3"><i class="fas fa-lightbulb text-warning"></i> <strong>Consejo:</strong> Los objetos deben implementar <code>Serializable</code> y definir <code>serialVersionUID</code>.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla comparativa rápida -->
+    <div class="card card-hover p-4 mt-2" id="tabla-comparativa">
+        <h3 class="fw-bold"><i class="fas fa-table-list"></i> Comparativa de Streams</h3>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-custom">
+                    <tr>
+                        <th>Clase</th><th>Propósito</th><th>Métodos destacados</th><th>Ejemplo de uso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>FileOutputStream</td><td>Escribir bytes</td><td>write(int), write(byte[])</td><td>Imagenes, binarios planos</td></tr>
+                    <tr><td>FileInputStream</td><td>Leer bytes</td><td>read(), read(byte[])</td><td>Copiar archivos, bajo nivel</td></tr>
+                    <tr><td>DataOutputStream</td><td>Escribir primitivos</td><td>writeInt, writeDouble</td><td>Guardar estructuras de datos</td></tr>
+                    <tr><td>DataInputStream</td><td>Leer primitivos</td><td>readInt, readDouble</td><td>Recuperar datos estructurados</td></tr>
+                    <tr><td>ObjectOutputStream</td><td>Serializar objetos</td><td>writeObject</td><td>Persistencia completa de objetos</td></tr>
+                    <tr><td>RandomAccessFile</td><td>Acceso aleatorio RW</td><td>seek, readInt, writeLong</td><td>Bases de datos simples, índices</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-2 text-muted small">Todos los streams binarios son más compactos y rápidos que los de texto.</div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer pt-5 pb-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fab fa-java me-2"></i> Ficheros Binarios en Java</h5>
+                    <p>Contenido basado en estándares de serialización, I/O de bajo nivel y buenas prácticas. Diseñado para desarrolladores que buscan rendimiento y control sobre sus datos.</p>
+                </div>
+                <div class="col-md-3">
+                    <h6><i class="fas fa-cogs"></i> Tecnologías</h6>
+                    <ul class="list-unstyled">
+                        <li>Java I/O (java.io)</li>
+                        <li>Serializable Interface</li>
+                        <li>Data streams</li>
+                        <li>RandomAccessFile</li>
                     </ul>
                 </div>
-
-                <div class="section-h">Clase MiEmpresa — ejemplo completo</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">public class</span> <span class="ty">MiEmpresa</span> <span class="kw">implements</span> <span class="ty">Serializable</span> {
-    <span class="kw">private static final long</span> serialVersionUID = <span class="nu">6368263803L</span>;
-
-    <span class="kw">private</span> <span class="ty">List</span>&lt;<span class="ty">Cliente</span>&gt;   clientes;
-    <span class="kw">private</span> <span class="ty">List</span>&lt;<span class="ty">Empleado</span>&gt;  empleados;
-    <span class="kw">private</span> <span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt;  productos;
-    <span class="kw">private double</span> capital;
-    <span class="kw">private</span> <span class="ty">String</span> nombre;
-
-    <span class="kw">public</span> <span class="ty">MiEmpresa</span>() { <span class="cm">// constructor por defecto obligatorio</span>
-        clientes  = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
-        empleados = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
-        productos = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
-        capital   = <span class="nu">100000</span>;
-        nombre    = <span class="str">"Mi Empresa"</span>;
-    }
-}</pre>
+                <div class="col-md-3">
+                    <h6><i class="fas fa-lightbulb"></i> Recursos</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check-circle text-success"></i> <a href="#" class="text-white text-decoration-none">Proyecto alumnos</a></li>
+                        <li><i class="fas fa-check-circle text-success"></i> <a href="#" class="text-white text-decoration-none">Ejemplos de código</a></li>
+                        <li><i class="fas fa-check-circle text-success"></i> <a href="#" class="text-white text-decoration-none">Best practices</a></li>
+                        <li><i class="fab fa-github text-white"></i> <a href="#" class="text-white text-decoration-none">Repositorio GitHub</a></li>
+                    </ul>
                 </div>
-
-                <div class="section-h">Guardar objeto</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">public static void</span> <span class="mt">guardarDatos</span>(<span class="ty">MiEmpresa</span> me) {
-    <span class="kw">try</span> (<span class="ty">ObjectOutputStream</span> salida = <span class="kw">new</span> <span class="ty">ObjectOutputStream</span>(
-            <span class="kw">new</span> <span class="ty">FileOutputStream</span>(<span class="str">"mi_empresa.dat"</span>))) {
-        salida.<span class="mt">writeObject</span>(me);
-    } <span class="kw">catch</span> (<span class="ty">Exception</span> e) {
-        <span class="ty">System</span>.err.println(<span class="str">"Error al guardar: "</span> + e.<span class="mt">getMessage</span>());
-    }
-}</pre>
-                </div>
-
-                <div class="section-h">Cargar objeto</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">public static</span> <span class="ty">MiEmpresa</span> <span class="mt">cargarDatos</span>() {
-    <span class="ty">MiEmpresa</span> me;
-    <span class="kw">try</span> (<span class="ty">ObjectInputStream</span> entrada = <span class="kw">new</span> <span class="ty">ObjectInputStream</span>(
-            <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"mi_empresa.dat"</span>))) {
-        me = (<span class="ty">MiEmpresa</span>) entrada.<span class="mt">readObject</span>();
-    } <span class="kw">catch</span> (<span class="ty">Exception</span> e) {
-        <span class="ty">System</span>.err.println(e);
-        me = <span class="kw">new</span> <span class="ty">MiEmpresa</span>(); <span class="cm">// primera ejecución: fichero no existe aún</span>
-    }
-    <span class="kw">return</span> me;
-}</pre>
-                </div>
-
-                <div class="section-h">Tipos primitivos — mismo orden de escritura / lectura</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java — escritura</div>
-                    <pre><span class="kw">try</span> (<span class="ty">ObjectOutputStream</span> out = <span class="kw">new</span> <span class="ty">ObjectOutputStream</span>(
-        <span class="kw">new</span> <span class="ty">FileOutputStream</span>(<span class="str">"datos.dat"</span>))) {
-    out.<span class="mt">writeInt</span>(<span class="nu">42</span>);
-    out.<span class="mt">writeDouble</span>(<span class="nu">3.14</span>);
-    out.<span class="mt">writeBoolean</span>(<span class="kw">true</span>);
-}</pre>
-                </div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java — lectura (mismo orden)</div>
-                    <pre><span class="kw">try</span> (<span class="ty">ObjectInputStream</span> in = <span class="kw">new</span> <span class="ty">ObjectInputStream</span>(
-        <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"datos.dat"</span>))) {
-    <span class="kw">int</span>     num  = in.<span class="mt">readInt</span>();
-    <span class="kw">double</span>  pi   = in.<span class="mt">readDouble</span>();
-    <span class="kw">boolean</span> flag = in.<span class="mt">readBoolean</span>();
-    <span class="ty">System</span>.out.println(num + <span class="str">" / "</span> + pi + <span class="str">" / "</span> + flag);
-}</pre>
-                </div>
-
-                <div class="callout callout-danger">
-                    <span class="callout-icon">🚫</span>
-                    <div>
-                        <strong>Inconvenientes:</strong> el formato es propio de Java (no compatible con otros lenguajes). Si se modifica la estructura de la clase puede romperse la compatibilidad con ficheros anteriores. Además, Java usa <em>Big Endian</em>; las plataformas Intel usan <em>Little Endian</em>.
-                    </div>
-                </div>
+            </div>
+            <hr class="my-3 opacity-25">
+            <div class="text-center pt-2">
+                <small>© 2025 - Guía profesional: Ficheros Binarios en Java</small>
             </div>
         </div>
+    </footer>
 
-        <!-- ══ 4. RANDOM ACCESS ══ -->
-        <div class="acc-item" data-index="3">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">4</div>
-                <span class="acc-title">Acceso directo — RandomAccessFile</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-            <div class="acc-body">
-                <p>Permite acceder a <strong>cualquier posición</strong> del fichero sin leerlo completo, como si fuera un array de bytes con un puntero interno (<em>filePointer</em>).</p>
-
-                <div class="info-card">
-                    <h5>Modos de apertura</h5>
-                    <table class="styled-table" style="margin:.5rem 0 0;">
-                        <thead><tr><th>Modo</th><th>Descripción</th></tr></thead>
-                        <tbody>
-                            <tr><td><code>"r"</code></td><td>Solo lectura</td></tr>
-                            <tr><td><code>"rw"</code></td><td>Lectura y escritura</td></tr>
-                            <tr><td><code>"rws"</code></td><td>Lectura/escritura + sincronización inmediata (datos y metadatos)</td></tr>
-                            <tr><td><code>"rwd"</code></td><td>Lectura/escritura + sincronización solo de datos (mayor rendimiento)</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="section-h">Leer dimensiones de un BMP</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">try</span> (<span class="ty">RandomAccessFile</span> fichero = <span class="kw">new</span> <span class="ty">RandomAccessFile</span>(<span class="str">"imagen.bmp"</span>, <span class="str">"r"</span>)) {
-    fichero.<span class="mt">seek</span>(<span class="nu">18</span>); <span class="cm">// posición 18: anchura (4 bytes, Little Endian)</span>
-    <span class="kw">int</span> ancho = <span class="ty">Integer</span>.<span class="mt">reverseBytes</span>(fichero.<span class="mt">readInt</span>());
-    <span class="kw">int</span> alto  = <span class="ty">Integer</span>.<span class="mt">reverseBytes</span>(fichero.<span class="mt">readInt</span>()); <span class="cm">// posición 22</span>
-    <span class="ty">System</span>.out.println(<span class="str">"Imagen: "</span> + ancho + <span class="str">" x "</span> + alto + <span class="str">" píxeles"</span>);
-} <span class="kw">catch</span> (<span class="ty">IOException</span> e) {
-    <span class="ty">System</span>.err.println(<span class="str">"Error: "</span> + e.<span class="mt">getMessage</span>());
-}</pre>
-                </div>
-
-                <div class="section-h">Modificar la altura de un BMP</div>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">int</span> nuevaAltura = <span class="nu">50</span>;
-<span class="kw">try</span> (<span class="ty">RandomAccessFile</span> fichero = <span class="kw">new</span> <span class="ty">RandomAccessFile</span>(<span class="str">"imagen.bmp"</span>, <span class="str">"rw"</span>)) {
-    fichero.<span class="mt">seek</span>(<span class="nu">22</span>);
-    fichero.<span class="mt">writeInt</span>(<span class="ty">Integer</span>.<span class="mt">reverseBytes</span>(nuevaAltura));
-    <span class="ty">System</span>.out.println(<span class="str">"Altura modificada a "</span> + nuevaAltura + <span class="str">" px."</span>);
-} <span class="kw">catch</span> (<span class="ty">IOException</span> e) {
-    <span class="ty">System</span>.err.println(<span class="str">"Error: "</span> + e.<span class="mt">getMessage</span>());
-}</pre>
-                </div>
-
-                <div class="section-h">Registros de longitud fija</div>
-                <p>Guardando registros de tamaño fijo podemos acceder directamente al registro N: <code>seek(N * TAM_REGISTRO)</code>.</p>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">final int</span> TAM_REGISTRO = <span class="nu">4</span> + <span class="nu">8</span>; <span class="cm">// int (4B) + double (8B) = 12 bytes</span>
-
-<span class="kw">try</span> (<span class="ty">RandomAccessFile</span> raf = <span class="kw">new</span> <span class="ty">RandomAccessFile</span>(<span class="str">"registros.dat"</span>, <span class="str">"rw"</span>)) {
-    <span class="cm">// Escribir 5 registros</span>
-    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">5</span>; i++) {
-        raf.<span class="mt">writeInt</span>(i);
-        raf.<span class="mt">writeDouble</span>(i * <span class="nu">1.5</span>);
-    }
-    <span class="cm">// Leer el registro 3 directamente</span>
-    <span class="kw">int</span> numRegistro = <span class="nu">3</span>;
-    raf.<span class="mt">seek</span>((<span class="kw">long</span>) numRegistro * TAM_REGISTRO);
-    <span class="kw">int</span>    id    = raf.<span class="mt">readInt</span>();
-    <span class="kw">double</span> valor = raf.<span class="mt">readDouble</span>();
-    <span class="ty">System</span>.out.println(<span class="str">"Registro 3: id="</span> + id + <span class="str">", valor="</span> + valor);
-}</pre>
-                </div>
-
-                <div class="callout callout-info">
-                    <span class="callout-icon">ℹ️</span>
-                    <span><code>seek(pos)</code> mueve el puntero · <code>getFilePointer()</code> consulta la posición actual · <code>length()</code> devuelve el tamaño del fichero</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- ══ 5. COMPARATIVA ══ -->
-        <div class="acc-item" data-index="4">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">5</div>
-                <span class="acc-title">Comparativa entre métodos</span>
-                <span class="acc-badge">COMPLETA</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-            <div class="acc-body">
-                <div class="compare-wrap">
-                    <table class="compare-table">
-                        <thead>
-                            <tr>
-                                <th>Característica</th>
-                                <th>FileInputStream / OS</th>
-                                <th>ObjectInputStream / OS</th>
-                                <th>RandomAccessFile</th>
-                                <th>BufferedReader / Writer</th>
-                                <th>FileReader / Writer</th>
-                                <th>PrintWriter</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Tipo de acceso</td>
-                                <td>Secuencial</td>
-                                <td>Secuencial</td>
-                                <td>Directo</td>
-                                <td>Secuencial (buffer)</td>
-                                <td>Secuencial</td>
-                                <td>Secuencial</td>
-                            </tr>
-                            <tr>
-                                <td>Qué se guarda</td>
-                                <td>Bytes crudos</td>
-                                <td>Objetos Java</td>
-                                <td>Bytes / primitivos</td>
-                                <td>Texto + codificación</td>
-                                <td>Texto</td>
-                                <td>Texto formateado</td>
-                            </tr>
-                            <tr>
-                                <td>Compatible otros lenguajes</td>
-                                <td class="yes">✓ Sí</td>
-                                <td class="no">✗ No</td>
-                                <td class="yes">✓ Sí*</td>
-                                <td class="yes">✓ Sí</td>
-                                <td class="yes">✓ Sí</td>
-                                <td class="yes">✓ Sí</td>
-                            </tr>
-                            <tr>
-                                <td>Acceso a posición arbitraria</td>
-                                <td class="no">✗</td>
-                                <td class="no">✗</td>
-                                <td class="yes">✓ seek()</td>
-                                <td class="no">✗</td>
-                                <td class="no">✗</td>
-                                <td class="no">✗</td>
-                            </tr>
-                            <tr>
-                                <td>Serialización automática</td>
-                                <td class="no">✗</td>
-                                <td class="yes">✓ Sí</td>
-                                <td class="no">✗ Manual</td>
-                                <td class="no">✗</td>
-                                <td class="no">✗</td>
-                                <td class="no">✗</td>
-                            </tr>
-                            <tr>
-                                <td>Caso de uso típico</td>
-                                <td>Copiar ficheros byte a byte</td>
-                                <td>Persistencia de objetos</td>
-                                <td>Cabeceras BMP, BBDD simple</td>
-                                <td>Ficheros de texto grandes</td>
-                                <td>Pequeños ficheros texto</td>
-                                <td>Logs, CSV, reports</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p style="font-size:.8rem; color:#666; margin-top:.5rem;">* Cuidado con Endianness al interoperar con plataformas Intel.</p>
-
-                <div class="callout callout-info" style="margin-top:1rem;">
-                    <span class="callout-icon">💡</span>
-                    <div>
-                        <code>BufferedReader/Writer</code> son <em>wrappers</em> sobre <code>FileReader/Writer</code> que reducen accesos a disco y añaden <code>readLine()</code> / <code>newLine()</code>. Para archivos binarios siempre usar <code>FileInputStream/OutputStream</code> o <code>RandomAccessFile</code>.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ══ 6. ERRORES COMUNES ══ -->
-        <div class="acc-item" data-index="5">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">6</div>
-                <span class="acc-title">Errores comunes y cómo evitarlos</span>
-                <span class="acc-badge">NUEVO</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-            <div class="acc-body">
-                <table class="styled-table">
-                    <thead><tr><th>Error</th><th>Causa</th><th>Solución</th></tr></thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="error-badge">No cerrar el fichero</span></td>
-                            <td>Buffer de escritura no se vacía; pérdida de datos</td>
-                            <td>Usar siempre <code>close()</code> o <em>try-with-resources</em></td>
-                        </tr>
-                        <tr>
-                            <td><span class="error-badge">Sin Serializable</span></td>
-                            <td><code>NotSerializableException</code> al intentar guardar</td>
-                            <td>Implementar <code>Serializable</code> en la clase y en todas sus clases miembro</td>
-                        </tr>
-                        <tr>
-                            <td><span class="error-badge">Sin serialVersionUID</span></td>
-                            <td><code>InvalidClassException</code> al cambiar la clase</td>
-                            <td>Declarar siempre <code>private static final long serialVersionUID = ...L;</code></td>
-                        </tr>
-                        <tr>
-                            <td><span class="error-badge">Orden de lectura distinto</span></td>
-                            <td>Datos incorrectos o excepción</td>
-                            <td>Mantener el mismo orden de lectura y escritura; documentarlo</td>
-                        </tr>
-                        <tr>
-                            <td><span class="error-badge">Ignorar Endianness</span></td>
-                            <td>Número leído incorrecto en ficheros externos</td>
-                            <td>Usar <code>Integer.reverseBytes()</code> al leer enteros de ficheros no Java</td>
-                        </tr>
-                        <tr>
-                            <td><span class="error-badge">ClassNotFoundException</span></td>
-                            <td>No capturada al usar <code>readObject()</code></td>
-                            <td>Capturar tanto <code>IOException</code> como <code>ClassNotFoundException</code></td>
-                        </tr>
-                        <tr>
-                            <td><span class="error-badge">available() en red</span></td>
-                            <td>Puede devolver 0 aunque queden datos</td>
-                            <td>En redes usar <code>read() != -1</code> en vez de <code>available()</code></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="section-h">Patrón recomendado — try-with-resources</div>
-                <p>Desde Java 7 el fichero se cierra automáticamente aunque haya excepción:</p>
-                <div class="code-wrap">
-                    <div class="code-lang">Java</div>
-                    <pre><span class="kw">try</span> (<span class="ty">FileInputStream</span> entrada = <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"datos.bin"</span>)) {
-    <span class="kw">int</span> dato;
-    <span class="kw">while</span> ((dato = entrada.<span class="mt">read</span>()) != -<span class="nu">1</span>) {
-        <span class="ty">System</span>.out.<span class="mt">print</span>(<span class="ty">Integer</span>.<span class="mt">toHexString</span>(dato) + <span class="str">" "</span>);
-    }
-} <span class="kw">catch</span> (<span class="ty">IOException</span> e) {
-    <span class="ty">System</span>.err.println(<span class="str">"Error: "</span> + e.<span class="mt">getMessage</span>());
-}
-<span class="cm">// entrada.close() se llama automáticamente</span></pre>
-                </div>
-            </div>
-        </div>
-
-        <!-- ══ 7. EJERCICIOS ══ -->
-        <div class="acc-item" data-index="6">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">7</div>
-                <span class="acc-title">Ejercicios prácticos resueltos</span>
-                <span class="acc-badge">NUEVO</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-            <div class="acc-body">
-
-                <div class="ex-box">
-                    <div class="ex-header">
-                        <div class="ex-num">1</div>
-                        <span class="ex-title">Contar bytes de un fichero</span>
-                    </div>
-                    <p class="ex-desc">Escribe un programa que abra un fichero binario cualquiera e imprima cuántos bytes tiene.</p>
-                    <button class="btn-sol" onclick="toggleSol('sol1')">Ver / ocultar solución</button>
-                    <div id="sol1" class="solution">
-                        <div class="code-wrap">
-                            <div class="code-lang">Java</div>
-                            <pre><span class="kw">import</span> java.io.*;
-
-<span class="kw">public class</span> <span class="ty">ContarBytes</span> {
-    <span class="kw">public static void</span> <span class="mt">main</span>(<span class="ty">String</span>[] args) {
-        <span class="kw">try</span> (<span class="ty">FileInputStream</span> entrada = <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"fichero.bin"</span>)) {
-            <span class="kw">int</span> contador = <span class="nu">0</span>;
-            <span class="kw">while</span> (entrada.<span class="mt">read</span>() != -<span class="nu">1</span>) contador++;
-            <span class="ty">System</span>.out.println(<span class="str">"El fichero tiene "</span> + contador + <span class="str">" bytes."</span>);
-        } <span class="kw">catch</span> (<span class="ty">IOException</span> e) {
-            <span class="ty">System</span>.err.println(<span class="str">"Error: "</span> + e.<span class="mt">getMessage</span>());
-        }
-    }
-}</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ex-box">
-                    <div class="ex-header">
-                        <div class="ex-num">2</div>
-                        <span class="ex-title">Guardar y recuperar una lista de productos</span>
-                    </div>
-                    <p class="ex-desc">Crea la clase <code>Producto</code> (id: int, nombre: String, precio: double) serializable. Guarda una lista con 3 productos en <code>productos.dat</code> y vuelve a cargarla imprimiendo cada producto.</p>
-                    <button class="btn-sol" onclick="toggleSol('sol2')">Ver / ocultar solución</button>
-                    <div id="sol2" class="solution">
-                        <div class="code-wrap">
-                            <div class="code-lang">Java</div>
-                            <pre><span class="kw">import</span> java.io.*;
-<span class="kw">import</span> java.util.*;
-
-<span class="kw">class</span> <span class="ty">Producto</span> <span class="kw">implements</span> <span class="ty">Serializable</span> {
-    <span class="kw">private static final long</span> serialVersionUID = <span class="nu">1L</span>;
-    <span class="kw">private int</span> id;
-    <span class="kw">private</span> <span class="ty">String</span> nombre;
-    <span class="kw">private double</span> precio;
-
-    <span class="kw">public</span> <span class="ty">Producto</span>() {}
-    <span class="kw">public</span> <span class="ty">Producto</span>(<span class="kw">int</span> id, <span class="ty">String</span> nombre, <span class="kw">double</span> precio) {
-        <span class="kw">this</span>.id = id; <span class="kw">this</span>.nombre = nombre; <span class="kw">this</span>.precio = precio;
-    }
-    <span class="kw">public</span> <span class="ty">String</span> <span class="mt">toString</span>() {
-        <span class="kw">return</span> id + <span class="str">" | "</span> + nombre + <span class="str">" | "</span> + precio + <span class="str">" EUR"</span>;
-    }
-}
-
-<span class="kw">public class</span> <span class="ty">GestionProductos</span> {
-
-    <span class="kw">public static void</span> <span class="mt">guardar</span>(<span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt; lista) <span class="kw">throws</span> <span class="ty">Exception</span> {
-        <span class="kw">try</span> (<span class="ty">ObjectOutputStream</span> out = <span class="kw">new</span> <span class="ty">ObjectOutputStream</span>(
-                <span class="kw">new</span> <span class="ty">FileOutputStream</span>(<span class="str">"productos.dat"</span>))) {
-            out.<span class="mt">writeObject</span>(lista);
-        }
-    }
-
-    <span class="kw">@SuppressWarnings</span>(<span class="str">"unchecked"</span>)
-    <span class="kw">public static</span> <span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt; <span class="mt">cargar</span>() <span class="kw">throws</span> <span class="ty">Exception</span> {
-        <span class="kw">try</span> (<span class="ty">ObjectInputStream</span> in = <span class="kw">new</span> <span class="ty">ObjectInputStream</span>(
-                <span class="kw">new</span> <span class="ty">FileInputStream</span>(<span class="str">"productos.dat"</span>))) {
-            <span class="kw">return</span> (<span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt;) in.<span class="mt">readObject</span>();
-        }
-    }
-
-    <span class="kw">public static void</span> <span class="mt">main</span>(<span class="ty">String</span>[] args) <span class="kw">throws</span> <span class="ty">Exception</span> {
-        <span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt; productos = <span class="kw">new</span> <span class="ty">ArrayList</span>&lt;&gt;();
-        productos.<span class="mt">add</span>(<span class="kw">new</span> <span class="ty">Producto</span>(<span class="nu">1</span>, <span class="str">"Teclado"</span>,  <span class="nu">45.99</span>));
-        productos.<span class="mt">add</span>(<span class="kw">new</span> <span class="ty">Producto</span>(<span class="nu">2</span>, <span class="str">"Ratón"</span>,    <span class="nu">19.50</span>));
-        productos.<span class="mt">add</span>(<span class="kw">new</span> <span class="ty">Producto</span>(<span class="nu">3</span>, <span class="str">"Monitor"</span>, <span class="nu">299.00</span>));
-
-        <span class="mt">guardar</span>(productos);
-        <span class="ty">System</span>.out.println(<span class="str">"Lista guardada."</span>);
-
-        <span class="ty">List</span>&lt;<span class="ty">Producto</span>&gt; recuperados = <span class="mt">cargar</span>();
-        recuperados.<span class="mt">forEach</span>(<span class="ty">System</span>.out::<span class="mt">println</span>);
-    }
-}</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ex-box">
-                    <div class="ex-header">
-                        <div class="ex-num">3</div>
-                        <span class="ex-title">Base de datos simple con RandomAccessFile</span>
-                    </div>
-                    <p class="ex-desc">Crea un fichero que almacene 5 registros con la estructura <code>id (int, 4B) + puntuación (double, 8B)</code>. Después lee el registro número 2 directamente sin leer los anteriores.</p>
-                    <button class="btn-sol" onclick="toggleSol('sol3')">Ver / ocultar solución</button>
-                    <div id="sol3" class="solution">
-                        <div class="code-wrap">
-                            <div class="code-lang">Java</div>
-                            <pre><span class="kw">import</span> java.io.*;
-
-<span class="kw">public class</span> <span class="ty">BaseDatosSimple</span> {
-    <span class="kw">static final int</span> TAM_REGISTRO = <span class="nu">4</span> + <span class="nu">8</span>; <span class="cm">// int + double = 12 bytes</span>
-
-    <span class="kw">public static void</span> <span class="mt">main</span>(<span class="ty">String</span>[] args) <span class="kw">throws</span> <span class="ty">IOException</span> {
-        <span class="cm">// ESCRITURA</span>
-        <span class="kw">try</span> (<span class="ty">RandomAccessFile</span> raf = <span class="kw">new</span> <span class="ty">RandomAccessFile</span>(<span class="str">"scores.dat"</span>, <span class="str">"rw"</span>)) {
-            <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">5</span>; i++) {
-                raf.<span class="mt">writeInt</span>(i + <span class="nu">1</span>);
-                raf.<span class="mt">writeDouble</span>(<span class="nu">100.0</span> - i * <span class="nu">7.5</span>);
-            }
-        }
-        <span class="cm">// LECTURA DIRECTA del registro 2 (índice 2)</span>
-        <span class="kw">try</span> (<span class="ty">RandomAccessFile</span> raf = <span class="kw">new</span> <span class="ty">RandomAccessFile</span>(<span class="str">"scores.dat"</span>, <span class="str">"r"</span>)) {
-            <span class="kw">int</span> numRegistro = <span class="nu">2</span>;
-            raf.<span class="mt">seek</span>((<span class="kw">long</span>) numRegistro * TAM_REGISTRO);
-            <span class="kw">int</span>    id    = raf.<span class="mt">readInt</span>();
-            <span class="kw">double</span> score = raf.<span class="mt">readDouble</span>();
-            <span class="ty">System</span>.out.println(<span class="str">"Registro 2: id="</span> + id + <span class="str">", puntuación="</span> + score);
-        }
-    }
-}</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ex-box">
-                    <div class="ex-header">
-                        <div class="ex-num">4</div>
-                        <span class="ex-title">Verificar cabecera de un fichero BMP</span>
-                    </div>
-                    <p class="ex-desc">Abre un fichero e imprime "Es un BMP válido" si sus dos primeros bytes son 'B' (66) y 'M' (77). Si no, indica que el formato es incorrecto.</p>
-                    <button class="btn-sol" onclick="toggleSol('sol4')">Ver / ocultar solución</button>
-                    <div id="sol4" class="solution">
-                        <div class="code-wrap">
-                            <div class="code-lang">Java</div>
-                            <pre><span class="kw">import</span> java.io.*;
-
-<span class="kw">public class</span> <span class="ty">VerificarBMP</span> {
-    <span class="kw">public static void</span> <span class="mt">main</span>(<span class="ty">String</span>[] args) <span class="kw">throws</span> <span class="ty">IOException</span> {
-        <span class="kw">try</span> (<span class="ty">RandomAccessFile</span> raf = <span class="kw">new</span> <span class="ty">RandomAccessFile</span>(<span class="str">"imagen.bmp"</span>, <span class="str">"r"</span>)) {
-            <span class="kw">int</span> b1 = raf.<span class="mt">read</span>(); <span class="cm">// 'B' = 66</span>
-            <span class="kw">int</span> b2 = raf.<span class="mt">read</span>(); <span class="cm">// 'M' = 77</span>
-            <span class="kw">if</span> (b1 == <span class="str">'B'</span> &amp;&amp; b2 == <span class="str">'M'</span>) {
-                <span class="ty">System</span>.out.println(<span class="str">"Es un BMP válido. Tamaño: "</span>
-                    + raf.<span class="mt">length</span>() + <span class="str">" bytes."</span>);
-            } <span class="kw">else</span> {
-                <span class="ty">System</span>.out.println(<span class="str">"Formato incorrecto. Cabecera: "</span>
-                    + (<span class="kw">char</span>) b1 + (<span class="kw">char</span>) b2);
-            }
-        }
-    }
-}</pre>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- ══ 8. RESUMEN ══ -->
-        <div class="acc-item" data-index="7">
-            <div class="acc-header" onclick="toggle(this)">
-                <div class="acc-num">8</div>
-                <span class="acc-title">Resumen rápido</span>
-                <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
-            <div class="acc-body">
-                <ul class="summary-list">
-                    <li>Ficheros binarios = secuencia de bytes sin interpretación de texto</li>
-                    <li><code>FileInputStream / FileOutputStream</code> → acceso secuencial byte a byte</li>
-                    <li><code>ObjectInputStream / ObjectOutputStream</code> → serialización de objetos Java</li>
-                    <li><code>RandomAccessFile</code> → acceso directo con <code>seek()</code></li>
-                    <li><strong>Endianness:</strong> Java = Big Endian · Intel = Little Endian → usar <code>Integer.reverseBytes()</code> al leer ficheros externos</li>
-                    <li>Usar <strong>try-with-resources</strong> para cerrar ficheros automáticamente</li>
-                    <li>Declarar siempre <code>serialVersionUID</code> en clases serializables</li>
-                </ul>
-            </div>
-        </div>
-
-    </div><!-- /accordion -->
-</div><!-- /page-wrap -->
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-function toggle(header) {
-    const item = header.closest('.acc-item');
-    item.classList.toggle('open');
-}
-
-function toggleSol(id) {
-    const el = document.getElementById(id);
-    el.style.display = (el.style.display === 'block') ? 'none' : 'block';
-}
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
