@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Programación (Java) – Boletín 12: Colecciones</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.55;
+      margin: 0;
+      padding: 24px;
+      background: #f7f9fc;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+      color: #283593;
+    }
+
+    p.meta {
+      margin: 0;
+      color: #333;
+    }
+
+    details {
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #fff;
+    }
+
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1.05em;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary::before {
+      content: "▶ ";
+      color: #283593;
+    }
+
+    details[open] summary::before {
+      content: "▼ ";
+    }
+
+    pre {
+      background: #f6f8fa;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e2e6ee;
+      overflow: auto;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.8em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #d0d7de;
+      background: #f6f8fa;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+<main class="wrap">
+
+  <header>
+    <h1>Boletín de Ejercicios – Colecciones en Java</h1>
+    <p class="meta">
+      Objetivo: dominar <strong>List</strong>, <strong>Set</strong>, <strong>Map</strong> e <strong>Iterator</strong>,
+      entendiendo su uso real en problemas de programación.
+    </p>
+  </header>
+
+  <!-- ACTIVIDAD 1 -->
+  <details>
+    <summary>Actividad 1 📋 List básica de números <span class="tag">List</span></summary>
+    <p>Crea una lista de números enteros:</p>
+    <ul>
+      <li>Añade 10 números introducidos por teclado</li>
+      <li>Muestra todos los valores</li>
+      <li>Calcula suma y media</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Usa <code>ArrayList&lt;Integer&gt;</code> y un bucle <code>for</code>.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 2 -->
+  <details>
+    <summary>Actividad 2 🔁 Eliminar duplicados <span class="tag">Set</span></summary>
+    <p>Dada una lista con números repetidos:</p>
+    <ul>
+      <li>Introduce valores manualmente</li>
+      <li>Elimina duplicados usando un <code>Set</code></li>
+      <li>Muestra resultado final</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Convierte <code>List → HashSet</code> y luego vuelve a <code>ArrayList</code>.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 3 -->
+  <details>
+    <summary>Actividad 3 👥 Lista de alumnos <span class="tag">List + objetos</span></summary>
+    <p>Crea clase <code>Alumno</code> (nombre, nota).</p>
+    <ul>
+      <li>Guarda alumnos en una lista</li>
+      <li>Muestra aprobados</li>
+      <li>Calcula media general</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Recorre con <code>for (Alumno a : lista)</code>.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 4 -->
+  <details>
+    <summary>Actividad 4 🗂️ Diccionario simple <span class="tag">Map</span></summary>
+    <p>Crea un traductor básico español-inglés:</p>
+    <ul>
+      <li>Usa <code>HashMap</code></li>
+      <li>Inserta 10 palabras</li>
+      <li>Permite buscar traducción</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p><code>map.get(clave)</code> devuelve el valor o null si no existe.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 5 -->
+  <details>
+    <summary>Actividad 5 🔎 Contar frecuencias <span class="tag">Map avanzado</span></summary>
+    <p>Dada una frase:</p>
+    <ul>
+      <li>Cuenta cuántas veces aparece cada palabra</li>
+      <li>Guarda resultado en un Map</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Si la palabra existe: incrementa valor. Si no: valor = 1.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 6 -->
+  <details>
+    <summary>Actividad 6 🚶 Recorrido con Iterator <span class="tag">Iterator</span></summary>
+    <p>Crea una lista de números:</p>
+    <ul>
+      <li>Elimina los pares mientras recorres la lista</li>
+      <li>Usa Iterator correctamente</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>No uses <code>for</code>, usa <code>Iterator.remove()</code>.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 7 -->
+  <details>
+    <summary>Actividad 7 🧑‍🏫 Lista de alumnos ordenada <span class="tag">Collections.sort</span></summary>
+    <p>Ordena alumnos por nota:</p>
+    <ul>
+      <li>Crea lista de objetos</li>
+      <li>Ordena por nota ascendente</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Usa <code>Comparator.comparing(Alumno::getNota)</code>.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 8 -->
+  <details>
+    <summary>Actividad 8 🛒 Carrito de compra <span class="tag">List + lógica</span></summary>
+    <p>Simula un carrito:</p>
+    <ul>
+      <li>Productos con nombre y precio</li>
+      <li>Lista de productos</li>
+      <li>Total de compra</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Recorre la lista sumando precios.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 9 -->
+  <details>
+    <summary>Actividad 9 🧾 Map de inventario <span class="tag">Map</span></summary>
+    <p>Simula inventario de tienda:</p>
+    <ul>
+      <li>Producto → Stock</li>
+      <li>Añadir productos</li>
+      <li>Actualizar stock</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p><code>map.put(producto, stock)</code> actualiza o inserta.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 10 -->
+  <details>
+    <summary>Actividad 10 🔄 Fusión de listas <span class="tag">List</span></summary>
+    <p>Tienes dos listas de números:</p>
+    <ul>
+      <li>Une ambas listas</li>
+      <li>Elimina duplicados</li>
+      <li>Ordena resultado</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Usa <code>addAll()</code> + <code>TreeSet</code>.</p>
+    </details>
+  </details>
+
+  <!-- ACTIVIDAD 11 -->
+  <details>
+    <summary>Actividad 11 🧠 Búsqueda en Map <span class="tag">Map + Iterator</span></summary>
+    <p>Busca claves que contengan una subcadena:</p>
+    <ul>
+      <li>Ej: “pe” → Pedro, Pepe</li>
+    </ul>
+
+    <details>
+      <summary>Pista 🔍</summary>
+      <p>Itera con <code>entrySet()</code>.</p>
+    </details>
+  </details>
+<details>
+  <summary>Actividad 12 🧪 Entrega obligatoria: Agenda avanzada <span class="tag">Herencia + List + Set + Interfaces + Ficheros</span></summary>
+
+  <p><strong>📌 Tipo:</strong> Práctica evaluable</p>
+  <p><strong>📌 Objetivo:</strong> Aplicar herencia, clases abstractas, colecciones, interfaces, ordenación y persistencia.</p>
+
+  <h4>🧩 Modelo orientado a objetos</h4>
+  <img src="img/image.png">
+  <p>Se debe diseñar una jerarquía de clases:</p>
+
+  <ul>
+    <li><strong>Clase abstracta:</strong> <code>Contacto</code>
+      <ul>
+        <li>atributos comunes: <code>nombre</code>, <code>telefono</code></li>
+        <li>método abstracto: <code>String getTipo()</code></li>
+      </ul>
+    </li>
+
+    <li><strong>Clases hijas:</strong>
+      <ul>
+        <li><code>ContactoPersonal</code> (añade atributo: <code>apodo</code>)</li>
+        <li><code>ContactoProfesional</code> (añade atributo: <code>empresa</code>)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>🔌 Interfaces (OBLIGATORIO)</h4>
+  <ul>
+    <li><code>Imprimible</code> → <code>String imprimir()</code></li>
+  </ul>
+
+  <p>Todas las clases de contacto deben implementar esta interfaz.</p>
+
+  <h4>📚 Colecciones (OBLIGATORIO)</h4>
+  <ul>
+    <li><code>List&lt;Contacto&gt;</code> → colección principal</li>
+    <li><code>Set&lt;Contacto&gt;</code> → control de duplicados</li>
+  </ul>
+
+  <p>Se almacenarán objetos de ambos tipos (<code>ContactoPersonal</code> y <code>ContactoProfesional</code>).</p>
+
+  <h4>🎯 Funcionalidades</h4>
+  <ul>
+    <li>➕ Añadir contacto (indicando tipo)</li>
+    <li>🔎 Buscar contacto por nombre</li>
+    <li>🗑️ Eliminar contacto (usar <code>Iterator</code>)</li>
+    <li>📋 Mostrar todos los contactos (usando polimorfismo)</li>
+  </ul>
+
+  <h4>📊 Ordenación (OBLIGATORIO)</h4>
+  <ul>
+    <li><strong>Comparable</strong> → ordenar por nombre</li>
+    <li><strong>Comparator</strong> → ordenar por teléfono o tipo de contacto</li>
+  </ul>
+
+  <h4>💾 Persistencia (OBLIGATORIO)</h4>
+  <ul>
+    <li>Guardar y cargar contactos desde fichero</li>
+    <li>Elegir entre:
+      <ul>
+        <li>Texto</li>
+        <li>Binario (Serializable)</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h4>📦 Entrega</h4>
+  <ul>
+    <li>Proyecto Java completo</li>
+    <li>Uso correcto de herencia y polimorfismo</li>
+    <li>README explicando decisiones de diseño</li>
+  </ul>
+
+</details>
+<!-- ACTIVIDAD 13 -->
+<details>
+  <summary>Actividad 13 🧠 Top N elementos <span class="tag">List + ordenación</span></summary>
+  <p>Dada una lista de números enteros:</p>
+  <ul>
+    <li>Ordena la lista de mayor a menor</li>
+    <li>Muestra los 5 valores más altos</li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>Usa <code>Collections.sort(lista, Collections.reverseOrder())</code>.</p>
+  </details>
+</details>
+
+<!-- ACTIVIDAD 14 -->
+<details>
+  <summary>Actividad 14 🔁 Eliminación segura con Iterator <span class="tag">Iterator avanzado</span></summary>
+  <p>Dada una lista de palabras:</p>
+  <ul>
+    <li>Elimina todas las palabras que tengan menos de 4 caracteres</li>
+    <li>Hazlo usando <code>Iterator</code></li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>Usa <code>iterator.remove()</code> dentro de un <code>while</code>.</p>
+  </details>
+</details>
+
+<!-- ACTIVIDAD 15 -->
+<details>
+  <summary>Actividad 15 🗂️ Map de notas por asignatura <span class="tag">Map anidado</span></summary>
+  <p>Crea un sistema de notas:</p>
+  <ul>
+    <li>Asignatura → (Alumno → Nota)</li>
+    <li>Usa <code>Map&lt;String, Map&lt;String, Double&gt;&gt;</code></li>
+    <li>Muestra todas las notas por asignatura</li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>Recorre con <code>entrySet()</code> doblemente anidado.</p>
+  </details>
+</details>
+
+<!-- ACTIVIDAD 16 -->
+<details>
+  <summary>Actividad 16 📊 Ranking de alumnos <span class="tag">List + Comparator</span></summary>
+  <p>Crea una lista de alumnos:</p>
+  <ul>
+    <li>Nombre y nota final</li>
+    <li>Ordena de mayor a menor nota</li>
+    <li>Muestra ranking tipo clasificación</li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>Usa <code>Comparator.comparing(Alumno::getNota).reversed()</code>.</p>
+  </details>
+</details>
+
+<!-- ACTIVIDAD 17 -->
+<details>
+  <summary>Actividad 17 🛒 Inventario inteligente <span class="tag">Map + lógica</span></summary>
+  <p>Simula un inventario:</p>
+  <ul>
+    <li>Producto → stock</li>
+    <li>Si stock llega a 0, eliminar producto</li>
+    <li>Mostrar solo productos disponibles</li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>Usa <code>iterator</code> sobre <code>entrySet()</code>.</p>
+  </details>
+</details>
+
+<!-- ACTIVIDAD 18 -->
+<details>
+  <summary>Actividad 18 🔍 Búsqueda múltiple <span class="tag">Map avanzado</span></summary>
+  <p>Dado un Map de contactos:</p>
+  <ul>
+    <li>Busca todos los nombres que contengan una letra o subcadena</li>
+    <li>Devuelve lista de coincidencias</li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>Recorre <code>entrySet()</code> y usa <code>contains()</code>.</p>
+  </details>
+</details>
+
+<!-- ACTIVIDAD 19 -->
+<details>
+  <summary>Actividad 19 🔄 Eliminación por condición <span class="tag">List + Iterator</span></summary>
+  <p>Dada una lista de productos:</p>
+  <ul>
+    <li>Elimina los productos cuyo precio sea menor a 10€</li>
+    <li>Hazlo de forma segura</li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>No uses for-each. Usa <code>Iterator.remove()</code>.</p>
+  </details>
+</details>
+
+<!-- ACTIVIDAD 20 -->
+<details>
+  <summary>Actividad 20 🚀 Proyecto final: Gestor completo de colecciones <span class="tag">todo integrado</span></summary>
+  <p>Implementa un sistema que combine todo lo aprendido:</p>
+
+  <ul>
+    <li>Lista de alumnos (List)</li>
+    <li>Notas por alumno (Map)</li>
+    <li>Eliminación de duplicados (Set)</li>
+    <li>Recorridos con Iterator</li>
+  </ul>
+
+  <p>Debe permitir:</p>
+  <ul>
+    <li>Agregar alumnos</li>
+    <li>Asignar notas</li>
+    <li>Mostrar ranking</li>
+    <li>Eliminar alumnos con media baja</li>
+  </ul>
+
+  <details>
+    <summary>Pista 🔍</summary>
+    <p>Divide el problema en estructuras: <code>List + Map + Set</code> y coordínalas desde un menú.</p>
+  </details>
+</details>
+</main>
+
+</body>
+</html>
