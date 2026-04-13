@@ -162,21 +162,69 @@
       <p><code>map.get(clave)</code> devuelve el valor o null si no existe.</p>
     </details>
   </details>
+<!-- ACTIVIDAD 5 -->
+<details>
+  <summary>Actividad 5 🔎 Contar frecuencias <span class="tag">Map avanzado</span></summary>
 
-  <!-- ACTIVIDAD 5 -->
+  <p>Dada una frase o un fichero de texto:</p>
+  <ul>
+    <li>Cuenta cuántas veces aparece cada palabra</li>
+    <li>Guarda el resultado en un <code>Map&lt;String, Integer&gt;</code></li>
+    <li>Muestra las palabras ordenadas por número de apariciones</li>
+  </ul>
+
   <details>
-    <summary>Actividad 5 🔎 Contar frecuencias <span class="tag">Map avanzado</span></summary>
-    <p>Dada una frase:</p>
+    <summary>Pista 🔍</summary>
     <ul>
-      <li>Cuenta cuántas veces aparece cada palabra</li>
-      <li>Guarda resultado en un Map</li>
+      <li>Usa un <code>Map</code> para almacenar palabra → frecuencia</li>
+      <li>Si la palabra ya existe: incrementa su valor</li>
+      <li>Si no existe: añádela con valor 1</li>
+      <li>Puedes usar <code>map.containsKey()</code> o <code>map.getOrDefault()</code></li>
     </ul>
-
-    <details>
-      <summary>Pista 🔍</summary>
-      <p>Si la palabra existe: incrementa valor. Si no: valor = 1.</p>
-    </details>
   </details>
+
+  <details>
+    <summary>Pista 📄 Lectura de fichero</summary>
+    <ul>
+      <li>Usa <code>BufferedReader</code> para leer el fichero línea a línea</li>
+      <li>Ejemplo:
+<pre><code>BufferedReader br = new BufferedReader(new FileReader("texto.txt"));
+String linea;
+
+while((linea = br.readLine()) != null){
+    // procesar línea
+}
+br.close();</code></pre>
+      </li>
+      <li>Divide cada línea en palabras con:
+<pre><code>String[] palabras = linea.split("\\s+");</code></pre>
+      </li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Pista 📊 Ordenar por frecuencia</summary>
+    <ul>
+      <li>Convierte el <code>Map</code> en una lista:
+<pre><code>List&lt;Map.Entry&lt;String,Integer&gt;&gt; lista = new ArrayList&lt;&gt;(map.entrySet());</code></pre>
+      </li>
+      <li>Ordena con <code>Comparator</code>:
+<pre><code>lista.sort((a, b) -> b.getValue() - a.getValue());</code></pre>
+      </li>
+      <li>Recorre la lista ordenada para mostrar resultados</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Pista PRO 🧠</summary>
+    <ul>
+      <li>Convierte todo a minúsculas (<code>toLowerCase()</code>)</li>
+      <li>Elimina signos de puntuación (<code>replaceAll()</code>)</li>
+      <li>Muestra el top 5 de palabras más repetidas</li>
+    </ul>
+  </details>
+
+</details>
 
   <!-- ACTIVIDAD 6 -->
   <details>
