@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java Streams Pro | Agregación, JSON, XML y Data Ops</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --java-red: #e76f00;
+      --java-blue: #5384a4;
+      --code-bg: #0f172a;
+    }
+    body {
+      background: linear-gradient(145deg, #f1f4f9 0%, #e2e8f0 100%);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', monospace;
+    }
+    .hero-glow {
+      background: rgba(255,255,240,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+      transition: all 0.2s;
+    }
+    .badge-agg {
+      background-color: #2c3e66;
+      letter-spacing: 0.3px;
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: #fff2e5;
+      color: var(--java-red);
+      border-left: 5px solid var(--java-red);
+      font-weight: 600;
+    }
+    pre {
+      background: var(--code-bg);
+      color: #f1f5f9;
+      padding: 1.2rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.4), 0 6px 12px rgba(0,0,0,0.05);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .terminal-sim {
+      background: #0a0e1c;
+      border-radius: 1rem;
+      padding: 0.8rem 1.2rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #b9fbc0;
+      margin-top: 1rem;
+      border-left: 5px solid var(--java-red);
+    }
+    .copy-btn {
+      background: #1e293b;
+      border: none;
+      color: #cbd5e1;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      transition: 0.15s;
+    }
+    .copy-btn:hover {
+      background: var(--java-red);
+      color: white;
+    }
+    .data-badge {
+      font-size: 0.7rem;
+      background: #e9ecef;
+      color: #0f172a;
+      border-radius: 30px;
+      padding: 0.2rem 0.7rem;
+    }
+    .card-hover {
+      transition: transform 0.1s ease, box-shadow 0.2s;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 28px -8px rgba(0,0,0,0.2);
+    }
+    @media (max-width: 760px) {
+      pre { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-lg-5">
+  <!-- Cabecera mejorada -->
+  <div class="hero-glow p-4 mb-5 text-center">
+    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+      <i class="bi bi-cpu fs-1" style="color: #e76f00;"></i>
+      <h1 class="display-5 fw-bold" style="color: #1f2a44;">☕ Java Streams <span class="badge bg-warning text-dark px-3">Aggregation · Data Ops</span></h1>
+    </div>
+    <p class="lead mt-2">Filtrado avanzado · Reducción · Recolección · <strong>JSON / XML</strong> con streams</p>
+    <div class="d-flex flex-wrap justify-content-center gap-3 mt-3">
+      <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/package-summary.html" target="_blank" class="btn btn-dark rounded-pill px-4"><i class="bi bi-journal-bookmark-fill"></i> Docs oficial</a>
+      <button class="btn btn-outline-danger rounded-pill px-4" id="scrollToAdvanced"><i class="bi bi-filetype-json"></i> Explorar JSON/XML</button>
+    </div>
+  </div>
+
+  <!-- ACCORDION PRINCIPAL con operaciones agregadas y manipulación + JSON/XML -->
+  <div class="accordion" id="streamsProAccordion">
+
+    <!-- 1. FILTRADO AVANZADO + REDUCCIÓN MÚLTIPLE -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#aggFilterReduce">
+          <i class="bi bi-funnel-fill me-2"></i> 🧹 Filtrado + Reducción múltiple (reduce, count, sum)
+        </button>
+      </h2>
+      <div id="aggFilterReduce" class="accordion-collapse collapse show" data-bs-parent="#streamsProAccordion">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap">
+            <span class="badge-agg badge text-white mb-2">operaciones agregadas · filter + reduce + sum</span>
+            <button class="copy-btn" data-code="aggCode1">📋 Copiar código</button>
+          </div>
+<pre id="aggCode1"><code>import java.util.*;
+import java.util.stream.*;
+
+class Transaccion {
+    String categoria;
+    double monto;
+    Transaccion(String c, double m) { categoria = c; monto = m; }
+    public String getCategoria() { return categoria; }
+    public double getMonto() { return monto; }
+}
+
+List&lt;Transaccion&gt; transacciones = Arrays.asList(
+    new Transaccion("comida", 45.50),
+    new Transaccion("transporte", 12.30),
+    new Transaccion("comida", 32.00),
+    new Transaccion("ocio", 100.00),
+    new Transaccion("comida", 18.75)
+);
+
+// 1. Filtrar transacciones de comida con monto > 20 y sumar montos
+double sumaComidaFiltrada = transacciones.stream()
+    .filter(t -> t.getCategoria().equals("comida"))
+    .filter(t -> t.getMonto() > 20)
+    .mapToDouble(Transaccion::getMonto)
+    .sum();
+
+// 2. Reducción personalizada: obtener categorías únicas mediante reduce (Set)
+Set&lt;String&gt; categoriasUnicas = transacciones.stream()
+    .map(Transaccion::getCategoria)
+    .reduce(new HashSet&lt;&gt;(), (set, cat) -> { set.add(cat); return set; }, (a,b) -> { a.addAll(b); return a; });
+
+System.out.println("Suma comidas >20€: " + sumaComidaFiltrada);
+System.out.println("Categorías únicas: " + categoriasUnicas);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Suma comidas >20€: 77.5<br>
+            Categorías únicas: [comida, transporte, ocio]
+          </div>
+          <div class="alert alert-secondary mt-2 py-1 small">⚡ <strong>Agregación:</strong> filter + mapToDouble + sum / reduce con acumulador mutable.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. RECOLECCIÓN AVANZADA: groupingBy, partitioningBy, summarizingDouble -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#aggCollectors">
+          <i class="bi bi-database-fill-gear me-2"></i> 📦 Recolección: groupingBy, partitioningBy, estadísticas
+        </button>
+      </h2>
+      <div id="aggCollectors" class="accordion-collapse collapse" data-bs-parent="#streamsProAccordion">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge-agg badge text-white">Collectors.toMap · groupingBy · summarizing</span>
+            <button class="copy-btn" data-code="collectCode">📋 Copiar</button>
+          </div>
+<pre id="collectCode"><code>record Empleado(String nombre, String depto, double salario) {}
+
+List&lt;Empleado&gt; empleados = List.of(
+    new Empleado("Ana", "IT", 45000),
+    new Empleado("Luis", "IT", 52000),
+    new Empleado("Marta", "RRHH", 38000),
+    new Empleado("Carlos", "RRHH", 41000),
+    new Empleado("Eva", "IT", 49000)
+);
+
+// GroupingBy + promedio por departamento
+Map&lt;String, Double&gt; salarioPromedioPorDepto = empleados.stream()
+    .collect(Collectors.groupingBy(Empleado::depto,
+             Collectors.averagingDouble(Empleado::salario)));
+
+// PartitioningBy: separar salarios altos (>45000)
+Map&lt;Boolean, List&lt;Empleado&gt;&gt; particionSalario = empleados.stream()
+    .collect(Collectors.partitioningBy(e -> e.salario() > 45000));
+
+// SummarizingDouble: estadísticas completas
+DoubleSummaryStatistics stats = empleados.stream()
+    .mapToDouble(Empleado::salario)
+    .summaryStatistics();
+
+System.out.println("Promedio por depto: " + salarioPromedioPorDepto);
+System.out.println("Salario >45k: " + particionSalario.get(true).stream().map(Empleado::nombre).toList());
+System.out.println("Estadísticas salariales: max=" + stats.getMax() + ", avg=" + stats.getAverage());</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Promedio por depto: {IT=48666.66, RRHH=39500.0}<br>
+            Salario >45k: [Luis, Eva, Ana? (depende)]<br>
+            Estadísticas salariales: max=52000.0, avg=45000.0
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MANIPULACIÓN DE DATOS CON STREAMS: flatMap, map multi nivel, peek, sorted complejo -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#dataManipulation">
+          <i class="bi bi-sliders2 me-2"></i> 🔄 Manipulación datos: flatMap, sorted compuesto, peek
+        </button>
+      </h2>
+      <div id="dataManipulation" class="accordion-collapse collapse" data-bs-parent="#streamsProAccordion">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge-agg badge text-white">flatMap · sorted(Comparator) · peek debug</span>
+            <button class="copy-btn" data-code="manipData">📋 Copiar</button>
+          </div>
+<pre id="manipData"><code>// Estructura anidada: cada equipo tiene lista de integrantes
+record Equipo(String nombreEquipo, List&lt;String&gt; miembros) {}
+
+List&lt;Equipo&gt; equipos = List.of(
+    new Equipo("Alpha", List.of("Juan", "Maria", "Pedro")),
+    new Equipo("Beta", List.of("Lucia", "Andres")),
+    new Equipo("Gamma", List.of("Sofia", "Mateo", "Valentina"))
+);
+
+// FlatMap para obtener todos los miembros + orden alfabético inverso + filtrar longitud >4
+List&lt;String&gt; miembrosFiltradosOrdenados = equipos.stream()
+    .flatMap(equipo -> equipo.miembros().stream())
+    .filter(m -> m.length() > 4)
+    .sorted((a,b) -> b.compareTo(a))   // descendente
+    .peek(System.out::println)          // operación intermedia para depurar
+    .toList();
+
+// También transformación: nombre -> mayúscula + contar caracteres
+List&lt;String&gt; reporte = equipos.stream()
+    .flatMap(e -> e.miembros().stream())
+    .map(m -> m.toUpperCase() + " (" + m.length() + ")")
+    .toList();
+
+System.out.println("Miembros filtrados (longitud>4) descendente: " + miembrosFiltradosOrdenados);
+System.out.println("Reporte transformado: " + reporte);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Valentina<br>Sofia<br>Maria<br>Miembros filtrados: [Valentina, Sofia, Maria]<br>
+            Reporte: [JUAN (4), MARIA (5), PEDRO (5), LUCIA (5), ANDRES (6), SOFIA (5), MATEO (5), VALENTINA (9)]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. JSON con Java Streams (simulación usando map y objetos) + manipulación -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#jsonStreams">
+          <i class="bi bi-filetype-json me-2"></i> 📄 JSON & Streams: parseo y transformación
+        </button>
+      </h2>
+      <div id="jsonStreams" class="accordion-collapse collapse" data-bs-parent="#streamsProAccordion">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge-agg badge text-white">Simulación JSON · Jackson-like con Streams</span>
+            <button class="copy-btn" data-code="jsonExample">📋 Copiar JSON + streams</button>
+          </div>
+<pre id="jsonExample"><code>// Simulación de datos provenientes de JSON (Lista de Mapas)
+List&lt;Map&lt;String, Object&gt;&gt; jsonData = List.of(
+    Map.of("id", 1, "nombre", "Laptop", "precio", 1200.0, "tags", List.of("electronica", "oferta")),
+    Map.of("id", 2, "nombre", "Mouse", "precio", 25.5, "tags", List.of("accesorio", "basico")),
+    Map.of("id", 3, "nombre", "Monitor", "precio", 350.0, "tags", List.of("electronica", "gaming"))
+);
+
+// Operaciones: filtrar productos con precio > 100 y extraer nombre + precio, ordenar por precio desc
+List&lt;String&gt; reporteProductos = jsonData.stream()
+    .filter(item -> ((Number) item.get("precio")).doubleValue() > 100)
+    .sorted((a,b) -> Double.compare(
+        ((Number) b.get("precio")).doubleValue(),
+        ((Number) a.get("precio")).doubleValue()))
+    .map(item -> item.get("nombre") + " - $" + item.get("precio"))
+    .toList();
+
+// Uso de flatMap para extraer todos los tags únicos
+Set&lt;String&gt; tagsUnicos = jsonData.stream()
+    .flatMap(item -> ((List&lt;String&gt;) item.get("tags")).stream())
+    .collect(Collectors.toSet());
+
+System.out.println("Productos caros ordenados: " + reporteProductos);
+System.out.println("Tags únicos desde JSON: " + tagsUnicos);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-filetype-json me-1"></i> <strong>▶️ Salida JSON-like procesada:</strong><br>
+            Productos caros ordenados: [Laptop - $1200.0, Monitor - $350.0]<br>
+            Tags únicos: [electronica, oferta, accesorio, basico, gaming]
+          </div>
+          <div class="small text-secondary mt-2"><i class="bi bi-info-circle-fill"></i> Simula procesamiento de flujos JSON usando Java Streams sin librerías externas, ideal para ETL ligero.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. XML con Java Streams: procesamiento de nodos (simulación con estructura jerárquica) -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#xmlStreams">
+          <i class="bi bi-filetype-xml me-2"></i> 🧬 XML & Streams: filtrado y extracción de nodos
+        </button>
+      </h2>
+      <div id="xmlStreams" class="accordion-collapse collapse" data-bs-parent="#streamsProAccordion">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge-agg badge text-white">modelado de documento XML → Stream processing</span>
+            <button class="copy-btn" data-code="xmlCode">📋 Copiar procesamiento XML</button>
+          </div>
+<pre id="xmlCode"><code>// Representación de un documento XML simple con objetos anidados
+record Libro(String titulo, String autor, int anyo, double precio) {}
+record Libreria(String nombre, List&lt;Libro&gt; libros) {}
+
+Libreria libreria = new Libreria("Biblioteca Central", List.of(
+    new Libro("Effective Java", "Joshua Bloch", 2018, 45.0),
+    new Libro("Java Concurrency", "Brian Goetz", 2015, 55.0),
+    new Libro("Modern Java", "Raoul-Gabriel Urma", 2021, 39.99),
+    new Libro("Clean Code", "Robert C. Martin", 2008, 48.50)
+));
+
+// Usando streams para extraer información como si se procesara XML (xpath-like)
+List&lt;String&gt; librosRecientes = libreria.libros().stream()
+    .filter(libro -> libro.anyo() >= 2018)
+    .sorted((a,b) -> Integer.compare(b.anyo(), a.anyo()))
+    .map(libro -> "📖 " + libro.titulo() + " (" + libro.anyo() + ") - $" + libro.precio())
+    .toList();
+
+// Reducción: precio total de libros con descuento simulado (recolección)
+double sumaPrecios = libreria.libros().stream()
+    .mapToDouble(Libro::precio)
+    .sum();
+
+// Agrupar por rango de año (clásica agregación)
+Map&lt;String, List&lt;Libro&gt;&gt; librosPorDecada = libreria.libros().stream()
+    .collect(Collectors.groupingBy(l -> (l.anyo() / 10) * 10 + "s"));
+
+System.out.println("📌 XML procesado (Libros recientes): " + librosRecientes);
+System.out.println("💰 Precio total colección: $" + sumaPrecios);
+System.out.println("📚 Clasificación por década: " + librosPorDecada.keySet());</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida XML/Streams:</strong><br>
+            Libros recientes: [📖 Modern Java (2021) - $39.99, 📖 Effective Java (2018) - $45.0]<br>
+            Precio total colección: $188.49<br>
+            Clasificación por década: [2010s, 2000s, 2020s]
+          </div>
+          <div class="alert alert-light border small mt-2">💡 <strong>Analogía:</strong> Los streams sobre colecciones emulan procesamiento declarativo de documentos XML (XPath + transformaciones).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. BONUS: agregación compleja con custom collector (recolección + estadísticas) -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#customCollector">
+          <i class="bi bi-graph-up me-2"></i> 📈 Colector personalizado: media y varianza
+        </button>
+      </h2>
+      <div id="customCollector" class="accordion-collapse collapse" data-bs-parent="#streamsProAccordion">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge-agg badge text-white">Collector.of · estadísticas avanzadas</span>
+            <button class="copy-btn" data-code="customCol">📋 Copiar collector</button>
+          </div>
+<pre id="customCol"><code>// Collector personalizado para calcular media y desviación (simplificado)
+record Estadisticas(double media, double varianza) {}
+
+List&lt;Double&gt; muestras = List.of(10.0, 20.0, 30.0, 40.0, 50.0);
+
+Estadisticas statsPersonalizadas = muestras.stream()
+    .collect(Collector.of(
+        () -> new double[]{0, 0, 0}, // [sum, sumSq, count]
+        (acc, val) -> { acc[0] += val; acc[1] += val*val; acc[2]++; },
+        (a, b) -> { a[0] += b[0]; a[1] += b[1]; a[2] += b[2]; return a; },
+        acc -> {
+            double media = acc[0] / acc[2];
+            double varianza = (acc[1] / acc[2]) - (media * media);
+            return new Estadisticas(media, varianza);
+        }
+    ));
+
+System.out.printf("Media = %.2f , Varianza = %.4f%n", statsPersonalizadas.media(), statsPersonalizadas.varianza());</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-calculator-fill"></i> Media = 30.00 , Varianza = 200.0000
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjetas de resumen: operaciones agregadas + JSON/XML tips -->
+  <div class="row mt-5 g-4">
+    <div class="col-md-4">
+      <div class="card card-hover h-100 border-0 shadow">
+        <div class="card-body">
+          <i class="bi bi-funnel fs-2 text-warning"></i>
+          <h5 class="card-title mt-2">Filtrado + Reducción</h5>
+          <p class="card-text small">filter + mapToDouble + sum, reduce con identidad, combinación de predicados y reducciones personalizadas.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-hover h-100 border-0 shadow">
+        <div class="card-body">
+          <i class="bi bi-filetype-json fs-2 text-primary"></i>
+          <h5 class="card-title mt-2">Intercambio de datos (JSON)</h5>
+          <p class="card-text small">Streams aplicados sobre estructuras tipo JSON (Mapas, listas) para transformar, filtrar y agregar datos semiestructurados.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-hover h-100 border-0 shadow">
+        <div class="card-body">
+          <i class="bi bi-filetype-xml fs-2 text-success"></i>
+          <h5 class="card-title mt-2">XML como objetos</h5>
+          <p class="card-text small">Modelado jerárquico + Streams para consultas análogas a XPath: filtrado, ordenamiento y recolección de nodos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center text-muted mt-5 pt-3 border-top">
+    <i class="bi bi-java"></i> Operaciones agregadas, reducción, groupingBy, JSON/XML con Java Streams · Ejemplos prácticos listos para copiar.
+  </footer>
+</div>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const codeId = this.getAttribute('data-code');
+      if (codeId) {
+        const preElem = document.getElementById(codeId);
+        if (preElem) {
+          const rawCode = preElem.innerText;
+          navigator.clipboard.writeText(rawCode).then(() => {
+            const original = this.innerHTML;
+            this.innerHTML = '✅ Copiado';
+            setTimeout(() => this.innerHTML = original, 1500);
+          }).catch(() => {
+            this.innerHTML = '❌ Error';
+            setTimeout(() => this.innerHTML = '📋 Copiar código', 1000);
+          });
+        }
+      }
+    });
+  });
+  document.getElementById('scrollToAdvanced')?.addEventListener('click', () => {
+    const jsonSection = document.getElementById('jsonStreams');
+    if (jsonSection) {
+      jsonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const btnHeader = document.querySelector('#jsonStreams .accordion-button');
+      if (btnHeader && btnHeader.classList.contains('collapsed')) btnHeader.click();
+    }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

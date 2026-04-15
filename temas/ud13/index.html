@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java Streams Lab | Práctica Interactiva</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --java-red: #e76f00;
+      --java-dark: #5384a4;
+    }
+    body {
+      background: linear-gradient(135deg, #f5f7fc 0%, #e9ecef 100%);
+      font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', monospace;
+    }
+    .java-header {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      transition: all 0.2s;
+    }
+    .badge-stream {
+      background-color: var(--java-red);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: #fff3e8;
+      color: var(--java-red);
+      border-left: 5px solid var(--java-red);
+    }
+    .accordion-button:focus {
+      box-shadow: none;
+      border-color: rgba(231,111,0,0.3);
+    }
+    .accordion-button i {
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+    }
+    .accordion-button:not(.collapsed) i {
+      transform: scale(1.05);
+      color: var(--java-red);
+    }
+    pre {
+      background: #1e1e2f;
+      color: #f8f8f2;
+      padding: 1.2rem;
+      border-radius: 1rem;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.05);
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    code {
+      color: #f8f8f2;
+    }
+    .terminal-sim {
+      background: #0f172a;
+      border-radius: 1rem;
+      padding: 0.8rem 1.2rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #a5f3c3;
+      margin-top: 1rem;
+      border-left: 6px solid var(--java-red);
+    }
+    .btn-outline-java {
+      border: 1px solid var(--java-red);
+      color: var(--java-red);
+      transition: all 0.2s;
+    }
+    .btn-outline-java:hover {
+      background: var(--java-red);
+      color: white;
+      border-color: var(--java-red);
+    }
+    .copy-btn {
+      background: #2d2d44;
+      border: none;
+      color: #ccc;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      transition: 0.1s;
+    }
+    .copy-btn:hover {
+      background: var(--java-red);
+      color: white;
+    }
+    .footer-note {
+      border-top: 1px dashed rgba(0,0,0,0.1);
+      font-size: 0.85rem;
+    }
+    @media (max-width: 768px) {
+      pre {
+        font-size: 0.75rem;
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-lg-5">
+  <!-- Header mejorado con efecto y badges -->
+  <div class="java-header mb-5 text-center">
+    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+      <i class="bi bi-cup-hot-fill" style="font-size: 2.5rem; color: #e76f00;"></i>
+      <h1 class="display-5 fw-bold mb-0" style="color: #2c3e4e;">☕ Java Streams <span class="badge-stream badge rounded-pill text-white px-3">functional · fluent</span></h1>
+    </div>
+    <p class="lead mt-3">Domina la programación funcional con Streams: filtros, mapeos, reducciones y más 🚀</p>
+    <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+      <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/package-summary.html" target="_blank" class="btn btn-dark rounded-pill px-4">
+        <i class="bi bi-book-half me-1"></i> Documentación oficial
+      </a>
+      <button class="btn btn-outline-java rounded-pill px-4" id="scrollTipBtn">
+        <i class="bi bi-lightbulb"></i> Tips rápidos
+      </button>
+    </div>
+  </div>
+
+  <!-- Acordeón con ejemplos mejorados + salidas simuladas interactivas -->
+  <div class="accordion" id="accordionStreamsAdvanced">
+
+    <!-- EJEMPLO 1: Filtrar pares + terminal style -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#ej1Advanced">
+          <i class="bi bi-filter-circle me-2"></i> 🔍 Filtrar números pares (filter)
+        </button>
+      </h2>
+      <div id="ej1Advanced" class="accordion-collapse collapse show" data-bs-parent="#accordionStreamsAdvanced">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap">
+            <span class="badge bg-secondary mb-2">operación intermedia · filter</span>
+            <button class="copy-btn btn-sm" data-code="filterCode">📋 Copiar código</button>
+          </div>
+<pre id="filterCode"><code>List&lt;Integer&gt; numeros = List.of(1, 2, 3, 4, 5, 6, 8, 11, 14);
+
+List&lt;Integer&gt; pares = numeros.stream()
+    .filter(n -> n % 2 == 0)
+    .toList();
+
+System.out.println("Números pares: " + pares);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Números pares: [2, 4, 6, 8, 14]
+          </div>
+          <div class="mt-3 small text-secondary">
+            <i class="bi bi-info-circle"></i> <code>filter()</code> evalúa un predicado (lambda) y mantiene los elementos que cumplen la condición.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO 2: map + toList mejorado con nombres -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#ej2Advanced">
+          <i class="bi bi-arrow-repeat me-2"></i> ✨ Transformar datos (map)
+        </button>
+      </h2>
+      <div id="ej2Advanced" class="accordion-collapse collapse" data-bs-parent="#accordionStreamsAdvanced">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-secondary mb-2">map · transformación 1:1</span>
+            <button class="copy-btn btn-sm" data-code="mapCode">📋 Copiar código</button>
+          </div>
+<pre id="mapCode"><code>List&lt;String&gt; nombres = List.of("ana", "juan", "pedro", "sofía");
+
+List&lt;String&gt; mayusculas = nombres.stream()
+    .map(String::toUpperCase)
+    .toList();
+
+// También capitalización elegante
+List&lt;String&gt; capitalizadas = nombres.stream()
+    .map(n -> n.substring(0,1).toUpperCase() + n.substring(1))
+    .toList();
+
+System.out.println("MAYÚSCULAS: " + mayusculas);
+System.out.println("Capitalizadas: " + capitalizadas);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            MAYÚSCULAS: [ANA, JUAN, PEDRO, SOFÍA]<br>
+            Capitalizadas: [Ana, Juan, Pedro, Sofía]
+          </div>
+          <div class="mt-2 small text-secondary">
+            <i class="bi bi-graph-up"></i> <code>map()</code> aplica una función a cada elemento, ideal para extraer campos o modificar.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO 3: reduce - suma, producto, máximo -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#ej3Advanced">
+          <i class="bi bi-calculator-fill me-2"></i> 🧮 Reducción: sumar, multiplicar (reduce)
+        </button>
+      </h2>
+      <div id="ej3Advanced" class="accordion-collapse collapse" data-bs-parent="#accordionStreamsAdvanced">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-secondary mb-2">reduce · operación terminal</span>
+            <button class="copy-btn btn-sm" data-code="reduceCode">📋 Copiar código</button>
+          </div>
+<pre id="reduceCode"><code>List&lt;Integer&gt; valores = List.of(2, 4, 6, 8);
+
+int suma = valores.stream()
+    .reduce(0, Integer::sum);
+
+int producto = valores.stream()
+    .reduce(1, (a, b) -> a * b);
+
+// Máximo sin usar max()
+int maximo = valores.stream()
+    .reduce(Integer::max)
+    .orElseThrow();
+
+System.out.println("Suma: " + suma);
+System.out.println("Producto: " + producto);
+System.out.println("Máximo: " + maximo);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Suma: 20<br>
+            Producto: 384<br>
+            Máximo: 8
+          </div>
+          <div class="mt-2 small text-secondary">
+            <i class="bi bi-calculator"></i> <code>reduce()</code> combina los elementos en un único resultado acumulativo.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO 4: sorted + limit + skip (operaciones intermedias) -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#ej4Advanced">
+          <i class="bi bi-sort-numeric-down-alt me-2"></i> 📊 Ordenar, limitar y saltar elementos
+        </button>
+      </h2>
+      <div id="ej4Advanced" class="accordion-collapse collapse" data-bs-parent="#accordionStreamsAdvanced">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-secondary mb-2">sorted · limit · skip</span>
+            <button class="copy-btn btn-sm" data-code="sortCode">📋 Copiar código</button>
+          </div>
+<pre id="sortCode"><code>List&lt;Integer&gt; numeros = List.of(42, 3, 17, 9, 88, 23, 5);
+
+List&lt;Integer&gt; top3Ascendente = numeros.stream()
+    .sorted()
+    .limit(3)
+    .toList();
+
+// Saltar los 2 más pequeños y tomar siguientes 2
+List&lt;Integer&gt; saltarDos = numeros.stream()
+    .sorted()
+    .skip(2)
+    .limit(2)
+    .toList();
+
+System.out.println("Top 3 menores: " + top3Ascendente);
+System.out.println("Después de saltar 2: " + saltarDos);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Top 3 menores: [3, 5, 9]<br>
+            Después de saltar 2: [9, 17]
+          </div>
+          <div class="alert alert-light border mt-2 py-1 small">
+            ⚡ <strong>Composición fluida:</strong> sorted() → limit() → toList()
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO 5: Trabajar con objetos -> filter + map avanzado -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#ej5Advanced">
+          <i class="bi bi-person-badge me-2"></i> 🧑‍💻 Streams con objetos y múltiples condiciones
+        </button>
+      </h2>
+      <div id="ej5Advanced" class="accordion-collapse collapse" data-bs-parent="#accordionStreamsAdvanced">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-secondary mb-2">POJO · filtros compuestos</span>
+            <button class="copy-btn btn-sm" data-code="objectCode">📋 Copiar código</button>
+          </div>
+<pre id="objectCode"><code>record Persona(String nombre, int edad, String ciudad) {}
+
+List&lt;Persona&gt; personas = List.of(
+    new Persona("Ana", 20, "Madrid"),
+    new Persona("Luis", 30, "Barcelona"),
+    new Persona("Carla", 25, "Madrid"),
+    new Persona("Pedro", 35, "Valencia"),
+    new Persona("Elena", 22, "Madrid")
+);
+
+// Personas mayores de 22 años que viven en Madrid
+List&lt;String&gt; madrileñosMayores = personas.stream()
+    .filter(p -> p.edad() > 22)
+    .filter(p -> p.ciudad().equals("Madrid"))
+    .map(Persona::nombre)
+    .toList();
+
+// Estadísticas: edad promedio usando mapToInt
+double edadPromedio = personas.stream()
+    .mapToInt(Persona::edad)
+    .average()
+    .orElse(0.0);
+
+System.out.println("Madrileños mayores de 22: " + madrileñosMayores);
+System.out.printf("Edad promedio del grupo: %.1f años%n", edadPromedio);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Madrileños mayores de 22: [Carla]<br>
+            Edad promedio del grupo: 26.4 años
+          </div>
+          <div class="mt-2 small text-secondary">
+            🔥 <strong>Tip extra:</strong> Usa <code>mapToInt()</code> + <code>average()</code> para estadísticas eficientes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUEVO EJEMPLO 6: groupingBy + colecciones avanzadas (muy útil) -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#ej6Advanced">
+          <i class="bi bi-diagram-3 me-2"></i> 📊 Agrupación (Collectors.groupingBy)
+        </button>
+      </h2>
+      <div id="ej6Advanced" class="accordion-collapse collapse" data-bs-parent="#accordionStreamsAdvanced">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-secondary mb-2">Collectors · groupingBy</span>
+            <button class="copy-btn btn-sm" data-code="groupCode">📋 Copiar código</button>
+          </div>
+<pre id="groupCode"><code>import java.util.stream.Collectors;
+
+record Producto(String nombre, String categoria, double precio) {}
+
+List&lt;Producto&gt; productos = List.of(
+    new Producto("Laptop", "Electrónica", 850.0),
+    new Producto("Mouse", "Electrónica", 25.5),
+    new Producto("Silla", "Oficina", 120.0),
+    new Producto("Mesa", "Oficina", 210.0),
+    new Producto("Cuaderno", "Papelería", 5.99)
+);
+
+// Agrupar productos por categoría
+Map&lt;String, List&lt;Producto&gt;&gt; porCategoria = productos.stream()
+    .collect(Collectors.groupingBy(Producto::categoria));
+
+// Contar productos por categoría
+Map&lt;String, Long&gt; conteo = productos.stream()
+    .collect(Collectors.groupingBy(Producto::categoria, Collectors.counting()));
+
+System.out.println("Productos por categoría: " + porCategoria.keySet());
+System.out.println("Conteo: " + conteo);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Productos por categoría: [Electrónica, Oficina, Papelería]<br>
+            Conteo: {Electrónica=2, Oficina=2, Papelería=1}
+          </div>
+          <div class="mt-2 small text-secondary">
+            📌 <code>groupingBy</code> es ideal para reportes y análisis de datos.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO 7: flatMap y Optional (bonus profesional) -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#ej7Advanced">
+          <i class="bi bi-grid-3x3-gap-fill me-2"></i> 🧩 Aplanar listas anidadas (flatMap)
+        </button>
+      </h2>
+      <div id="ej7Advanced" class="accordion-collapse collapse" data-bs-parent="#accordionStreamsAdvanced">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-secondary mb-2">flatMap · colecciones anidadas</span>
+            <button class="copy-btn btn-sm" data-code="flatMapCode">📋 Copiar código</button>
+          </div>
+<pre id="flatMapCode"><code>List&lt;List&lt;Integer&gt;&gt; listaDeListas = List.of(
+    List.of(1, 2, 3),
+    List.of(4, 5),
+    List.of(6, 7, 8, 9)
+);
+
+List&lt;Integer&gt; listaPlana = listaDeListas.stream()
+    .flatMap(List::stream)
+    .toList();
+
+// Sumar solo pares después de aplanar
+int sumaPares = listaDeListas.stream()
+    .flatMap(List::stream)
+    .filter(n -> n % 2 == 0)
+    .mapToInt(Integer::intValue)
+    .sum();
+
+System.out.println("Lista plana: " + listaPlana);
+System.out.println("Suma de pares después flatMap: " + sumaPares);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada:</strong><br>
+            Lista plana: [1, 2, 3, 4, 5, 6, 7, 8, 9]<br>
+            Suma de pares después flatMap: 20
+          </div>
+          <div class="alert alert-warning py-2 mt-2 small">
+            🚀 <strong>flatMap</strong> → "aplanamiento" de estructuras multidimensionales.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de tips rápidos / atajos mentales -->
+  <div class="row mt-5 g-4">
+    <div class="col-md-6">
+      <div class="card border-0 shadow h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-lightning-charge-fill text-warning"></i> Cheat Sheet visual</h5>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent"><code>filter(Predicate)</code> → selecciona elementos</li>
+            <li class="list-group-item bg-transparent"><code>map(Function)</code> → transforma cada elemento</li>
+            <li class="list-group-item bg-transparent"><code>flatMap()</code> → aplana + transforma</li>
+            <li class="list-group-item bg-transparent"><code>sorted() / limit() / skip()</code> → orden y paginación</li>
+            <li class="list-group-item bg-transparent"><code>collect(Collectors.toList()) / toList()</code> → recolectar</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow h-100 bg-dark text-white" style="background: linear-gradient(145deg, #1e293b, #0f172a);">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-stars"></i> Pro tip del día</h5>
+          <p class="card-text">Los Streams son <strong>lazy</strong>: las operaciones intermedias no se ejecutan hasta que se invoca una operación terminal (forEach, collect, reduce, etc.). ¡Aprovéchalo para cadenas eficientes!</p>
+          <hr class="border-secondary">
+          <code class="text-info">peek()</code> para depurar sin romper el flujo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-note text-center mt-5 pt-4 text-muted">
+    <i class="bi bi-java me-1"></i> Java Streams API · Ejemplos prácticos para dominar el paradigma funcional · <i class="bi bi-github"></i> Mejora continua
+  </footer>
+</div>
+
+<script>
+  // Funcionalidad para copiar código desde cualquier bloque <pre> con id referenciado
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const codeId = this.getAttribute('data-code');
+      if (codeId) {
+        const preElement = document.getElementById(codeId);
+        if (preElement) {
+          const codeText = preElement.innerText || preElement.textContent;
+          navigator.clipboard.writeText(codeText).then(() => {
+            // feedback visual breve
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ Copiado!';
+            setTimeout(() => {
+              btn.innerHTML = originalText;
+            }, 1500);
+          }).catch(err => {
+            console.warn('Error al copiar: ', err);
+            btn.innerHTML = '❌ Error';
+            setTimeout(() => {
+              btn.innerHTML = originalText;
+            }, 1000);
+          });
+        }
+      }
+    });
+  });
+
+  // Botón tips rápidos: scroll a la sección de cheat sheet
+  const tipBtn = document.getElementById('scrollTipBtn');
+  if (tipBtn) {
+    tipBtn.addEventListener('click', () => {
+      const cheatSheet = document.querySelector('.card.border-0.shadow.h-100');
+      if (cheatSheet) {
+        cheatSheet.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        cheatSheet.style.transition = '0.2s';
+        cheatSheet.style.boxShadow = '0 0 0 3px #e76f00';
+        setTimeout(() => {
+          cheatSheet.style.boxShadow = '';
+        }, 1200);
+      }
+    });
+  }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>      <i class="bi bi-ship fs-1"></i>

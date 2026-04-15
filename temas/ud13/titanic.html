@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java Streams Lab | Titanic Edition 🚢</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --java-red: #e76f00;
+      --titanic-blue: #1a3a5c;
+      --ocean: #0f4c5f;
+    }
+    body {
+      background: linear-gradient(135deg, #f0f4f8 0%, #dce3ec 100%);
+      font-family: 'Segoe UI', system-ui, 'Roboto', monospace;
+    }
+    .java-header {
+      background: linear-gradient(135deg, rgba(26,58,92,0.9), rgba(15,76,95,0.85));
+      backdrop-filter: blur(8px);
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+      padding: 1.8rem;
+      color: white;
+    }
+    .badge-stream {
+      background-color: var(--java-red);
+      font-weight: 500;
+    }
+    .accordion-button:not(.collapsed) {
+      background-color: #fff3e8;
+      color: var(--java-red);
+      border-left: 5px solid var(--java-red);
+    }
+    .accordion-button:focus {
+      box-shadow: none;
+    }
+    pre {
+      background: #0a0e1f;
+      color: #f1f5f9;
+      padding: 1.2rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .terminal-sim {
+      background: #0f172a;
+      border-radius: 1rem;
+      padding: 0.8rem 1.2rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #a5f3c3;
+      margin-top: 1rem;
+      border-left: 5px solid var(--java-red);
+    }
+    .copy-btn {
+      background: #2d2d44;
+      border: none;
+      color: #ccc;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      transition: 0.15s;
+    }
+    .copy-btn:hover {
+      background: var(--java-red);
+      color: white;
+    }
+    .exercise-card {
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      border-left: 4px solid var(--java-red);
+    }
+    .exercise-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+    .solution-badge {
+      font-size: 0.7rem;
+      background: #e9ecef;
+      border-radius: 30px;
+    }
+    .btn-challenge {
+      background: var(--titanic-blue);
+      color: white;
+      border-radius: 40px;
+    }
+    .btn-challenge:hover {
+      background: #0a3a5a;
+      color: white;
+    }
+    @media (max-width: 768px) {
+      pre { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-4 py-lg-5">
+  <!-- Header Titanic Edition -->
+  <div class="java-header mb-5 text-center">
+    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+      <i class="bi bi-ship fs-1"></i>
+      <h1 class="display-5 fw-bold mb-0">🚢 Java Streams <span class="badge-stream badge rounded-pill text-white px-3">Titanic · Data Analysis</span></h1>
+    </div>
+    <p class="lead mt-3">Domina Streams filtrando, agrupando y analizando datos reales de pasajeros del Titanic 🧑‍✈️</p>
+    <div class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+      <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/package-summary.html" target="_blank" class="btn btn-light rounded-pill px-4">
+        <i class="bi bi-book-half me-1"></i> Documentación oficial
+      </a>
+      <button class="btn btn-outline-light rounded-pill px-4" id="scrollToExercises">
+        <i class="bi bi-trophy-fill"></i> Ver ejercicios divertidos
+      </button>
+    </div>
+  </div>
+
+  <!-- CLASE PASAJERO (Titanic) - Mostrar estructura -->
+  <div class="alert alert-secondary border-0 shadow-sm rounded-4 mb-4">
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+      <i class="bi bi-code-slash fs-3 text-dark"></i>
+      <div><strong>📄 Clase Pasajero (Titanic dataset)</strong><br>
+      <span class="small">Atributos: passengerId, survived, pclass, name, sex, age, sibSp, parch, ticket, fare, cabin, embarked</span>
+      </div>
+      <button class="copy-btn ms-auto" data-code="pasajeroClass">📋 Copiar clase completa</button>
+    </div>
+    <pre id="pasajeroClass" class="mt-3 mb-0" style="display: none;">package com.titanic.modelo;
+import com.titanic.interfaz.Identificable;
+
+public class Pasajero implements Identificable {
+    private int passengerId;
+    private int survived;
+    private int pclass;
+    private String name;
+    private String sex;
+    private Double age;
+    private int sibSp;
+    private int parch;
+    private String ticket;
+    private double fare;
+    private String cabin;
+    private String embarked;
+
+    public Pasajero(int passengerId, int survived, int pclass, String name, String sex,
+                    Double age, int sibSp, int parch, String ticket,
+                    double fare, String cabin, String embarked) {
+        this.passengerId = passengerId;
+        this.survived = survived;
+        this.pclass = pclass;
+        this.name = name;
+        this.sex = sex;
+        this.age = age;
+        this.sibSp = sibSp;
+        this.parch = parch;
+        this.ticket = ticket;
+        this.fare = fare;
+        this.cabin = cabin;
+        this.embarked = embarked;
+    }
+    @Override public String getId() { return String.valueOf(passengerId); }
+    public int getPassengerId() { return passengerId; }
+    public int getSurvived() { return survived; }
+    public int getPclass() { return pclass; }
+    public String getName() { return name; }
+    public String getSex() { return sex; }
+    public Double getAge() { return age; }
+    public int getSibSp() { return sibSp; }
+    public int getParch() { return parch; }
+    public String getTicket() { return ticket; }
+    public double getFare() { return fare; }
+    public String getCabin() { return cabin; }
+    public String getEmbarked() { return embarked; }
+    public boolean sobrevivio() { return survived == 1; }
+    public boolean esMujer() { return "female".equalsIgnoreCase(sex); }
+    public boolean esHombre() { return "male".equalsIgnoreCase(sex); }
+    @Override
+    public String toString() {
+        return "Pasajero{id=" + passengerId + ", name='" + name + "', survived=" + survived + "}";
+    }
+}</pre>
+  </div>
+
+  <!-- ACORDEÓN PRINCIPAL + EJEMPLOS DEL TITANIC -->
+  <div class="accordion" id="accordionTitanic">
+
+    <!-- EJEMPLO 1: Filtrar mujeres que sobrevivieron -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#titanicEj1">
+          <i class="bi bi-gender-female me-2"></i> 👩 Filtrar mujeres supervivientes
+        </button>
+      </h2>
+      <div id="titanicEj1" class="accordion-collapse collapse show" data-bs-parent="#accordionTitanic">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between">
+            <span class="badge bg-secondary mb-2">filter + map</span>
+            <button class="copy-btn" data-code="titanicCode1">📋 Copiar</button>
+          </div>
+<pre id="titanicCode1"><code>List&lt;Pasajero&gt; pasajeros = cargarPasajeros(); // lista de ejemplo
+
+// Mujeres que sobrevivieron (survived == 1)
+List&lt;String&gt; mujeresSupervivientes = pasajeros.stream()
+    .filter(Pasajero::esMujer)
+    .filter(Pasajero::sobrevivio)
+    .map(Pasajero::getName)
+    .toList();
+
+System.out.println("Mujeres que sobrevivieron: " + mujeresSupervivientes);</code></pre>
+          <div class="terminal-sim">
+            <i class="bi bi-terminal-fill me-2"></i> <strong>▶️ Salida esperada (primeros 3):</strong><br>
+            Mujeres que sobrevivieron: [Braund, Mrs. John Bradley (Florence Briggs Thayer), Cumings, Mrs. John Bradley (Florence Briggs Thayer), Heikkinen, Miss. Laina]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO 2: Edad promedio por clase (pclass) -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#titanicEj2">
+          <i class="bi bi-calendar-range me-2"></i> 📊 Edad promedio por clase (groupingBy)
+        </button>
+      </h2>
+      <div id="titanicEj2" class="accordion-collapse collapse" data-bs-parent="#accordionTitanic">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between">
+            <span class="badge bg-secondary mb-2">Collectors.groupingBy + averagingDouble</span>
+            <button class="copy-btn" data-code="titanicCode2">📋 Copiar</button>
+          </div>
+<pre id="titanicCode2"><code>Map&lt;Integer, Double&gt; edadPromedioPorClase = pasajeros.stream()
+    .filter(p -> p.getAge() != null)   // evitar nulls
+    .collect(Collectors.groupingBy(
+        Pasajero::getPclass,
+        Collectors.averagingDouble(Pasajero::getAge)
+    ));
+
+System.out.println("Edad promedio por clase: " + edadPromedioPorClase);
+// Resultado esperado: 1ª clase ~38, 2ª clase ~30, 3ª clase ~25</code></pre>
+          <div class="terminal-sim">📊 Edad promedio por clase: {1=38.23, 2=29.87, 3=25.14}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO 3: Pasajeros con más de 3 hermanos/cónyuges (sibSp) y ordenados -->
+    <div class="accordion-item mb-3 border-0 shadow-sm rounded-4 overflow-hidden">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#titanicEj3">
+          <i class="bi bi-people-fill me-2"></i> 👨‍👩‍👧 Familias grandes (sibSp > 2)
+        </button>
+      </h2>
+      <div id="titanicEj3" class="accordion-collapse collapse" data-bs-parent="#accordionTitanic">
+        <div class="accordion-body bg-white">
+          <div class="d-flex justify-content-between">
+            <span class="badge bg-secondary mb-2">filter + sorted</span>
+            <button class="copy-btn" data-code="titanicCode3">📋 Copiar</button>
+          </div>
+<pre id="titanicCode3"><code>List&lt;Pasajero&gt; familiasNumerosas = pasajeros.stream()
+    .filter(p -> p.getSibSp() > 2)
+    .sorted(Comparator.comparingInt(Pasajero::getSibSp).reversed())
+    .toList();
+
+familiasNumerosas.forEach(p -> 
+    System.out.println(p.getName() + " - hermanos/esposos: " + p.getSibSp()));</code></pre>
+          <div class="terminal-sim">👨‍👩‍👧‍👦 Goodman, Mr. John (hermanos: 4), ...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== EJERCICIOS DIVERTIDOS PARA APRENDER STREAMS ========== -->
+  <div class="mt-5 pt-3" id="ejerciciosDivertidos">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <i class="bi bi-emoji-sunglasses fs-1 text-warning"></i>
+      <h2 class="fw-bold">🎮 Ejercicios interactivos · Aprende Streams jugando</h2>
+    </div>
+    <p class="lead mb-4">💡 <strong>Retos Titanic:</strong> Resuelve cada desafío usando Streams. ¡Piensa como un Data Analyst!</p>
+    
+    <div class="row g-4">
+      <!-- Ejercicio 1 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card exercise-card h-100 border-0 shadow-sm" data-challenge="1">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <i class="bi bi-1-circle-fill fs-3 text-danger"></i>
+              <span class="solution-badge badge bg-light text-dark">⭐ Fácil</span>
+            </div>
+            <h5 class="card-title mt-2">🚺 ¿Cuántas mujeres viajaban en 1ª clase?</h5>
+            <p class="card-text small">Filtra pasajeros donde <code>pclass == 1</code> y <code>sex = "female"</code>. Cuenta el total.</p>
+            <button class="btn btn-sm btn-outline-secondary mt-2 see-solution" data-sol="sol1">🔍 Ver pista</button>
+            <div id="sol1" class="small text-muted mt-2 d-none"><code>pasajeros.stream().filter(p -> p.getPclass()==1 && p.esMujer()).count()</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 2 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card exercise-card h-100 border-0 shadow-sm" data-challenge="2">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <i class="bi bi-2-circle-fill fs-3 text-primary"></i>
+              <span class="solution-badge badge bg-light text-dark">⭐ Medio</span>
+            </div>
+            <h5 class="card-title mt-2">💰 Tarifa promedio de los hombres que sobrevivieron</h5>
+            <p class="card-text small">Filtra hombres <code>sobrevivio() == true</code> y calcula el promedio de <code>fare</code>.</p>
+            <button class="btn btn-sm btn-outline-secondary mt-2 see-solution" data-sol="sol2">🔍 Ver pista</button>
+            <div id="sol2" class="small text-muted mt-2 d-none"><code>pasajeros.stream().filter(Pasajero::esHombre).filter(Pasajero::sobrevivio).mapToDouble(Pasajero::getFare).average().orElse(0)</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 3 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card exercise-card h-100 border-0 shadow-sm" data-challenge="3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <i class="bi bi-3-circle-fill fs-3 text-success"></i>
+              <span class="solution-badge badge bg-light text-dark">⭐⭐ Intermedio</span>
+            </div>
+            <h5 class="card-title mt-2">📛 Nombres de pasajeros menores de 18 años (ordenados)</h5>
+            <p class="card-text small">Filtra edad < 18, ordena por edad ascendente, obtén lista de nombres.</p>
+            <button class="btn btn-sm btn-outline-secondary mt-2 see-solution" data-sol="sol3">🔍 Ver pista</button>
+            <div id="sol3" class="small text-muted mt-2 d-none"><code>pasajeros.stream().filter(p -> p.getAge() != null && p.getAge() < 18).sorted(Comparator.comparing(Pasajero::getAge)).map(Pasajero::getName).toList()</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 4 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card exercise-card h-100 border-0 shadow-sm" data-challenge="4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <i class="bi bi-4-circle-fill fs-3 text-info"></i>
+              <span class="solution-badge badge bg-light text-dark">⭐⭐ Avanzado</span>
+            </div>
+            <h5 class="card-title mt-2">🏆 Agrupar por puerto de embarque (embarked) y contar supervivientes</h5>
+            <p class="card-text small">Usa <code>groupingBy</code> con <code>filtering</code> o counting sobre supervivientes.</p>
+            <button class="btn btn-sm btn-outline-secondary mt-2 see-solution" data-sol="sol4">🔍 Ver pista</button>
+            <div id="sol4" class="small text-muted mt-2 d-none"><code>pasajeros.stream().collect(Collectors.groupingBy(Pasajero::getEmbarked, Collectors.filtering(Pasajero::sobrevivio, Collectors.counting())))</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 5 -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card exercise-card h-100 border-0 shadow-sm" data-challenge="5">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <i class="bi bi-5-circle-fill fs-3 text-warning"></i>
+              <span class="solution-badge badge bg-light text-dark">⭐ Creativo</span>
+            </div>
+            <h5 class="card-title mt-2">🎟️ ¿Alguna cabina repetida? (cabin no nulo)</h5>
+            <p class="card-text small">Usa <code>Collectors.groupingBy</code> y busca si alguna cabina aparece más de una vez.</p>
+            <button class="btn btn-sm btn-outline-secondary mt-2 see-solution" data-sol="sol5">🔍 Ver pista</button>
+            <div id="sol5" class="small text-muted mt-2 d-none"><code>pasajeros.stream().filter(p -> p.getCabin() != null && !p.getCabin().isBlank()).collect(Collectors.groupingBy(Pasajero::getCabin, Collectors.counting())).entrySet().stream().filter(e -> e.getValue() > 1).toList()</code></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ejercicio 6 bonus: mapa de tarifas vs supervivencia -->
+      <div class="col-md-6 col-lg-4">
+        <div class="card exercise-card h-100 border-0 shadow-sm" data-challenge="6">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <i class="bi bi-6-circle-fill fs-3 text-danger"></i>
+              <span class="solution-badge badge bg-light text-dark">🔥 Experto</span>
+            </div>
+            <h5 class="card-title mt-2">📈 Partición: sobrevivientes vs no sobrevivientes y su tarifa media</h5>
+            <p class="card-text small">Usa <code>partitioningBy</code> y calcula promedio de fare en cada grupo.</p>
+            <button class="btn btn-sm btn-outline-secondary mt-2 see-solution" data-sol="sol6">🔍 Ver pista</button>
+            <div id="sol6" class="small text-muted mt-2 d-none"><code>Map&lt;Boolean, Double&gt; promedioFare = pasajeros.stream().collect(Collectors.partitioningBy(Pasajero::sobrevivio, Collectors.averagingDouble(Pasajero::getFare)));</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dataset simulado + datos de ejemplo reales (Titanic) -->
+  <div class="card mt-5 border-0 shadow rounded-4 bg-dark text-white">
+    <div class="card-body">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-database-fill fs-3"></i>
+        <h5 class="mb-0">📋 Dataset de ejemplo (10 pasajeros Titanic)</h5>
+        <button class="copy-btn ms-auto" data-code="titanicDataset">📋 Copiar lista de prueba</button>
+      </div>
+<pre id="titanicDataset" class="mt-3"><code>// Método auxiliar para pruebas (simula carga de datos)
+List&lt;Pasajero&gt; cargarPasajerosEjemplo() {
+    return List.of(
+        new Pasajero(1, 0, 3, "Braund, Mr. Owen Harris", "male", 22.0, 1, 0, "A/5 21171", 7.25, "", "S"),
+        new Pasajero(2, 1, 1, "Cumings, Mrs. John Bradley", "female", 38.0, 1, 0, "PC 17599", 71.2833, "C85", "C"),
+        new Pasajero(3, 1, 3, "Heikkinen, Miss. Laina", "female", 26.0, 0, 0, "STON/O2. 3101282", 7.925, "", "S"),
+        new Pasajero(4, 1, 1, "Futrelle, Mrs. Jacques Heath", "female", 35.0, 1, 0, "113803", 53.1, "C123", "S"),
+        new Pasajero(5, 0, 3, "Allen, Mr. William Henry", "male", 35.0, 0, 0, "373450", 8.05, "", "S"),
+        new Pasajero(6, 0, 3, "Moran, Mr. James", "male", null, 0, 0, "330877", 8.4583, "", "Q"),
+        new Pasajero(7, 0, 1, "McCarthy, Mr. Timothy J", "male", 54.0, 0, 0, "17463", 51.8625, "E46", "S"),
+        new Pasajero(8, 0, 3, "Palsson, Master. Gosta Leonard", "male", 2.0, 3, 1, "349909", 21.075, "", "S"),
+        new Pasajero(9, 1, 3, "Johnson, Mrs. Oscar W", "female", 27.0, 0, 2, "347742", 11.1333, "", "S"),
+        new Pasajero(10, 1, 2, "Nasser, Mrs. Nicholas", "female", 28.0, 1, 0, "237736", 30.0708, "", "C")
+    );
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- Cheat Sheet -->
+  <div class="row mt-5 g-4">
+    <div class="col-md-6">
+      <div class="card border-0 shadow h-100">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-lightbulb-fill text-warning"></i> Cheat Sheet Streams</h5>
+          <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item"><code>.filter(p -> p.sobrevivio())</code> → filtro booleano</li>
+            <li class="list-group-item"><code>.map(Pasajero::getName)</code> → transformación</li>
+            <li class="list-group-item"><code>.mapToDouble(Pasajero::getFare).average()</code> → estadísticas</li>
+            <li class="list-group-item"><code>.sorted(Comparator.comparing(Pasajero::getAge))</code> → ordenar</li>
+            <li class="list-group-item"><code>.collect(Collectors.groupingBy(Pasajero::getSex, Collectors.counting()))</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card border-0 shadow bg-dark text-white" style="background: linear-gradient(145deg, #0f172a, #020617);">
+        <div class="card-body">
+          <h5 class="card-title"><i class="bi bi-stars"></i> Pro Tip Titanic</h5>
+          <p>El dataset contiene valores <code>null</code> en edad, cabina, etc. Usa <code>.filter(Objects::nonNull)</code> o chequea <code>getAge() != null</code> antes de operar.</p>
+          <hr class="border-secondary">
+          <code class="text-info">peek(System.out::println)</code> para depurar el flujo mientras programas.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center text-muted mt-5 pt-4 border-top">
+    <i class="bi bi-java"></i> Java Streams · Titanic Dataset · Aprende programación funcional con datos reales 🚢
+  </footer>
+</div>
+
+<script>
+  // Copiar funcionalidad
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const codeId = this.getAttribute('data-code');
+      if (codeId) {
+        const preElem = document.getElementById(codeId);
+        if (preElem) {
+          let raw = preElem.innerText;
+          navigator.clipboard.writeText(raw).then(() => {
+            const original = this.innerHTML;
+            this.innerHTML = '✅ Copiado';
+            setTimeout(() => this.innerHTML = original, 1400);
+          });
+        }
+      }
+    });
+  });
+
+  // Mostrar/ocultar pistas en ejercicios
+  document.querySelectorAll('.see-solution').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const solId = this.getAttribute('data-sol');
+      const solDiv = document.getElementById(solId);
+      if (solDiv) {
+        solDiv.classList.toggle('d-none');
+        this.textContent = solDiv.classList.contains('d-none') ? '🔍 Ver pista' : '🙈 Ocultar pista';
+      }
+    });
+  });
+
+  // Scroll a ejercicios
+  document.getElementById('scrollToExercises')?.addEventListener('click', () => {
+    document.getElementById('ejerciciosDivertidos').scrollIntoView({ behavior: 'smooth' });
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
