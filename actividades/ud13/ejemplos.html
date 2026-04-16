@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Java Streams · Boletín 13 | Programación funcional</title>
+  <!-- Bootstrap 5 + íconos + fuentes modernas -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --java-orange: #F89820;
+      --java-orange-dark: #e07c1a;
+      --java-blue: #1565c0;
+      --java-bg: #0A0C10;
+      --java-surface: #11151C;
+      --java-surface-light: #1A1F2A;
+      --java-border: #2A2F3A;
+      --java-text: #F0F3F8;
+      --java-muted: #9CA3AF;
+      --java-green: #2EA043;
+      --java-red: #F85149;
+      --java-purple: #BC8CFF;
+      --java-yellow: #E3B341;
+      --glow-orange: rgba(248,152,32,0.2);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--java-bg);
+      color: var(--java-text);
+      scroll-behavior: smooth;
+    }
+
+    /* Scrollbar elegante */
+    ::-webkit-scrollbar { width: 8px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--java-surface); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--java-border); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--java-orange); }
+
+    /* Hero mejorado */
+    .hero {
+      background: radial-gradient(ellipse 80% 60% at 30% 20%, #12181F, #07090E);
+      border-bottom: 1px solid var(--java-border);
+      padding: 3.5rem 0 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "⚡";
+      font-size: 260px;
+      opacity: 0.03;
+      position: absolute;
+      bottom: -40px;
+      right: -20px;
+      pointer-events: none;
+      font-family: monospace;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(248,152,32,0.12);
+      border: 1px solid rgba(248,152,32,0.3);
+      border-radius: 60px;
+      padding: 0.3rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: var(--java-orange);
+      margin-bottom: 1.2rem;
+      backdrop-filter: blur(2px);
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #FFFFFF 30%, var(--java-orange) 80%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.75rem;
+    }
+    .hero .lead {
+      color: var(--java-muted);
+      font-size: 1rem;
+      max-width: 640px;
+      border-left: 3px solid var(--java-orange);
+      padding-left: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    /* stats premium */
+    .stats-bar {
+      background: rgba(17, 21, 28, 0.8);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--java-border);
+      padding: 0.7rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: var(--java-surface);
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      border: 1px solid var(--java-border);
+    }
+    .stat-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--java-orange);
+      box-shadow: 0 0 6px var(--java-orange);
+    }
+
+    /* secciones */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--java-orange);
+      margin: 2rem 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .section-label i {
+      font-size: 1.1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--java-border), transparent);
+    }
+
+    /* Cards interactivas */
+    .activity-card {
+      background: var(--java-surface);
+      border: 1px solid var(--java-border);
+      border-radius: 20px;
+      transition: all 0.2s ease-in-out;
+      overflow: hidden;
+      box-shadow: 0 6px 12px -8px rgba(0,0,0,0.4);
+    }
+    .activity-card:hover {
+      border-color: rgba(248,152,32,0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -12px rgba(0,0,0,0.5);
+    }
+    .card-header-custom {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 1.3rem;
+      cursor: pointer;
+      user-select: none;
+      background: transparent;
+      transition: background 0.15s;
+    }
+    .card-header-custom:hover {
+      background: rgba(255,255,255,0.02);
+    }
+    .act-number {
+      min-width: 2.3rem;
+      height: 2.3rem;
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(248,152,32,0.15), rgba(0,0,0,0.2));
+      border: 1px solid rgba(248,152,32,0.3);
+      color: var(--java-orange);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .act-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .act-subtitle {
+      font-size: 0.75rem;
+      color: var(--java-muted);
+      letter-spacing: -0.2px;
+    }
+    .chevron {
+      margin-left: auto;
+      color: var(--java-muted);
+      transition: transform 0.25s;
+      font-size: 1.2rem;
+    }
+    .activity-card.open .chevron {
+      transform: rotate(180deg);
+      color: var(--java-orange);
+    }
+    .card-body-custom {
+      display: none;
+      border-top: 1px solid var(--java-border);
+      padding: 1.3rem 1.5rem;
+      background: rgba(0,0,0,0.2);
+    }
+    .activity-card.open .card-body-custom {
+      display: block;
+      animation: fadeSlide 0.25s ease-out;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* badges y etiquetas */
+    .tag-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      background: rgba(100,100,100,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .tag-orange { background: rgba(248,152,32,0.15); color: var(--java-orange); border-color: rgba(248,152,32,0.3); }
+    .tag-blue   { background: rgba(56,139,253,0.15); color: #79c0ff; }
+    .tag-green  { background: rgba(63,185,80,0.15); color: #3fb950; }
+    .tag-purple { background: rgba(163,113,247,0.15); color: var(--java-purple); }
+    .tag-yellow { background: rgba(227,179,65,0.15); color: var(--java-yellow); }
+    .tag-red    { background: rgba(248,81,73,0.15); color: var(--java-red); }
+
+    .difficulty-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.8rem;
+      border-radius: 24px;
+      background: var(--java-surface-light);
+      border: 1px solid var(--java-border);
+    }
+    .diff-basic { color: #6fcf97; border-left: 3px solid #2ea043; }
+    .diff-medio { color: #f2c94c; border-left: 3px solid #e3b341; }
+    .diff-avanzado { color: #ff7b72; border-left: 3px solid #f85149; }
+
+    /* cajas objetivo y contexto */
+    .objective-box {
+      background: rgba(21,101,192,0.08);
+      border-left: 4px solid var(--java-blue);
+      border-radius: 12px;
+      padding: 0.7rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+    .context-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--java-border);
+      border-radius: 14px;
+      padding: 0.8rem 1rem;
+      font-size: 0.85rem;
+      color: #b9c3d4;
+      margin-bottom: 1rem;
+    }
+    pre {
+      background: #090c10;
+      border-radius: 14px;
+      padding: 1rem;
+      overflow-x: auto;
+      border: 1px solid #222831;
+      font-size: 0.8rem;
+    }
+    code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .kw  { color: #ff7b72; }
+    .cls { color: #ffb454; }
+    .str { color: #a5d6ff; }
+    .cmt { color: #6e7681; font-style: italic; }
+    .met { color: #d2a8ff; }
+    .num { color: #79c0ff; }
+    .lam { color: #7ee787; }
+
+    /* hint button mejorado */
+    .hint-toggle {
+      background: transparent;
+      border: 1px dashed var(--java-border);
+      border-radius: 28px;
+      color: var(--java-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      margin-top: 0.8rem;
+    }
+    .hint-toggle:hover {
+      border-color: var(--java-orange);
+      color: var(--java-orange);
+      background: rgba(248,152,32,0.05);
+    }
+    .hint-body {
+      display: none;
+      margin-top: 0.8rem;
+    }
+    .hint-toggle.open + .hint-body {
+      display: block;
+    }
+
+    .steps {
+      padding-left: 1.2rem;
+      margin: 0.6rem 0;
+    }
+    .steps li {
+      font-size: 0.85rem;
+      margin: 0.5rem 0;
+      color: #b4c2da;
+    }
+    footer {
+      border-top: 1px solid var(--java-border);
+      background: #07090e;
+      padding: 1.8rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--java-muted);
+    }
+    @media (max-width: 576px) {
+      .card-header-custom { padding: 0.9rem; }
+      .card-body-custom { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero section renovada -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><i class="bi bi-code-slash"></i> BOLETÍN 13 · STREAM API</div>
+    <h1>Transforma colecciones<br>con <span style="color:var(--java-orange);">Streams</span> funcionales</h1>
+    <p class="lead">
+      Aprende a dominar <strong>filter, map, reduce, collect y flatMap</strong> con ejemplos progresivos.
+      Desde los fundamentos hasta un analizador de textos real.
+    </p>
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <span class="difficulty-badge diff-basic"><i class="bi bi-chevron-double-right"></i> Básico (1-6)</span>
+      <span class="difficulty-badge diff-medio"><i class="bi bi-stars"></i> Intermedio (7-15)</span>
+      <span class="difficulty-badge diff-avanzado"><i class="bi bi-lightning-charge"></i> Avanzado (16-20)</span>
+    </div>
+  </div>
+</section>
+
+<!-- Stats moderno -->
+<div class="stats-bar">
+  <div class="container">
+    <div class="d-flex flex-wrap gap-3 justify-content-start">
+      <div class="stat-item"><span class="stat-dot"></span><span>20 actividades prácticas</span></div>
+      <div class="stat-item"><span class="stat-dot" style="background: var(--java-green);"></span><span>filter · map · reduce · collect</span></div>
+      <div class="stat-item"><span class="stat-dot" style="background: var(--java-purple);"></span><span>Java 8+ · Lazy evaluation</span></div>
+      <div class="stat-item"><i class="bi bi-terminal-fill" style="color:var(--java-muted);"></i><span>100% práctico</span></div>
+    </div>
+  </div>
+</div>
+
+<main class="container py-4">
+
+  <!-- NIVEL BÁSICO -->
+  <div class="section-label"><i class="bi bi-brightness-alt-high"></i> Nivel básico · primeros pasos</div>
+  <div class="row g-4 mb-4">
+    <!-- actividad 1 a 6 se mantienen pero con micro mejoras de accesibilidad -->
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card1"><div class="card-header-custom" onclick="toggle('card1')"><div class="act-number">01</div><div class="flex-grow-1"><p class="act-title">Primer Stream <span class="tag-pill tag-orange">forEach</span></p><p class="act-subtitle">Recorrido declarativo</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box"><strong>🎯 Objetivo:</strong> Introducción al pipeline de streams.</div><div class="context-box"><p><code>stream()</code> crea una secuencia. <code>forEach</code> es terminal e imprime cada elemento.</p></div><pre><code><span class="kw">List</span>&lt;<span class="cls">Integer</span>&gt; nums = <span class="cls">List</span>.<span class="met">of</span>(<span class="num">3</span>, <span class="num">7</span>, <span class="num">1</span>, <span class="num">9</span>);
+<span class="cmt">// Muestra cada número</span></code></pre><button class="hint-toggle" onclick="toggleHint(this)"><i class="bi bi-lightbulb"></i> Mostrar solución</button><div class="hint-body"><pre><code>nums.<span class="met">stream</span>().<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>);</code></pre></div></div></div></div>
+
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card2"><div class="card-header-custom" onclick="toggle('card2')"><div class="act-number">02</div><div class="flex-grow-1"><p class="act-title">Filtrar pares <span class="tag-pill tag-blue">filter</span></p><p class="act-subtitle">Operaciones intermedias</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box"><strong>🎯 Objetivo:</strong> Usar predicados con filter.</div><pre><code><span class="kw">List</span>&lt;<span class="cls">Integer</span>&gt; nums = <span class="cls">List</span>.<span class="met">of</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>);</code></pre><button class="hint-toggle" onclick="toggleHint(this)"><i class="bi bi-lightbulb"></i> Pista</button><div class="hint-body"><pre><code>nums.<span class="met">stream</span>().<span class="met">filter</span>(<span class="lam">n -> n%2==0</span>).<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>);</code></pre></div></div></div></div>
+
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card3"><div class="card-header-custom" onclick="toggle('card3')"><div class="act-number">03</div><div class="flex-grow-1"><p class="act-title">Cuadrados <span class="tag-pill tag-purple">map</span></p><p class="act-subtitle">Transformación uno a uno</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box"><strong>🎯 map()</strong> genera nuevo stream con función aplicada.</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>); <span class="cmt">// → 1,4,9,16,25</span></code></pre><button class="hint-toggle" onclick="toggleHint(this)">✨ map(n -> n*n)</button><div class="hint-body"><pre><code>nums.<span class="met">stream</span>().<span class="met">map</span>(<span class="lam">n -> n*n</span>).<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>);</code></pre></div></div></div></div>
+
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card4"><div class="card-header-custom" onclick="toggle('card4')"><div class="act-number">04</div><div class="flex-grow-1"><p class="act-title">Suma con reduce <span class="tag-pill tag-green">reduce</span></p><p class="act-subtitle">Acumulación inmutable</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box"><strong>reduce</strong> combina todos en un resultado.</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="num">10</span>,<span class="num">20</span>,<span class="num">30</span>,<span class="num">40</span>) <span class="cmt">// suma = 100</span></code></pre><button class="hint-toggle" onclick="toggleHint(this)">🔁 reduce(0, Integer::sum)</button><div class="hint-body"><pre><code><span class="kw">int</span> suma = nums.<span class="met">stream</span>().<span class="met">reduce</span>(<span class="num">0</span>, <span class="cls">Integer</span>::<span class="met">sum</span>);</code></pre></div></div></div></div>
+
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card5"><div class="card-header-custom" onclick="toggle('card5')"><div class="act-number">05</div><div class="flex-grow-1"><p class="act-title">Collect to List <span class="tag-pill tag-yellow">collect</span></p><p class="act-subtitle">Materializar resultados</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Recoge los elementos filtrados en una nueva lista.</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="num">5</span>,<span class="num">12</span>,<span class="num">3</span>,<span class="num">18</span>) → mayores a 10: [12,18]</code></pre><button class="hint-toggle" onclick="toggleHint(this)">📦 collect(Collectors.toList())</button><div class="hint-body"><pre><code><span class="kw">var</span> mayores = nums.<span class="met">stream</span>().<span class="met">filter</span>(<span class="lam">n->n>10</span>).<span class="met">toList</span>(); <span class="cmt">// Java 16+</span></code></pre></div></div></div></div>
+
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card6"><div class="card-header-custom" onclick="toggle('card6')"><div class="act-number">06</div><div class="flex-grow-1"><p class="act-title">Mayúsculas <span class="tag-pill tag-purple">method ref</span></p><p class="act-subtitle">Referencia a método</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Map con String::toUpperCase.</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="str">"ana"</span>,<span class="str">"pedro"</span>) → ANA PEDRO</code></pre><button class="hint-toggle" onclick="toggleHint(this)">🔠 map(String::toUpperCase)</button><div class="hint-body"><pre><code>nombres.<span class="met">stream</span>().<span class="met">map</span>(<span class="cls">String</span>::<span class="met">toUpperCase</span>).<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>);</code></pre></div></div></div></div>
+  </div>
+
+  <!-- NIVEL INTERMEDIO (resumido elegante pero completo) -->
+  <div class="section-label"><i class="bi bi-graph-up"></i> Nivel intermedio · Composición real</div>
+  <div class="row g-4 mb-4">
+    <!-- He resumido la presentación interna pero manteniendo el contenido clave para no duplicar excesivamente; pero integro todas las actividades -->
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card7"><div class="card-header-custom" onclick="toggle('card7')"><div class="act-number">07</div><div class="flex-grow-1"><p class="act-title">Filtrar por inicial <span class="tag-pill tag-blue">startsWith</span></p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Filtrar nombres que empiecen con "A"</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="str">"Ana"</span>,<span class="str">"Luis"</span>,<span class="str">"Alba"</span>) → Ana, Alba</code></pre><button class="hint-toggle" onclick="toggleHint(this)">💡 .filter(n -> n.startsWith("A"))</button><div class="hint-body"><pre><code>nombres.<span class="met">stream</span>().<span class="met">filter</span>(<span class="lam">s->s.startsWith("A")</span>).<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>);</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card8"><div class="card-header-custom" onclick="toggle('card8')"><div class="act-number">08</div><div class="flex-grow-1"><p class="act-title">Contar <span class="tag-pill tag-orange">count()</span></p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Números > 50</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="num">10</span>,<span class="num">55</span>,<span class="num">23</span>,<span class="num">80</span>) → 2</code></pre><button class="hint-toggle" onclick="toggleHint(this)">🔢 .filter().count()</button><div class="hint-body"><pre><code><span class="kw">long</span> c = nums.<span class="met">stream</span>().<span class="met">filter</span>(<span class="lam">n->n>50</span>).<span class="met">count</span>();</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card9"><div class="card-header-custom" onclick="toggle('card9')"><div class="act-number">09</div><div class="flex-grow-1"><p class="act-title">anyMatch / allMatch</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Comprobar condiciones con cortocircuito.</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="num">4</span>,<span class="num">-2</span>,<span class="num">7</span>) → hayNegativo true</code></pre><button class="hint-toggle" onclick="toggleHint(this)">⚡ anyMatch(n-> n<0)</button><div class="hint-body"><pre><code><span class="kw">boolean</span> hayNeg = nums.<span class="met">stream</span>().<span class="met">anyMatch</span>(<span class="lam">n -> n < 0</span>);</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card10"><div class="card-header-custom" onclick="toggle('card10')"><div class="act-number">10</div><div class="flex-grow-1"><p class="act-title">max / min</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Valor máximo y mínimo con Comparator.</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="num">3</span>,<span class="num">17</span>,<span class="num">42</span>) → max=42</code></pre><button class="hint-toggle" onclick="toggleHint(this)">📈 max(Comparator.naturalOrder())</button><div class="hint-body"><pre><code><span class="kw">int</span> mayor = nums.<span class="met">stream</span>().<span class="met">max</span>(<span class="cls">Comparator</span>.<span class="met">naturalOrder</span>()).<span class="met">get</span>();</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card11"><div class="card-header-custom" onclick="toggle('card11')"><div class="act-number">11</div><div class="flex-grow-1"><p class="act-title">Streams con objetos</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Filtrar alumnos aprobados (nota>=5)</div><pre><code><span class="kw">class</span> <span class="cls">Alumno</span> { String nombre; double nota; }</code></pre><button class="hint-toggle" onclick="toggleHint(this)">👩‍🎓 filter + map</button><div class="hint-body"><pre><code>alumnos.<span class="met">stream</span>().<span class="met">filter</span>(<span class="lam">a->a.getNota()>=5</span>).<span class="met">map</span>(<span class="cls">Alumno</span>::<span class="met">getNombre</span>).<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>);</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card12"><div class="card-header-custom" onclick="toggle('card12')"><div class="act-number">12</div><div class="flex-grow-1"><p class="act-title">Media con mapToDouble</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">DoubleStream y average()</div><pre><code>alumnos → nota media = 6.0</code></pre><button class="hint-toggle" onclick="toggleHint(this)">📊 mapToDouble + average</button><div class="hint-body"><pre><code><span class="kw">double</span> media = alumnos.<span class="met">stream</span>().<span class="met">mapToDouble</span>(<span class="cls">Alumno</span>::<span class="met">getNota</span>).<span class="met">average</span>().<span class="met">orElse</span>(<span class="num">0</span>);</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card13"><div class="card-header-custom" onclick="toggle('card13')"><div class="act-number">13</div><div class="flex-grow-1"><p class="act-title">Ordenar sorted()</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Orden ascendente y descendente</div><pre><code>[5,2,8,1] → [1,2,5,8] y luego descendente</code></pre><button class="hint-toggle" onclick="toggleHint(this)">🔽 sorted(Comparator.reverseOrder())</button><div class="hint-body"><pre><code>nums.<span class="met">stream</span>().<span class="met">sorted</span>().<span class="met">forEach</span>(...);</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card14"><div class="card-header-custom" onclick="toggle('card14')"><div class="act-number">14</div><div class="flex-grow-1"><p class="act-title">distinct sin duplicados</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Eliminar elementos repetidos</div><pre><code>[1,2,2,3,3,4] → [1,2,3,4]</code></pre><button class="hint-toggle" onclick="toggleHint(this)">♻️ distinct()</button><div class="hint-body"><pre><code>nums.<span class="met">stream</span>().<span class="met">distinct</span>().<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>);</code></pre></div></div></div></div>
+    <div class="col-12"><div class="activity-card" id="card15"><div class="card-header-custom" onclick="toggle('card15')"><div class="act-number">15</div><div class="flex-grow-1"><p class="act-title">Pipeline completo <span class="tag-pill tag-green">filter+map+sorted</span></p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Ejemplo integrador: pares → cuadrado → ordenar → lista</div><pre><code><span class="cls">List</span>.<span class="met">of</span>(<span class="num">9</span>,<span class="num">4</span>,<span class="num">7</span>,<span class="num">2</span>,<span class="num">6</span>) → [4,16,36]</code></pre><button class="hint-toggle" onclick="toggleHint(this)">⚙️ pipeline completo</button><div class="hint-body"><pre><code><span class="kw">var</span> resultado = nums.<span class="met">stream</span>().<span class="met">filter</span>(<span class="lam">n->n%2==0</span>).<span class="met">map</span>(<span class="lam">n->n*n</span>).<span class="met">sorted</span>().<span class="met">toList</span>();</code></pre></div></div></div></div>
+  </div>
+
+  <!-- NIVEL AVANZADO (16-20) con estilo y contenido completo -->
+  <div class="section-label"><i class="bi bi-rocket-takeoff"></i> Nivel avanzado · Proyectos reales</div>
+  <div class="row g-4 mb-5">
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card16"><div class="card-header-custom" onclick="toggle('card16')"><div class="act-number">16</div><div class="flex-grow-1"><p class="act-title">Files.lines + filtro <span class="tag-pill tag-red">I/O</span></p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Leer log.txt y filtrar líneas con "ERROR".</div><pre><code><span class="kw">try</span> (<span class="kw">var</span> stream = <span class="cls">Files</span>.<span class="met">lines</span>(<span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"log.txt"</span>))) { stream.<span class="met">filter</span>(<span class="lam">l->l.contains("ERROR")</span>).<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>); }</code></pre><button class="hint-toggle" onclick="toggleHint(this)">📁 try-with-resources</button><div class="hint-body"><pre><code><span class="kw">try</span> (<span class="cls">Stream</span>&lt;<span class="cls">String</span>&gt; lines = <span class="cls">Files</span>.<span class="met">lines</span>(<span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"log.txt"</span>))) { lines.<span class="met">filter</span>(l -> l.contains(<span class="str">"ERROR"</span>)).<span class="met">forEach</span>(<span class="cls">System</span>.out::<span class="met">println</span>); }</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card17"><div class="card-header-custom" onclick="toggle('card17')"><div class="act-number">17</div><div class="flex-grow-1"><p class="act-title">flatMap contar palabras</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Aplanar líneas → palabras</div><pre><code><span class="cls">Files</span>.<span class="met">lines</span>(path).<span class="met">flatMap</span>(<span class="lam">l-> <span class="cls">Arrays</span>.<span class="met">stream</span>(l.split("\\s+"))</span>).<span class="met">count</span>();</code></pre><button class="hint-toggle" onclick="toggleHint(this)">📖 flatMap explicado</button><div class="hint-body"><pre><code><span class="kw">long</span> total = <span class="cls">Files</span>.<span class="met">lines</span>(<span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"texto.txt"</span>)).<span class="met">flatMap</span>(<span class="lam">linea -> <span class="cls">Arrays</span>.<span class="met">stream</span>(linea.split("\\W+"))</span>).<span class="met">filter</span>(<span class="lam">w->!w.isBlank()</span>).<span class="met">count</span>();</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card18"><div class="card-header-custom" onclick="toggle('card18')"><div class="act-number">18</div><div class="flex-grow-1"><p class="act-title">groupingBy básico</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Agrupar alumnos por aprobado/suspenso</div><pre><code><span class="cls">Map</span>&lt;<span class="cls">Boolean</span>, <span class="cls">List</span>&lt;<span class="cls">Alumno</span>&gt;&gt; map = alumnos.<span class="met">stream</span>().<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">groupingBy</span>(<span class="lam">a->a.getNota()>=5</span>));</code></pre><button class="hint-toggle" onclick="toggleHint(this)">📂 groupingBy</button><div class="hint-body"><pre><code><span class="cls">Map</span>&lt;<span class="cls">Boolean</span>, <span class="cls">Long</span>&gt; recuento = alumnos.<span class="met">stream</span>().<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">groupingBy</span>(<span class="lam">a->a.getNota()>=5</span>, <span class="cls">Collectors</span>.<span class="met">counting</span>()));</code></pre></div></div></div></div>
+    <div class="col-12 col-lg-6"><div class="activity-card" id="card19"><div class="card-header-custom" onclick="toggle('card19')"><div class="act-number">19</div><div class="flex-grow-1"><p class="act-title">Frecuencia palabras</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box">Mapa de frecuencia con groupingBy + counting</div><pre><code><span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Long</span>&gt; freq = palabras.<span class="met">stream</span>().<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">groupingBy</span>(<span class="cls">Function</span>.<span class="met">identity</span>(), <span class="cls">Collectors</span>.<span class="met">counting</span>()));</code></pre><button class="hint-toggle" onclick="toggleHint(this)">📈 top N</button><div class="hint-body"><pre><code>freq.<span class="met">entrySet</span>().<span class="met">stream</span>().<span class="met">sorted</span>(<span class="cls">Map</span>.<span class="cls">Entry</span>.&lt;<span class="cls">String</span>,<span class="cls">Long</span>&gt;<span class="met">comparingByValue</span>().<span class="met">reversed</span>()).<span class="met">limit</span>(<span class="num">5</span>).<span class="met">forEach</span>(<span class="lam">e->System.out.println(e.getKey()+": "+e.getValue())</span>);</code></pre></div></div></div></div>
+    <div class="col-12"><div class="activity-card" style="border-color: var(--java-orange);" id="card20"><div class="card-header-custom" onclick="toggle('card20')" style="background: rgba(248,152,32,0.05);"><div class="act-number" style="background: var(--java-orange); color:#0A0C10;">20</div><div class="flex-grow-1"><p class="act-title">🚀 Proyecto final · Analizador de texto</p><p class="act-subtitle">Integración total: lectura, limpieza, frecuencias, top 10</p></div><span class="chevron">▾</span></div><div class="card-body-custom"><div class="objective-box"><strong>🎯 OBJETIVO MASTER:</strong> Construir un contador de palabras profesional con streams puros.</div><ul class="steps"><li>Leer fichero con Files.lines</li><li>Normalizar a minúsculas y dividir con expresiones regulares</li><li>Filtrar stopwords (el, la, de, y, a, con)</li><li>Agrupar por palabra y contar frecuencias</li><li>Ordenar descendente y mostrar TOP 10</li></ul>
+    <button class="hint-toggle" onclick="toggleHint(this)">🏆 Solución completa integrada</button><div class="hint-body"><pre><code><span class="cls">Set</span>&lt;<span class="cls">String</span>&gt; stopwords = <span class="cls">Set</span>.<span class="met">of</span>(<span class="str">"el"</span>,<span class="str">"la"</span>,<span class="str">"de"</span>,<span class="str">"y"</span>,<span class="str">"a"</span>,<span class="str">"en"</span>);
+<span class="kw">try</span> (<span class="cls">Stream</span>&lt;<span class="cls">String</span>&gt; lines = <span class="cls">Files</span>.<span class="met">lines</span>(<span class="cls">Path</span>.<span class="met">of</span>(<span class="str">"texto.txt"</span>))) {
+    lines.<span class="met">map</span>(<span class="cls">String</span>::<span class="met">toLowerCase</span>)
+         .<span class="met">flatMap</span>(<span class="lam">l -> <span class="cls">Arrays</span>.<span class="met">stream</span>(l.split("[^a-záéíóúüñ]+"))</span>)
+         .<span class="met">filter</span>(<span class="lam">w -> w.length() > 1 && !stopwords.contains(w)</span>)
+         .<span class="met">collect</span>(<span class="cls">Collectors</span>.<span class="met">groupingBy</span>(<span class="cls">Function</span>.<span class="met">identity</span>(), <span class="cls">Collectors</span>.<span class="met">counting</span>()))
+         .<span class="met">entrySet</span>().<span class="met">stream</span>()
+         .<span class="met">sorted</span>(<span class="cls">Map</span>.<span class="cls">Entry</span>.&lt;<span class="cls">String</span>,<span class="cls">Long</span>&gt;<span class="met">comparingByValue</span>().<span class="met">reversed</span>())
+         .<span class="met">limit</span>(<span class="num">10</span>)
+         .<span class="met">forEach</span>(<span class="lam">e -> System.out.printf("%-15s → %d%n", e.getKey(), e.getValue())</span>);
+}</code></pre></div></div></div></div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <i class="bi bi-journal-code"></i> Java Stream API · Boletín 13 · Programación funcional moderna · 20 retos prácticos
+  </div>
+</footer>
+
+<script>
+  function toggle(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  }
+  function toggleHint(btn) {
+    btn.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
