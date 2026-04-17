@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UD14 – JDBC: Persistencia de Datos en Java (Mejorado)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* === MEJORAS DE ESTILO === */
+    :root {
+      --ud-navy:    #0a1628;
+      --ud-blue:    #1a56db;
+      --ud-cyan:    #06b6d4;
+      --ud-amber:   #f59e0b;
+      --ud-green:   #10b981;
+      --ud-red:     #ef4444;
+      --ud-surface: #f0f4ff;
+      --ud-card:    #ffffff;
+      --ud-border:  #dde3f0;
+      --ud-muted:   #64748b;
+      --ud-mono:    'JetBrains Mono', monospace;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--ud-surface);
+      color: #1e2a3a;
+    }
+
+    /* Hero mejorado */
+    .ud-hero {
+      background: linear-gradient(135deg, var(--ud-navy) 0%, #0f2b4d 100%);
+      color: #fff;
+      padding: 3.5rem 2rem 3rem;
+      border-radius: 0 0 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .ud-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(6,182,212,.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 15% 80%, rgba(26,86,219,.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .ud-hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 99px;
+      padding: .3rem .9rem;
+      font-size: .75rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ud-cyan);
+      margin-bottom: 1.2rem;
+    }
+    .ud-hero h1 {
+      font-weight: 700;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      line-height: 1.2;
+      margin-bottom: .8rem;
+    }
+    .ud-hero p.lead {
+      color: rgba(255,255,255,.65);
+      font-size: 1rem;
+      max-width: 640px;
+    }
+    .ud-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .35rem .85rem;
+      border-radius: 99px;
+      font-size: .78rem;
+      font-weight: 600;
+    }
+    .pill-java   { background: rgba(245,158,11,.18); color: #fcd34d; border: 1px solid rgba(245,158,11,.3); }
+    .pill-jdbc   { background: rgba(6,182,212,.18);  color: #67e8f9; border: 1px solid rgba(6,182,212,.3);  }
+    .pill-sqlite { background: rgba(16,185,129,.18); color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
+    .pill-dao    { background: rgba(139,92,246,.18); color: #c4b5fd; border: 1px solid rgba(139,92,246,.3); }
+
+    /* Tarjetas mejoradas */
+    .ud-section-card {
+      background: var(--ud-card);
+      border: 1px solid var(--ud-border);
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,.05), 0 2px 4px -1px rgba(0,0,0,.03);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .ud-section-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -8px rgba(0,0,0,.1);
+    }
+    .ud-card-header {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      padding: 1rem 1.4rem;
+      font-weight: 600;
+      font-size: .95rem;
+      border-bottom: 1px solid var(--ud-border);
+    }
+    .header-blue   { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+    .header-dark   { background: #0f172a; color: #e2e8f0; border-color: #1e293b; }
+    .header-green  { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+    .header-cyan   { background: #ecfeff; color: #155e75; border-color: #a5f3fc; }
+    .header-amber  { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
+    .header-slate  { background: #f8fafc; color: #334155; border-color: #e2e8f0; }
+    .header-purple { background: #f5f3ff; color: #4c1d95; border-color: #ddd6fe; }
+
+    /* Tarjetas de objetivos */
+    .objetivo-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .9rem;
+      padding: .9rem 0;
+      border-bottom: 1px solid var(--ud-border);
+    }
+    .obj-icon-wrap {
+      flex-shrink: 0;
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: .5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .oi-blue   { background: #eff6ff; color: #1d4ed8; }
+    .oi-green  { background: #ecfdf5; color: #065f46; }
+    .oi-amber  { background: #fffbeb; color: #b45309; }
+    .oi-cyan   { background: #ecfeff; color: #155e75; }
+    .oi-purple { background: #f5f3ff; color: #5b21b6; }
+    .obj-text  { font-size: .9rem; color: #334155; line-height: 1.5; padding-top: .3rem; }
+
+    /* Bloques de código mejorados */
+    .code-block {
+      background: #0f172a;
+      border-radius: .75rem;
+      overflow: hidden;
+      margin: 1.2rem 0;
+      border: 1px solid #1e293b;
+    }
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .55rem 1rem;
+      background: #1e293b;
+      font-size: .75rem;
+      color: #94a3b8;
+      font-family: var(--ud-mono);
+    }
+    .code-block pre {
+      margin: 0;
+      padding: 1.2rem 1.25rem;
+      font-family: var(--ud-mono);
+      font-size: .82rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      overflow-x: auto;
+      background: transparent;
+    }
+    /* Colores de sintaxis */
+    .kw  { color: #c084fc; }
+    .ty  { color: #67e8f9; }
+    .st  { color: #86efac; }
+    .cm  { color: #64748b; font-style: italic; }
+    .mt  { color: #fbbf24; }
+    .nu  { color: #fb923c; }
+    .an  { color: #a5f3fc; }
+
+    /* Alertas mejoradas */
+    .ud-tip {
+      display: flex;
+      gap: .8rem;
+      padding: .9rem 1.1rem;
+      border-radius: .65rem;
+      font-size: .87rem;
+      line-height: 1.5;
+    }
+    .tip-warn { background: #fffbeb; border-left: 4px solid #f59e0b; color: #78350f; }
+    .tip-info { background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e3a5f; }
+    .tip-suc  { background: #ecfdf5; border-left: 4px solid #10b981; color: #064e3b; }
+    .tip-danger { background: #fef2f2; border-left: 4px solid #ef4444; color: #7f1d1d; }
+
+    /* Componentes DAO */
+    .dao-layer {
+      background: var(--ud-surface);
+      border: 1px solid var(--ud-border);
+      border-radius: .65rem;
+      padding: .85rem 1.1rem;
+      margin-bottom: .7rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+    }
+    .dao-layer-badge {
+      flex-shrink: 0;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      padding: .2rem .6rem;
+      border-radius: .35rem;
+      margin-top: .1rem;
+    }
+    .badge-model  { background: #ede9fe; color: #5b21b6; }
+    .badge-iface  { background: #ecfdf5; color: #065f46; }
+    .badge-impl   { background: #eff6ff; color: #1d4ed8; }
+    .badge-conn   { background: #fef3c7; color: #92400e; }
+
+    /* Tabla CRUD mejorada */
+    .crud-table th { background: #f8fafc; font-size: .82rem; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: .05em; }
+    .badge-op {
+      display: inline-block;
+      padding: .2rem .6rem;
+      border-radius: .3rem;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+    }
+    .op-c { background: #dcfce7; color: #166534; }
+    .op-r { background: #dbeafe; color: #1e3a5f; }
+    .op-u { background: #fef9c3; color: #854d0e; }
+    .op-d { background: #fee2e2; color: #7f1d1d; }
+
+    /* Sección de práctica interactiva */
+    .quiz-question {
+      background: #f9fafb;
+      border-radius: .75rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #e5e7eb;
+    }
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .5rem;
+      border-radius: .5rem;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .quiz-option:hover {
+      background: #f3f4f6;
+    }
+    .quiz-feedback {
+      margin-top: .5rem;
+      padding: .5rem;
+      border-radius: .5rem;
+      font-size: .85rem;
+    }
+
+    /* Footer */
+    .ud-footer {
+      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+      font-size: .82rem;
+      color: var(--ud-muted);
+      border-top: 1px solid var(--ud-border);
+      margin-top: 1rem;
+    }
+
+    /* Animaciones */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-in {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero mejorado -->
+<div class="ud-hero">
+  <div class="container">
+    <div class="ud-hero-tag">
+      <i class="bi bi-stack"></i> DAW · DAM — Acceso a Datos
+    </div>
+    <h1><i class="bi bi-database-fill-lock"></i> Unidad 14<br>Conexión a Base de Datos: JDBC</h1>
+    <p class="lead">Aprende a persistir el estado de una aplicación Java interactuando con un sistema gestor de bases de datos relacionales mediante la API estándar JDBC.</p>
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <span class="ud-badge-pill pill-java"><i class="bi bi-cup-hot-fill"></i> Java SE</span>
+      <span class="ud-badge-pill pill-jdbc"><i class="bi bi-database-fill-gear"></i> JDBC API</span>
+      <span class="ud-badge-pill pill-sqlite"><i class="bi bi-hdd-fill"></i> SQLite · MySQL</span>
+      <span class="ud-badge-pill pill-dao"><i class="bi bi-diagram-3-fill"></i> Patrón DAO</span>
+    </div>
+  </div>
+</div>
+
+<div class="container my-4">
+  <!-- Barra de progreso interactiva -->
+  <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <span class="text-muted small fw-semibold"><i class="bi bi-arrow-repeat"></i> Progreso de la unidad</span>
+      <span class="text-muted small" id="progressPercentage">0%</span>
+    </div>
+    <div class="progress" style="height: 8px;">
+      <div class="progress-bar bg-primary" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="d-flex justify-content-between mt-2 text-center small text-muted">
+      <div>Conceptos</div>
+      <div>JDBC</div>
+      <div>CRUD</div>
+      <div>DAO</div>
+      <div>Práctica</div>
+    </div>
+  </div>
+
+  <!-- Objetivos -->
+  <div class="ud-section-card animate-in">
+    <div class="ud-card-header header-blue">
+      <i class="bi bi-check2-circle"></i> Objetivos de aprendizaje
+    </div>
+    <div class="card-body p-4">
+      <div class="row row-cols-1 row-cols-md-2 g-3">
+        <div class="col">
+          <div class="objetivo-item">
+            <div class="obj-icon-wrap oi-blue"><i class="bi bi-database-check"></i></div>
+            <div class="obj-text">Realizar la persistencia de los datos de una aplicación mediante los servicios de un SGBD.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="objetivo-item">
+            <div class="obj-icon-wrap oi-green"><i class="bi bi-gear-wide-connected"></i></div>
+            <div class="obj-text">Configurar el driver JDBC para acceder a SGBD de distintos fabricantes.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="objetivo-item">
+            <div class="obj-icon-wrap oi-amber"><i class="bi bi-plug"></i></div>
+            <div class="obj-text">Crear una conexión entre un programa Java y un SGBD.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="objetivo-item">
+            <div class="obj-icon-wrap oi-cyan"><i class="bi bi-terminal"></i></div>
+            <div class="obj-text">Ejecutar instrucciones SQL desde una aplicación cliente Java.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="objetivo-item">
+            <div class="obj-icon-wrap oi-purple"><i class="bi bi-save"></i></div>
+            <div class="obj-text">Insertar los datos de una aplicación en una base de datos.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="objetivo-item">
+            <div class="obj-icon-wrap oi-blue"><i class="bi bi-arrow-repeat"></i></div>
+            <div class="obj-text">Recuperar información almacenada en una BD desde Java para su posterior uso.</div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="objetivo-item">
+            <div class="obj-icon-wrap oi-green"><i class="bi bi-diagram-3"></i></div>
+            <div class="obj-text">Realizar el mapeo objeto-relacional (ORM) de clases simples.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conceptos clave -->
+  <div class="ud-section-card animate-in">
+    <div class="ud-card-header header-cyan">
+      <i class="bi bi-lightbulb"></i> Conceptos clave
+    </div>
+    <div class="p-4">
+      <div class="accordion" id="conceptosAccordion">
+        <div class="accordion-item border-0 mb-2" style="border:1px solid #e2e8f0 !important; border-radius:.65rem !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+              <i class="bi bi-diagram-2 me-2 text-primary"></i> ¿Qué es JDBC?
+            </button>
+          </h2>
+          <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#conceptosAccordion">
+            <div class="accordion-body">
+              <p><strong>JDBC (Java DataBase Connectivity)</strong> es la API estándar de Java para conectar aplicaciones con bases de datos relacionales. Forma parte del JDK (<code>java.sql.*</code>) y actúa como una capa de abstracción entre tu código y el SGBD concreto.</p>
+              <div class="ud-tip tip-info mt-2">
+                <i class="bi bi-info-circle-fill"></i>
+                <div>Si cambias de SQLite a MySQL solo tienes que cambiar la URL de conexión y el JAR del driver. El resto del código JDBC <em>no cambia</em>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item border-0 mb-2" style="border:1px solid #e2e8f0 !important; border-radius:.65rem !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+              <i class="bi bi-shield-exclamation me-2 text-danger"></i> SQL Injection
+            </button>
+          </h2>
+          <div id="c2" class="accordion-collapse collapse" data-bs-parent="#conceptosAccordion">
+            <div class="accordion-body">
+              <p><strong>SQL Injection</strong> ocurre cuando un atacante inyecta código SQL malicioso en un parámetro de entrada.</p>
+              <div class="ud-tip tip-warn mt-2">
+                <i class="bi bi-shield-check-fill"></i>
+                <div><strong>Regla de oro:</strong> Nunca concatenes valores de usuario en SQL. Siempre usa <code>PreparedStatement</code>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Código de ejemplo mejorado -->
+  <div class="ud-section-card animate-in">
+    <div class="ud-card-header header-dark">
+      <i class="bi bi-code-slash"></i> Ejemplos de código
+    </div>
+    <div class="p-4">
+      <h6 class="fw-bold mb-2">Conexión con SQLite</h6>
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="cb-dots"><span class="cb-dot cb-red"></span><span class="cb-dot cb-yellow"></span><span class="cb-dot cb-green"></span></div>
+          <span>ConexionBD.java</span>
+        </div>
+        <pre><span class="kw">import</span> java.sql.*;
+
+<span class="kw">public class</span> <span class="ty">ConexionBD</span> {
+    <span class="kw">private static final</span> <span class="ty">String</span> URL = <span class="st">"jdbc:sqlite:instituto.db"</span>;
+
+    <span class="kw">public static</span> <span class="ty">Connection</span> <span class="mt">getConnection</span>() <span class="kw">throws</span> <span class="ty">SQLException</span> {
+        <span class="kw">return</span> <span class="ty">DriverManager</span>.<span class="mt">getConnection</span>(URL);
+    }
+}</pre>
+      </div>
+
+      <h6 class="fw-bold mb-2 mt-4">CRUD con PreparedStatement</h6>
+      <div class="code-block">
+        <div class="code-block-header">
+          <div class="cb-dots"><span class="cb-dot cb-red"></span><span class="cb-dot cb-yellow"></span><span class="cb-dot cb-green"></span></div>
+          <span>Operaciones CRUD</span>
+        </div>
+        <pre><span class="cm">// INSERT</span>
+<span class="ty">String</span> sqlIns = <span class="st">"INSERT INTO alumnos(nombre, ciclo, nota) VALUES(?, ?, ?)"</span>;
+<span class="kw">try</span> (<span class="ty">PreparedStatement</span> ps = conn.<span class="mt">prepareStatement</span>(sqlIns)) {
+    ps.<span class="mt">setString</span>(<span class="nu">1</span>, <span class="st">"Laura García"</span>);
+    ps.<span class="mt">setString</span>(<span class="nu">2</span>, <span class="st">"DAW"</span>);
+    ps.<span class="mt">setDouble</span>(<span class="nu">3</span>, <span class="nu">8.5</span>);
+    ps.<span class="mt">executeUpdate</span>();
+}
+
+<span class="cm">// SELECT con mapeo ORM</span>
+<span class="ty">String</span> sqlSel = <span class="st">"SELECT id, nombre, ciclo, nota FROM alumnos WHERE ciclo = ?"</span>;
+<span class="kw">try</span> (<span class="ty">PreparedStatement</span> ps = conn.<span class="mt">prepareStatement</span>(sqlSel)) {
+    ps.<span class="mt">setString</span>(<span class="nu">1</span>, <span class="st">"DAW"</span>);
+    <span class="kw">try</span> (<span class="ty">ResultSet</span> rs = ps.<span class="mt">executeQuery</span>()) {
+        <span class="kw">while</span> (rs.<span class="mt">next</span>()) {
+            <span class="ty">Alumno</span> a = <span class="kw">new</span> <span class="ty">Alumno</span>();
+            a.<span class="mt">setId</span>(rs.<span class="mt">getInt</span>(<span class="st">"id"</span>));
+            a.<span class="mt">setNombre</span>(rs.<span class="mt">getString</span>(<span class="st">"nombre"</span>));
+            a.<span class="mt">setCiclo</span>(rs.<span class="mt">getString</span>(<span class="st">"ciclo"</span>));
+            a.<span class="mt">setNota</span>(rs.<span class="mt">getDouble</span>(<span class="st">"nota"</span>));
+            lista.<span class="mt">add</span>(a);
+        }
+    }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patrón DAO -->
+  <div class="ud-section-card animate-in">
+    <div class="ud-card-header header-purple">
+      <i class="bi bi-diagram-3"></i> Patrón DAO
+    </div>
+    <div class="p-4">
+      <div class="dao-layer">
+        <span class="dao-layer-badge badge-model">Modelo</span>
+        <div class="dao-layer-info">
+          <strong><code>Alumno.java</code> — Entidad POJO</strong>
+          Clase Java pura con atributos, getters y setters.
+        </div>
+      </div>
+      <div class="dao-layer">
+        <span class="dao-layer-badge badge-iface">Interfaz</span>
+        <div class="dao-layer-info">
+          <strong><code>AlumnoDAO.java</code> — Contrato</strong>
+          Define métodos: insertar, listar, obtener, actualizar, eliminar.
+        </div>
+      </div>
+      <div class="dao-layer">
+        <span class="dao-layer-badge badge-impl">Implementación</span>
+        <div class="dao-layer-info">
+          <strong><code>AlumnoDAOImpl.java</code> — Lógica JDBC</strong>
+          Implementa la interfaz con código JDBC y mapeo ORM.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Práctica interactiva -->
+  <div class="ud-section-card animate-in">
+    <div class="ud-card-header header-green">
+      <i class="bi bi-puzzle"></i> Práctica interactiva
+    </div>
+    <div class="p-4">
+      <div class="quiz-question" id="quiz1">
+        <p class="fw-semibold mb-2">Pregunta 1: ¿Qué clase de JDBC se debe usar para evitar SQL Injection?</p>
+        <div class="quiz-option" data-question="1" data-answer="prepared">
+          <input type="radio" name="q1" value="statement"> Statement
+        </div>
+        <div class="quiz-option" data-question="1" data-answer="prepared">
+          <input type="radio" name="q1" value="prepared"> PreparedStatement
+        </div>
+        <div class="quiz-option" data-question="1" data-answer="prepared">
+          <input type="radio" name="q1" value="callable"> CallableStatement
+        </div>
+        <div class="quiz-feedback" id="feedback1"></div>
+      </div>
+
+      <div class="quiz-question" id="quiz2">
+        <p class="fw-semibold mb-2">Pregunta 2: ¿Cuál es el método correcto para ejecutar un SELECT?</p>
+        <div class="quiz-option" data-question="2" data-answer="executeQuery">
+          <input type="radio" name="q2" value="executeUpdate"> executeUpdate()
+        </div>
+        <div class="quiz-option" data-question="2" data-answer="executeQuery">
+          <input type="radio" name="q2" value="executeQuery"> executeQuery()
+        </div>
+        <div class="quiz-option" data-question="2" data-answer="executeQuery">
+          <input type="radio" name="q2" value="execute"> execute()
+        </div>
+        <div class="quiz-feedback" id="feedback2"></div>
+      </div>
+
+      <div class="quiz-question" id="quiz3">
+        <p class="fw-semibold mb-2">Pregunta 3: ¿Qué interfaz representa una fila de resultados de una consulta?</p>
+        <div class="quiz-option" data-question="3" data-answer="resultset">
+          <input type="radio" name="q3" value="statement"> Statement
+        </div>
+        <div class="quiz-option" data-question="3" data-answer="resultset">
+          <input type="radio" name="q3" value="resultset"> ResultSet
+        </div>
+        <div class="quiz-option" data-question="3" data-answer="resultset">
+          <input type="radio" name="q3" value="connection"> Connection
+        </div>
+        <div class="quiz-feedback" id="feedback3"></div>
+      </div>
+
+      <button class="btn btn-primary mt-3" id="checkQuiz">Verificar respuestas</button>
+    </div>
+  </div>
+
+  <!-- Reto práctico -->
+  <div class="ud-section-card animate-in" style="border-color:#fcd34d;">
+    <div class="ud-card-header header-amber">
+      <i class="bi bi-trophy-fill"></i> Reto práctico
+    </div>
+    <div class="p-4">
+      <p>Implementa un CRUD completo de <strong>Productos</strong> (id, nombre, precio, stock) usando el patrón DAO.</p>
+      <div class="reto-step">
+        <div class="reto-num">1</div>
+        <div class="reto-text">Crea la clase <strong>Producto</strong> (POJO).</div>
+      </div>
+      <div class="reto-step">
+        <div class="reto-num">2</div>
+        <div class="reto-text">Implementa <strong>ConexionBD</strong> para SQLite.</div>
+      </div>
+      <div class="reto-step">
+        <div class="reto-num">3</div>
+        <div class="reto-text">Define la interfaz <strong>ProductoDAO</strong> con métodos CRUD.</div>
+      </div>
+      <div class="reto-step">
+        <div class="reto-num">4</div>
+        <div class="reto-text">Implementa <strong>ProductoDAOImpl</strong> con JDBC y PreparedStatement.</div>
+      </div>
+      <div class="reto-step">
+        <div class="reto-num">5</div>
+        <div class="reto-text">Crea un menú de consola para probar todas las operaciones.</div>
+      </div>
+      <div class="ud-tip tip-warn mt-3">
+        <i class="bi bi-lightbulb-fill"></i>
+        <div><strong>Criterios de evaluación:</strong> PreparedStatement, try-with-resources, separación de capas y manejo de excepciones.</div>
+      </div>
+      <button class="btn btn-warning fw-semibold px-4 mt-3" onclick="alert('Sube el proyecto .zip con el código fuente y capturas de consola a la tarea de Moodle.')">
+        <i class="bi bi-upload me-1"></i> Entregar tarea
+      </button>
+    </div>
+  </div>
+
+  <!-- Recursos adicionales -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="ud-section-card mb-0">
+        <div class="ud-card-header header-slate">
+          <i class="bi bi-book-half"></i> Documentación
+        </div>
+        <div class="p-3">
+          <a href="https://docs.oracle.com/javase/tutorial/jdbc/" target="_blank" class="resource-item d-block mb-2">Oracle JDBC Tutorial</a>
+          <a href="https://github.com/xerial/sqlite-jdbc" target="_blank" class="resource-item d-block">Driver sqlite-jdbc</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="ud-section-card mb-0">
+        <div class="ud-card-header header-slate">
+          <i class="bi bi-play-circle"></i> Videotutoriales
+        </div>
+        <div class="p-3">
+          <a href="https://www.youtube.com/results?search_query=JDBC+Java" target="_blank" class="resource-item d-block">JDBC en YouTube</a>
+          <a href="https://www.youtube.com/results?search_query=patrón+DAO+Java" target="_blank" class="resource-item d-block">Patrón DAO</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="ud-footer">
+  <strong>Unidad 14: Conexión a Base de Datos (JDBC)</strong><br>
+  Desarrollo de Aplicaciones Web (DAW) · Desarrollo de Aplicaciones Multiplataforma (DAM)
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Barra de progreso interactiva
+  function updateProgress() {
+    const sections = document.querySelectorAll('.ud-section-card');
+    let visibleSections = 0;
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100 && rect.bottom > 0) {
+        visibleSections++;
+      }
+    });
+    const progress = Math.min(100, Math.round((visibleSections / sections.length) * 100));
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('progressPercentage').innerText = progress + '%';
+  }
+
+  window.addEventListener('scroll', updateProgress);
+  window.addEventListener('load', updateProgress);
+
+  // Quiz interactivo
+  document.getElementById('checkQuiz').addEventListener('click', function() {
+    // Pregunta 1
+    const q1Selected = document.querySelector('input[name="q1"]:checked');
+    const feedback1 = document.getElementById('feedback1');
+    if (q1Selected && q1Selected.value === 'prepared') {
+      feedback1.innerHTML = '<div class="ud-tip tip-suc"><i class="bi bi-check-circle-fill"></i> ¡Correcto! PreparedStatement evita SQL Injection.</div>';
+    } else if (q1Selected) {
+      feedback1.innerHTML = '<div class="ud-tip tip-danger"><i class="bi bi-x-circle-fill"></i> Incorrecto. PreparedStatement es la opción segura.</div>';
+    } else {
+      feedback1.innerHTML = '<div class="ud-tip tip-warn"><i class="bi bi-exclamation-triangle-fill"></i> Selecciona una respuesta.</div>';
+    }
+
+    // Pregunta 2
+    const q2Selected = document.querySelector('input[name="q2"]:checked');
+    const feedback2 = document.getElementById('feedback2');
+    if (q2Selected && q2Selected.value === 'executeQuery') {
+      feedback2.innerHTML = '<div class="ud-tip tip-suc"><i class="bi bi-check-circle-fill"></i> ¡Correcto! executeQuery() devuelve ResultSet.</div>';
+    } else if (q2Selected) {
+      feedback2.innerHTML = '<div class="ud-tip tip-danger"><i class="bi bi-x-circle-fill"></i> Incorrecto. SELECT se ejecuta con executeQuery().</div>';
+    } else {
+      feedback2.innerHTML = '<div class="ud-tip tip-warn"><i class="bi bi-exclamation-triangle-fill"></i> Selecciona una respuesta.</div>';
+    }
+
+    // Pregunta 3
+    const q3Selected = document.querySelector('input[name="q3"]:checked');
+    const feedback3 = document.getElementById('feedback3');
+    if (q3Selected && q3Selected.value === 'resultset') {
+      feedback3.innerHTML = '<div class="ud-tip tip-suc"><i class="bi bi-check-circle-fill"></i> ¡Correcto! ResultSet representa las filas resultado.</div>';
+    } else if (q3Selected) {
+      feedback3.innerHTML = '<div class="ud-tip tip-danger"><i class="bi bi-x-circle-fill"></i> Incorrecto. ResultSet es la interfaz para resultados de consultas.</div>';
+    } else {
+      feedback3.innerHTML = '<div class="ud-tip tip-warn"><i class="bi bi-exclamation-triangle-fill"></i> Selecciona una respuesta.</div>';
+    }
+  });
+</script>
+</body>
+</html>
