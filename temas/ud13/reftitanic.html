@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Titanic - Southampton</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* Imagen como fondo real */
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+/* Oscurecer para legibilidad */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  padding: 30px;
+  max-width: 900px;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+h1 {
+  font-size: 60px;
+  margin-bottom: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+}
+
+p {
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+/* Referencia APA */
+.reference {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #ddd;
+  background: rgba(0,0,0,0.6);
+  padding: 6px 10px;
+  border-radius: 6px;
+  max-width: 95%;
+  text-align: center;
+  z-index: 3;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Imagen de fondo -->
+<img class="bg" src="image.png" alt="Titanic Southampton">
+
+<div class="overlay"></div>
+
+<div class="content">
+  <h1>RMS Titanic</h1>
+  <p>Southampton, 1912</p>
+  <p>Un instante antes de la historia. El mayor transatlántico de su época a punto de zarpar.</p>
+</div>
+
+<div class="reference">
+  Harrell, F. E. (s. f.). Titanic passenger data. Vanderbilt University, Department of Biostatistics. https://hbiostat.org/data/repo/titanic.html
+</div>
+
+</body>
+</html>
