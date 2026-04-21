@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>Unidad 15: API de Persistencia de Java (JPA) · Guía profesional</title>
+  <!-- Bootstrap 5 CSS + Icons + Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: mejor tipografía profesional -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fcfcfd;
+      color: #1e293b;
+      scroll-behavior: smooth;
+    }
+    /* Código */
+    pre, code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .code-block {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #0f172a;
+    }
+    .code-block pre {
+      margin: 0;
+      background: transparent;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .badge-jakarta {
+      background-color: #e9ecef;
+      color: #0b5e7e;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #f1f5f9 0%, #ffffff 100%);
+      border-bottom: 1px solid #e9edf2;
+      padding: 4rem 0 3rem 0;
+    }
+    .section-title {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      border-left: 5px solid #0d6efd;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+      color: #0f172a;
+    }
+    .card-hover {
+      transition: all 0.2s ease-in-out;
+      border: 1px solid #eef2f6;
+      border-radius: 1.2rem;
+      background: white;
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 25px -12px rgba(0,0,0,0.07);
+      border-color: #cbd5e1;
+    }
+    .api-badge {
+      background: #f1f5f9;
+      color: #1e40af;
+      border-radius: 2rem;
+      padding: 0.25rem 0.9rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+      border: 1px solid #e2e8f0;
+    }
+    .api-badge:hover {
+      background: #e6edf5;
+      border-color: #94a3b8;
+      color: #0c4a6e;
+    }
+    .nav-pills-custom .nav-link {
+      color: #334155;
+      font-weight: 500;
+      border-radius: 2rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+    .nav-pills-custom .nav-link.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+    footer {
+      background: #f8fafc;
+      border-top: 1px solid #e9edf2;
+    }
+    .table-crud {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    .table-crud th {
+      background: #f1f5f9;
+      font-weight: 600;
+    }
+    .strategy-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      height: 100%;
+      border-left: 4px solid;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      border: 1px solid #eef2f6;
+    }
+    .strategy-single { border-left-color: #0d6efd; }
+    .strategy-joined { border-left-color: #6f42c1; }
+    .strategy-table { border-left-color: #d63384; }
+    .list-icon {
+      list-style: none;
+      padding-left: 0;
+    }
+    .list-icon li {
+      margin-bottom: 0.6rem;
+      padding-left: 1.7rem;
+      position: relative;
+    }
+    .list-icon li:before {
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      content: "\f00c";
+      position: absolute;
+      left: 0;
+      color: #0d6efd;
+      font-size: 0.85rem;
+    }
+    .bg-soft-primary {
+      background-color: #eef2ff;
+    }
+    .border-soft {
+      border-color: #e2e8f0;
+    }
+    .btn-outline-api {
+      border-color: #cbd5e1;
+      color: #1e293b;
+    }
+    .btn-outline-api:hover {
+      background-color: #f1f5f9;
+      border-color: #94a3b8;
+    }
+    .code-tag {
+      background: #eef2ff;
+      color: #0c4e6e;
+      border-radius: 0.5rem;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===================== NAVBAR BOOTSTRAP ===================== -->
+<nav class="navbar navbar-expand-lg bg-white sticky-top border-bottom shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">
+      <i class="fas fa-database text-primary me-2"></i>JPA<span class="text-secondary"> · Unidad 15</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
+        <li class="nav-item"><a class="nav-link" href="#persistencia">Persistencia</a></li>
+        <li class="nav-item"><a class="nav-link" href="#entidades">Entidades</a></li>
+        <li class="nav-item"><a class="nav-link" href="#unidad">Unidad</a></li>
+        <li class="nav-item"><a class="nav-link" href="#entitymanager">EntityManager</a></li>
+        <li class="nav-item"><a class="nav-link" href="#crud">CRUD</a></li>
+        <li class="nav-item"><a class="nav-link" href="#jpql">JPQL</a></li>
+        <li class="nav-item"><a class="nav-link" href="#herencia">Herencia</a></li>
+        <li class="nav-item"><a class="nav-link" href="#asociaciones">Asociaciones</a></li>
+        <li class="nav-item"><a class="nav-link" href="#herramientas">Herramientas</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-8">
+        <span class="badge-jakarta badge rounded-pill mb-3 px-3 py-2"><i class="fab fa-java me-1"></i> Jakarta Persistence 3.1+ · Estándar ORM</span>
+        <h1 class="display-4 fw-bold lh-1 mb-3">API de Persistencia de Java<br><span class="text-primary">JPA: entidades, consultas y relaciones</span></h1>
+        <p class="lead text-secondary">Establece los fundamentos de persistencia, mapeo objeto-relacional y operaciones CRUD con Jakarta Persistence. Domina el ciclo de vida de entidades, el gestor de persistencia y el lenguaje JPQL para aplicaciones empresariales.</p>
+        <div class="mt-4 d-flex flex-wrap gap-2">
+          <a href="https://jakarta.ee/specifications/persistence/" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill"><i class="fab fa-java"></i> Especificación oficial</a>
+          <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/" target="_blank" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-file-code"></i> Javadoc JPA 3.0</a>
+          <a href="https://jakarta.ee/specifications/persistence/3.0/jakarta-persistence-spec-3.0.pdf" target="_blank" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-file-pdf"></i> PDF especificación</a>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center d-none d-lg-block">
+        <i class="fas fa-database fa-4x text-primary opacity-50 me-2"></i>
+        <i class="fas fa-right-left fa-3x text-secondary opacity-50 mx-2"></i>
+        <i class="fas fa-code fa-4x text-success opacity-50"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== OBJETIVOS RESUMEN ===================== -->
+<div class="container mt-4">
+  <div class="card border-0 shadow-sm bg-soft-primary rounded-4">
+    <div class="card-body p-4">
+      <h5 class="fw-bold mb-3"><i class="fas fa-bullseye text-primary me-2"></i>Objetivos de la unidad</h5>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <ul class="list-icon">
+            <li>Establecer conceptos de persistencia para salvaguardar y recuperar datos.</li>
+            <li>Concretar mecanismos de conversión objeto-relacional (ORM).</li>
+            <li>Clasificar relaciones entre clases según navegabilidad y cardinalidad.</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-icon">
+            <li>Asimilar anotaciones JPA y JPQL (Java Persistence Query Language).</li>
+            <li>Conocer herramientas de gestión: generación de controladores y persistence.xml.</li>
+            <li>Crear entidades desde esquemas relacionales (ingeniería inversa).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONTENIDO PRINCIPAL ===================== -->
+<main class="container my-5">
+  
+  <!-- SECCIÓN 1: PERSISTENCIA -->
+  <section id="persistencia" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-database me-2 text-primary"></i> Persistencia & JPA</h2>
+    <div class="card card-hover p-4">
+      <p><strong>Jakarta Persistence API (JPA)</strong> es la especificación estándar para la gestión de persistencia y mapeo objeto-relacional en Java. Permite almacenar y recuperar objetos Java en bases de datos relacionales sin escribir SQL explícito, mediante anotaciones declarativas.</p>
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <h6><i class="fas fa-check-circle text-success"></i> Ventajas clave</h6>
+          <ul class="list-icon">
+            <li>Abstracción del acceso a datos con anotaciones estándar.</li>
+            <li>Gestión automática del ciclo de vida de las entidades.</li>
+            <li>Portabilidad entre proveedores: Hibernate, EclipseLink, OpenJPA.</li>
+            <li>Consultas orientadas a objetos mediante JPQL y Criteria API.</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <div class="bg-light p-3 rounded-3 border">
+            <i class="fas fa-link text-primary"></i> <strong>Documentación oficial</strong><br>
+            <a href="https://jakarta.ee/learn/specification-guides/persistence-explained/" target="_blank" class="small">Jakarta Persistence Explained →</a><br>
+            <a href="https://github.com/jakartaee/persistence" target="_blank" class="small">Repositorio GitHub (spec) →</a>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-light border-start border-4 border-primary mt-3">
+        <strong>Alternativas a ficheros:</strong> JPA sustituye a la serialización manual, ficheros XML/JSON o JDBC puro, ofreciendo transaccionalidad, caché de primer nivel y consultas optimizadas.
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: ENTIDADES -->
+  <section id="entidades" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-tags me-2 text-primary"></i> Entidades JPA</h2>
+    <div class="card card-hover p-4">
+      <p>Una <strong>entidad</strong> es una clase POJO anotada con <code>@Entity</code> que se mapea a una tabla de base de datos. Debe tener un constructor sin argumentos y una clave primaria con <code>@Id</code>.</p>
+      <div class="code-block mb-3">
+        <pre><span style="color:#0d6efd;">import</span> jakarta.persistence.*;
+
+<span style="color:#0d6efd;">@Entity</span>
+<span style="color:#0d6efd;">@Table</span>(name = <span style="color:#2c7a4d;">"empleados"</span>)
+<span style="color:#1e293b;">public class</span> Empleado {
+    <span style="color:#0d6efd;">@Id</span>
+    <span style="color:#0d6efd;">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span style="color:#1e293b;">private</span> Long id;
+
+    <span style="color:#0d6efd;">@Column</span>(nullable = false, length = 100)
+    <span style="color:#1e293b;">private</span> String nombre;
+
+    <span style="color:#0d6efd;">@Column</span>(unique = true)
+    <span style="color:#1e293b;">private</span> String email;
+
+    <span style="color:#0d6efd;">@Basic</span>(fetch = FetchType.LAZY)
+    <span style="color:#1e293b;">private</span> String foto;
+
+    <span style="color:#0d6efd;">@Transient</span>
+    <span style="color:#1e293b;">private</span> String campoNoPersistente;
+    
+    <span style="color:#64748b;">// constructores, getters y setters</span>
+}</pre>
+      </div>
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entity" target="_blank" class="api-badge"><i class="fas fa-code"></i> @Entity</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/table" target="_blank" class="api-badge"><i class="fas fa-table"></i> @Table</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/id" target="_blank" class="api-badge"><i class="fas fa-key"></i> @Id</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/generatedvalue" target="_blank" class="api-badge"><i class="fas fa-bolt"></i> @GeneratedValue</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/column" target="_blank" class="api-badge"><i class="fas fa-columns"></i> @Column</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/lob" target="_blank" class="api-badge">@Lob</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: UNIDAD DE PERSISTENCIA -->
+  <section id="unidad" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-folder-open me-2 text-primary"></i> Unidad de persistencia (persistence.xml)</h2>
+    <div class="card card-hover p-4">
+      <p>El archivo <code>META-INF/persistence.xml</code> define la unidad de persistencia: entidades gestionadas, proveedor JPA, tipo de transacción y propiedades de conexión JDBC.</p>
+      <div class="code-block">
+        <pre>&lt;persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence"&gt;
+    &lt;persistence-unit name="miUnidadPU" transaction-type="RESOURCE_LOCAL"&gt;
+        &lt;provider&gt;org.hibernate.jpa.HibernatePersistenceProvider&lt;/provider&gt;
+        &lt;class&gt;com.example.Empleado&lt;/class&gt;
+        &lt;properties&gt;
+            &lt;property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/empresa"/&gt;
+            &lt;property name="jakarta.persistence.jdbc.user" value="appuser"/&gt;
+            &lt;property name="jakarta.persistence.schema-generation.database.action" value="update"/&gt;
+        &lt;/properties&gt;
+    &lt;/persistence-unit&gt;
+&lt;/persistence&gt;</pre>
+      </div>
+      <div class="mt-2"><a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/persistence" target="_blank" class="api-badge"><i class="fas fa-cube"></i> Clase Persistence (createEntityManagerFactory)</a></div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: GESTOR DE ENTIDADES -->
+  <section id="entitymanager" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-user-cog me-2 text-primary"></i> EntityManager y transacciones</h2>
+    <div class="card card-hover p-4">
+      <p><code>EntityManager</code> es el núcleo de JPA: gestiona el contexto de persistencia, ciclos de vida y operaciones CRUD. En Java SE usamos <code>EntityTransaction</code> para controlar transacciones.</p>
+      <div class="code-block">
+        <pre>EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidadPU");
+EntityManager em = emf.createEntityManager();
+EntityTransaction tx = em.getTransaction();
+
+try {
+    tx.begin();
+    Empleado emp = new Empleado();
+    emp.setNombre("Ana Torres");
+    em.persist(emp);
+    tx.commit();
+} catch (Exception e) {
+    if (tx.isActive()) tx.rollback();
+} finally {
+    em.close();
+    emf.close();
+}</pre>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-6">
+          <span class="badge bg-light text-dark p-2"><i class="fas fa-database"></i> Métodos principales:</span>
+          <ul class="mt-2">
+            <li><code>persist()</code> – insertar entidad</li>
+            <li><code>find(Class, pk)</code> – buscar por clave primaria</li>
+            <li><code>merge()</code> – sincronizar entidad detached</li>
+            <li><code>remove()</code> – eliminar entidad gestionada</li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <a href="https://jakartaee.github.io/persistence/latest/api/jakarta.persistence/jakarta/persistence/EntityManager.html" target="_blank" class="api-badge mb-2 me-2">EntityManager API</a>
+          <a href="https://jakartaee.github.io/persistence/latest/api/jakarta.persistence/jakarta/persistence/EntityTransaction.html" target="_blank" class="api-badge">EntityTransaction</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 5: CRUD -->
+  <section id="crud" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-table-list me-2 text-primary"></i> Operaciones CRUD</h2>
+    <div class="card card-hover p-4">
+      <p>JPA simplifica el acceso a datos con operaciones directas sobre entidades. El dirty checking actualiza automáticamente los cambios dentro de una transacción activa.</p>
+      <div class="table-responsive">
+        <table class="table table-bordered table-crud">
+          <thead class="table-light">
+            <tr><th>Operación</th><th>Método JPA</th><th>Descripción</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge bg-success">Create</span></td><td><code>em.persist(entity)</code></td><td>Inserta nuevo registro en BD</td></tr>
+            <tr><td><span class="badge bg-primary">Read</span></td><td><code>em.find(Class, id)</code></td><td>Recupera entidad por clave primaria</td></tr>
+            <tr><td><span class="badge bg-warning text-dark">Update</span></td><td><code>em.merge(entity)</code> / dirty checking</td><td>Actualiza entidad desacoplada o modifica managed</td></tr>
+            <tr><td><span class="badge bg-danger">Delete</span></td><td><code>em.remove(entity)</code></td><td>Elimina entidad gestionada</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-2"><a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entitymanager" target="_blank" class="api-badge">Ver EntityManager (JavaDoc)</a></div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 6: JPQL -->
+  <section id="jpql" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-search me-2 text-primary"></i> JPQL: Java Persistence Query Language</h2>
+    <div class="card card-hover p-4">
+      <p>Lenguaje de consultas orientado a objetos, trabaja sobre entidades y sus atributos. Soporta joins, funciones agregadas, parámetros nombrados y actualizaciones masivas.</p>
+      <div class="code-block">
+        <pre>// Consulta tipada con parámetro
+TypedQuery&lt;Empleado&gt; query = em.createQuery(
+    "SELECT e FROM Empleado e WHERE e.departamento.nombre = :dept", Empleado.class);
+query.setParameter("dept", "TI");
+List&lt;Empleado&gt; resultados = query.getResultList();
+
+// Actualización masiva
+int updated = em.createQuery("UPDATE Empleado e SET e.sueldo = e.sueldo * 1.05 WHERE e.antiguedad > 3")
+                .executeUpdate();
+
+// Proyección con constructor
+List&lt;EmpleadoDTO&gt; dtos = em.createQuery(
+    "SELECT NEW com.example.EmpleadoDTO(e.nombre, e.email) FROM Empleado e", EmpleadoDTO.class)
+    .getResultList();</pre>
+      </div>
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/query" target="_blank" class="api-badge">Interface Query</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/typedquery" target="_blank" class="api-badge">TypedQuery</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/criteria/criteriabuilder" target="_blank" class="api-badge">CriteriaBuilder</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/namedquery" target="_blank" class="api-badge">@NamedQuery</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 7: HERENCIA -->
+  <section id="herencia" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-sitemap me-2 text-primary"></i> Herencia en JPA</h2>
+    <div class="card card-hover p-4">
+      <p>JPA soporta jerarquías de herencia con las estrategias definidas en <code>@Inheritance</code>. La elección afecta al rendimiento y diseño de tablas.</p>
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <div class="strategy-card strategy-single">
+            <h6><i class="fas fa-layer-group text-primary"></i> SINGLE_TABLE</h6>
+            <p class="small">Una sola tabla para toda la jerarquía. Usa columna discriminadora. Rendimiento óptimo en consultas polimórficas.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="strategy-card strategy-joined">
+            <h6><i class="fas fa-link text-purple"></i> JOINED</h6>
+            <p class="small">Tablas normalizadas (una por clase). Joins en consultas, evita columnas nulas. Ideal para jerarquías complejas.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="strategy-card strategy-table">
+            <h6><i class="fas fa-database text-danger"></i> TABLE_PER_CLASS</h6>
+            <p class="small">Una tabla por clase concreta. Consultas polimórficas poco eficientes (UNION). Menos recomendada.</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3"><a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/inheritance" target="_blank" class="api-badge">@Inheritance</a> <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/discriminatorcolumn" target="_blank" class="api-badge">@DiscriminatorColumn</a></div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 8: ASOCIACIONES -->
+  <section id="asociaciones" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-link me-2 text-primary"></i> Asociaciones y cardinalidad</h2>
+    <div class="card card-hover p-4">
+      <p>Las relaciones entre entidades se definen con anotaciones que expresan la navegabilidad y cardinalidad: <code>@OneToOne, @OneToMany, @ManyToOne, @ManyToMany</code>.</p>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="code-block">
+            <pre><span style="color:#0d6efd;">@Entity</span>
+public class Departamento {
+    @Id private Long id;
+    @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
+    private List&lt;Empleado&gt; empleados;
+}
+
+<span style="color:#0d6efd;">@Entity</span>
+public class Empleado {
+    @Id private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "depto_id")
+    private Departamento departamento;
+}</pre>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-icon">
+            <li><strong>@ManyToOne</strong> : FK en la tabla de la entidad origen</li>
+            <li><strong>@OneToMany</strong> : colección en el lado inverso</li>
+            <li><strong>@JoinColumn</strong> : personaliza nombre de columna FK</li>
+            <li><strong>@JoinTable</strong> : para relaciones ManyToMany</li>
+          </ul>
+          <div class="mt-2">
+            <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/manytoone" target="_blank" class="api-badge">@ManyToOne</a>
+            <a href="https://jakarta.ee/specifications/persistence/2.2/apidocs/javax/persistence/onetomany" target="_blank" class="api-badge">@OneToMany</a>
+            <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/manytomany" target="_blank" class="api-badge">@ManyToMany</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 9: CREACIÓN DE ENTIDADES DESDE BD + HERRAMIENTAS -->
+  <section id="herramientas" class="mb-5">
+    <h2 class="section-title"><i class="fas fa-tools me-2 text-primary"></i> Generación desde BD y herramientas JPA</h2>
+    <div class="card card-hover p-4">
+      <p>Los IDEs modernos permiten <strong>ingeniería inversa</strong>: generar entidades JPA directamente desde un esquema relacional, incluyendo relaciones, <code>persistence.xml</code> y controladores JPA (facades).</p>
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <div class="border rounded-3 p-3 h-100 bg-light">
+            <i class="fab fa-java fa-2x text-primary mb-2 d-block"></i>
+            <h6>NetBeans / Eclipse Dali</h6>
+            <p class="small">Asistentes "Entidades desde base de datos". Generación automática de clases <code>@Entity</code>, controladores y mapeo de relaciones.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="border rounded-3 p-3 h-100 bg-light">
+            <i class="fas fa-magic fa-2x text-success mb-2 d-block"></i>
+            <h6>IntelliJ IDEA Ultimate</h6>
+            <p class="small">JPA Buddy / Persistence → Generate Entities from Schema. Soporte visual para JPQL, persistence.xml y anotaciones.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="border rounded-3 p-3 h-100 bg-light">
+            <i class="fas fa-database fa-2x text-secondary mb-2 d-block"></i>
+            <h6>Hibernate Tools (Maven)</h6>
+            <p class="small">Reverse engineering con archivo <code>reveng.xml</code>. Generación de entidades anotadas y mapeos HBM.</p>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-primary mt-3">
+        <i class="fas fa-lightbulb"></i> <strong>Controladores JPA:</strong> Clases que encapsulan el EntityManager y ofrecen métodos CRUD genéricos. Los IDEs pueden generarlos automáticamente (patrón DAO/Facade).
+      </div>
+      <div class="mt-2"><a href="https://eclipse.dev/dali/" target="_blank" class="api-badge">Eclipse Dali JPA Tools</a> <a href="https://www.jetbrains.com/help/idea/jpa-buddy.html" target="_blank" class="api-badge">IntelliJ JPA Support</a></div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: ENLACES ADICIONALES API -->
+  <div class="mt-5 pt-3 border-top">
+    <h5 class="fw-bold"><i class="fas fa-link me-2"></i>Referencias y API oficial Jakarta Persistence</h5>
+    <div class="row g-2 mt-2">
+      <div class="col-md-3"><a href="https://jakarta.ee/specifications/persistence/" target="_blank" class="btn btn-sm btn-outline-secondary w-100">Especificación JPA</a></div>
+      <div class="col-md-3"><a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/" target="_blank" class="btn btn-sm btn-outline-secondary w-100">JavaDoc JPA 3.0</a></div>
+      <div class="col-md-3"><a href="https://jakartaee.github.io/persistence/latest/api/" target="_blank" class="btn btn-sm btn-outline-secondary w-100">API Nightly (3.2+)</a></div>
+      <div class="col-md-3"><a href="https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api" target="_blank" class="btn btn-sm btn-outline-secondary w-100">Maven: jakarta.persistence-api</a></div>
+    </div>
+  </div>
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="py-4 text-center text-muted small">
+  <div class="container">
+    <i class="fas fa-graduation-cap text-primary me-1"></i> Unidad 15: API de Persistencia de Java — Contenido alineado con Jakarta Persistence 3.1+ y mejores prácticas ORM.<br>
+    <span class="text-secondary">Material profesional con enlaces oficiales a la documentación de Jakarta EE.</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

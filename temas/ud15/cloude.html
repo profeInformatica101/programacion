@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidad 15 — API de Persistencia de Java (JPA)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #0a0e14;
+      --surface: #111620;
+      --surface2: #161c28;
+      --border: #1e2a3a;
+      --accent: #00d4aa;
+      --accent2: #ff6b35;
+      --accent3: #6366f1;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim: #94a3b8;
+      --code-bg: #0d1117;
+      --nav-h: 64px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(10,14,20,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 2rem;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-brand span { color: var(--text-dim); font-weight: 400; }
+
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      overflow-x: auto;
+      flex: 1;
+      scrollbar-width: none;
+    }
+
+    .nav-links::-webkit-scrollbar { display: none; }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+      background: rgba(0,212,170,0.08);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: calc(var(--nav-h) + 4rem) 2rem 5rem;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,170,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,170,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent);
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+    }
+
+    .hero-orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,212,170,0.12), transparent 70%);
+      top: -100px; left: -100px;
+    }
+
+    .hero-orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(99,102,241,0.1), transparent 70%);
+      bottom: 0; right: -50px;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      border-radius: 100px;
+      padding: 0.4rem 1rem;
+      font-size: 0.78rem;
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      -webkit-text-fill-color: transparent;
+      background: linear-gradient(135deg, var(--accent) 0%, #00ffe0 50%, var(--accent3) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 680px;
+      margin: 1.5rem 0 2.5rem;
+      font-weight: 300;
+      line-height: 1.8;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-objectives {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.25s ease both;
+    }
+
+    .hero-objectives h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .obj-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.6rem;
+      list-style: none;
+    }
+
+    .obj-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--text-dim);
+    }
+
+    .obj-list li::before {
+      content: '◆';
+      color: var(--accent);
+      font-size: 0.5rem;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: all 0.2s;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .pill-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,212,170,0.05);
+    }
+
+    .pill-link i { font-size: 0.85rem; }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    /* ── SECTION BLOCKS ── */
+    .section-block {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: calc(var(--nav-h) + 24px);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.7rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h2.section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: rgba(0,212,170,0.2); }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .card-sm {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .icon-green { background: rgba(0,212,170,0.1); color: var(--accent); }
+    .icon-orange { background: rgba(255,107,53,0.1); color: var(--accent2); }
+    .icon-purple { background: rgba(99,102,241,0.1); color: var(--accent3); }
+    .icon-blue { background: rgba(59,130,246,0.1); color: #60a5fa; }
+
+    .card-sm h4 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .card-sm p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── CODE BLOCKS ── */
+    .code-wrap {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 1.25rem 0;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 1rem;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28c941; }
+
+    .code-lang {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .code-wrap pre {
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+
+    /* simple syntax highlighting */
+    .kw { color: #6366f1; }
+    .ann { color: #00d4aa; }
+    .str { color: #86efac; }
+    .cmt { color: #475569; font-style: italic; }
+    .cls { color: #f0abfc; }
+    .xml-tag { color: #6366f1; }
+    .xml-attr { color: #00d4aa; }
+    .xml-val { color: #86efac; }
+
+    /* ── ANNOTATION TAGS ── */
+    .ann-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .ann-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,212,170,0.07);
+      border: 1px solid rgba(0,212,170,0.15);
+      border-radius: 8px;
+      padding: 0.3rem 0.75rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .ann-tag:hover {
+      background: rgba(0,212,170,0.14);
+      border-color: var(--accent);
+    }
+
+    .ann-tag.orange {
+      background: rgba(255,107,53,0.07);
+      border-color: rgba(255,107,53,0.2);
+      color: var(--accent2);
+    }
+
+    .ann-tag.orange:hover { background: rgba(255,107,53,0.14); border-color: var(--accent2); }
+
+    .ann-tag.purple {
+      background: rgba(99,102,241,0.07);
+      border-color: rgba(99,102,241,0.2);
+      color: #a5b4fc;
+    }
+
+    /* ── CRUD TABLE ── */
+    .crud-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .crud-cell {
+      background: var(--surface2);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .crud-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .crud-method {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent);
+      background: rgba(0,212,170,0.08);
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .crud-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── JPQL highlight ── */
+    .jpql-example {
+      background: var(--code-bg);
+      border-left: 3px solid var(--accent3);
+      border-radius: 0 12px 12px 0;
+      padding: 1rem 1.25rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.84rem;
+      color: #c4b5fd;
+      margin: 0.75rem 0;
+    }
+
+    /* ── INHERITANCE STRATEGIES ── */
+    .strategy-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+
+    .strategy-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .strategy-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .strategy-card.s1::before { background: var(--accent); }
+    .strategy-card.s2::before { background: var(--accent3); }
+    .strategy-card.s3::before { background: var(--accent2); }
+
+    .strategy-card h4 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .strategy-card.s1 h4 { color: var(--accent); }
+    .strategy-card.s2 h4 { color: #a5b4fc; }
+    .strategy-card.s3 h4 { color: var(--accent2); }
+
+    .strategy-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── ASSOCIATIONS ── */
+    .assoc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    /* ── TOOLS ── */
+    .tool-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tool-row:last-child { border-bottom: none; }
+
+    .tool-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.15);
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .tool-row h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .tool-row p { font-size: 0.84rem; color: var(--text-muted); }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      background: rgba(0,212,170,0.05);
+      border: 1px solid rgba(0,212,170,0.15);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .highlight-box.orange {
+      background: rgba(255,107,53,0.05);
+      border-color: rgba(255,107,53,0.15);
+    }
+
+    .highlight-box p { font-size: 0.9rem; color: var(--text-dim); }
+
+    /* ── API GRID ── */
+    .api-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .api-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .api-item:hover {
+      border-color: var(--accent);
+      background: rgba(0,212,170,0.05);
+    }
+
+    .api-item .api-label {
+      font-size: 0.68rem;
+      font-family: 'DM Mono', monospace;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .api-item .api-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+      margin: 3.5rem 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    footer p { font-size: 0.8rem; color: var(--text-muted); }
+    footer strong { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── UTIL ── */
+    p { color: var(--text-dim); margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+    code {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.84em;
+      background: rgba(0,212,170,0.08);
+      color: var(--accent);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+    }
+
+    a { color: var(--accent); }
+
+    @media (max-width: 768px) {
+      .crud-grid { grid-template-columns: 1fr 1fr; }
+      .assoc-row { grid-template-columns: 1fr; }
+      nav { gap: 1rem; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .crud-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a href="#hero" class="nav-brand">
+    <i class="fas fa-database"></i>
+    JPA <span>/ Unidad 15</span>
+  </a>
+  <div class="nav-links">
+    <a href="#persistencia">Persistencia</a>
+    <a href="#entidades">Entidades</a>
+    <a href="#unidad-persistencia">Unidad de persistencia</a>
+    <a href="#gestor">EntityManager</a>
+    <a href="#crud">CRUD</a>
+    <a href="#jpql">JPQL</a>
+    <a href="#herencia">Herencia</a>
+    <a href="#asociaciones">Asociaciones</a>
+    <a href="#entidades-bd">Entidades desde BD</a>
+    <a href="#herramientas">Herramientas</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <i class="fas fa-circle" style="font-size:0.5rem;"></i>
+      Jakarta Persistence API · JPA 3.1+ · DAM / DAW
+    </div>
+    <h1>API de Persistencia<br>de <em>Java</em></h1>
+    <p class="hero-desc">Domina el mapeo objeto-relacional con JPA: desde las anotaciones de entidades hasta consultas JPQL avanzadas, gestión de transacciones y relaciones entre entidades para aplicaciones empresariales robustas.</p>
+
+    <div class="hero-objectives">
+      <h3><i class="fas fa-bullseye" style="margin-right:6px;"></i> Objetivos de aprendizaje</h3>
+      <ul class="obj-list">
+        <li>Establecer los conceptos de persistencia para salvaguardar y recuperar datos de cualquier aplicación.</li>
+        <li>Concretar la importancia de la conversión entre objetos Java y datos relacionales (ORM).</li>
+        <li>Clasificar las relaciones entre clases según su navegabilidad y cardinalidad.</li>
+        <li>Profundizar en la persistencia de objetos y sus alternativas al almacenamiento en ficheros.</li>
+        <li>Asimilar las anotaciones y clases de JPA, así como JPQL, su lenguaje de consulta.</li>
+        <li>Conocer las herramientas para gestión de JPA: controladores, asistentes y generación desde BD.</li>
+      </ul>
+    </div>
+
+    <div class="hero-links">
+      <a href="https://jakarta.ee/specifications/persistence/" target="_blank" class="pill-link">
+        <i class="fab fa-java"></i> Especificación Jakarta Persistence
+      </a>
+      <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/" target="_blank" class="pill-link">
+        <i class="fas fa-file-code"></i> Javadoc JPA 3.0
+      </a>
+      <a href="https://jakarta.ee/specifications/persistence/3.0/jakarta-persistence-spec-3.0.pdf" target="_blank" class="pill-link">
+        <i class="fas fa-file-pdf"></i> PDF Especificación
+      </a>
+      <a href="https://github.com/jakartaee/persistence" target="_blank" class="pill-link">
+        <i class="fab fa-github"></i> Repositorio GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── MAIN CONTENT ── -->
+<main>
+
+  <!-- ① PERSISTENCIA -->
+  <section class="section-block" id="persistencia">
+    <div class="section-label">01 — Fundamentos</div>
+    <h2 class="section-title">Persistencia & JPA</h2>
+    <div class="card">
+      <p><strong style="color:var(--text);">Jakarta Persistence API (JPA)</strong> es la especificación estándar de Java para la gestión de persistencia y el mapeo objeto-relacional (ORM). Permite que las aplicaciones guarden y recuperen objetos Java en una base de datos relacional sin escribir SQL manual, usando en su lugar anotaciones declarativas.</p>
+      <p>La persistencia consiste en garantizar que el estado de un objeto sobrevive más allá del tiempo de ejecución de la aplicación. JPA proporciona una capa de abstracción sobre JDBC que normaliza el acceso a datos entre distintos proveedores.</p>
+
+      <div class="card-grid" style="margin-top:1.5rem;">
+        <div class="card-sm">
+          <div class="card-icon icon-green"><i class="fas fa-layer-group"></i></div>
+          <h4>Abstracción ORM</h4>
+          <p>Elimina el SQL repetitivo mediante anotaciones que mapean clases a tablas y atributos a columnas automáticamente.</p>
+        </div>
+        <div class="card-sm">
+          <div class="card-icon icon-purple"><i class="fas fa-recycle"></i></div>
+          <h4>Ciclo de vida gestionado</h4>
+          <p>JPA controla los estados de las entidades: <code>NEW</code>, <code>MANAGED</code>, <code>DETACHED</code> y <code>REMOVED</code>.</p>
+        </div>
+        <div class="card-sm">
+          <div class="card-icon icon-orange"><i class="fas fa-plug"></i></div>
+          <h4>Portabilidad</h4>
+          <p>La misma API funciona con Hibernate, EclipseLink u OpenJPA. Cambiar de proveedor no requiere reescribir la lógica de negocio.</p>
+        </div>
+        <div class="card-sm">
+          <div class="card-icon icon-blue"><i class="fas fa-search"></i></div>
+          <h4>JPQL orientado a objetos</h4>
+          <p>Un lenguaje de consultas que trabaja sobre entidades Java, no sobre tablas, garantizando independencia del motor de BD.</p>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:1.5rem;">
+        <p><strong style="color:var(--accent);">Alternativas a la persistencia en ficheros:</strong> Antes de JPA, los datos se guardaban en ficheros planos (serialización Java, XML, JSON) o con acceso JDBC manual. JPA unifica estas alternativas con un modelo declarativo estándar que gestiona automáticamente transacciones, caché y relaciones entre entidades.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ② ENTIDADES -->
+  <section class="section-block" id="entidades">
+    <div class="section-label">02 — Entidades</div>
+    <h2 class="section-title">Entidades JPA</h2>
+    <div class="card">
+      <p>Una <strong style="color:var(--text);">entidad</strong> es una clase Java ligera (POJO) que se mapea directamente a una tabla de base de datos. Debe estar anotada con <code>@Entity</code>, poseer un constructor sin argumentos, y declarar al menos un campo <code>@Id</code> que actúe como clave primaria.</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots">
+            <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+          </div>
+          <span class="code-lang">Java · Empleado.java</span>
+        </div>
+        <pre><span class="kw">import</span> jakarta.persistence.*;
+
+<span class="ann">@Entity</span>                                  <span class="cmt">// Clase mapeada a tabla</span>
+<span class="ann">@Table</span>(name = <span class="str">"empleados"</span>)              <span class="cmt">// Nombre explícito de la tabla</span>
+<span class="kw">public class</span> <span class="cls">Empleado</span> {
+
+    <span class="ann">@Id</span>
+    <span class="ann">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private</span> Long id;                       <span class="cmt">// Clave primaria autogenerada</span>
+
+    <span class="ann">@Column</span>(name = <span class="str">"nombre_completo"</span>, nullable = <span class="kw">false</span>, length = <span class="str">100</span>)
+    <span class="kw">private</span> String nombre;
+
+    <span class="ann">@Column</span>(unique = <span class="kw">true</span>)
+    <span class="kw">private</span> String email;
+
+    <span class="ann">@Basic</span>(fetch = FetchType.LAZY, optional = <span class="kw">true</span>)
+    <span class="kw">private</span> String fotoPerfil;             <span class="cmt">// Carga diferida</span>
+
+    <span class="ann">@Transient</span>
+    <span class="kw">private</span> String campoNoMapeado;         <span class="cmt">// No se persiste en BD</span>
+
+    <span class="cmt">// Constructor sin argumentos obligatorio</span>
+    <span class="kw">public</span> <span class="cls">Empleado</span>() {}
+
+    <span class="cmt">// Getters y setters...</span>
+}</pre>
+      </div>
+
+      <div class="ann-grid">
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/entity" target="_blank" class="ann-tag">@Entity</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/table" target="_blank" class="ann-tag">@Table</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/id" target="_blank" class="ann-tag">@Id</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/generatedvalue" target="_blank" class="ann-tag">@GeneratedValue</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/column" target="_blank" class="ann-tag">@Column</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/basic" target="_blank" class="ann-tag">@Basic</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/transient" target="_blank" class="ann-tag">@Transient</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/embeddable" target="_blank" class="ann-tag orange">@Embeddable</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/embedded" target="_blank" class="ann-tag orange">@Embedded</a>
+      </div>
+
+      <div class="highlight-box" style="margin-top:1rem;">
+        <p><strong style="color:var(--accent);">Estrategias de GenerationType:</strong> <code>IDENTITY</code> (autoincrement de BD), <code>SEQUENCE</code> (secuencia de BD), <code>TABLE</code> (tabla de secuencias JPA), <code>AUTO</code> (el proveedor elige la mejor opción).</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ③ UNIDAD DE PERSISTENCIA -->
+  <section class="section-block" id="unidad-persistencia">
+    <div class="section-label">03 — Configuración</div>
+    <h2 class="section-title">Unidad de persistencia</h2>
+    <div class="card">
+      <p>El archivo <strong style="color:var(--text);">META-INF/persistence.xml</strong> define la unidad de persistencia: el conjunto de entidades gestionadas, el proveedor JPA, el tipo de transacción y las propiedades de conexión a la base de datos.</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots">
+            <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+          </div>
+          <span class="code-lang">XML · META-INF/persistence.xml</span>
+        </div>
+        <pre><span class="xml-tag">&lt;persistence</span> <span class="xml-attr">version</span>=<span class="xml-val">"3.0"</span>
+             <span class="xml-attr">xmlns</span>=<span class="xml-val">"https://jakarta.ee/xml/ns/persistence"</span><span class="xml-tag">&gt;</span>
+
+  <span class="xml-tag">&lt;persistence-unit</span> <span class="xml-attr">name</span>=<span class="xml-val">"miUnidad"</span>
+                    <span class="xml-attr">transaction-type</span>=<span class="xml-val">"RESOURCE_LOCAL"</span><span class="xml-tag">&gt;</span>
+
+    <span class="xml-tag">&lt;provider&gt;</span>org.hibernate.jpa.HibernatePersistenceProvider<span class="xml-tag">&lt;/provider&gt;</span>
+
+    <span class="cmt">&lt;!-- Clases entidad registradas --&gt;</span>
+    <span class="xml-tag">&lt;class&gt;</span>com.example.Empleado<span class="xml-tag">&lt;/class&gt;</span>
+    <span class="xml-tag">&lt;class&gt;</span>com.example.Departamento<span class="xml-tag">&lt;/class&gt;</span>
+
+    <span class="xml-tag">&lt;properties&gt;</span>
+      <span class="xml-tag">&lt;property</span> <span class="xml-attr">name</span>=<span class="xml-val">"jakarta.persistence.jdbc.url"</span>
+               <span class="xml-attr">value</span>=<span class="xml-val">"jdbc:mysql://localhost:3306/empresa"</span><span class="xml-tag">/&gt;</span>
+      <span class="xml-tag">&lt;property</span> <span class="xml-attr">name</span>=<span class="xml-val">"jakarta.persistence.jdbc.user"</span>     <span class="xml-attr">value</span>=<span class="xml-val">"root"</span><span class="xml-tag">/&gt;</span>
+      <span class="xml-tag">&lt;property</span> <span class="xml-attr">name</span>=<span class="xml-val">"jakarta.persistence.jdbc.password"</span> <span class="xml-attr">value</span>=<span class="xml-val">"****"</span><span class="xml-tag">/&gt;</span>
+      <span class="xml-tag">&lt;property</span> <span class="xml-attr">name</span>=<span class="xml-val">"jakarta.persistence.schema-generation.database.action"</span>
+               <span class="xml-attr">value</span>=<span class="xml-val">"create"</span><span class="xml-tag">/&gt;</span>
+      <span class="cmt">&lt;!-- Mostrar SQL generado en consola --&gt;</span>
+      <span class="xml-tag">&lt;property</span> <span class="xml-attr">name</span>=<span class="xml-val">"hibernate.show_sql"</span> <span class="xml-attr">value</span>=<span class="xml-val">"true"</span><span class="xml-tag">/&gt;</span>
+    <span class="xml-tag">&lt;/properties&gt;</span>
+
+  <span class="xml-tag">&lt;/persistence-unit&gt;</span>
+<span class="xml-tag">&lt;/persistence&gt;</span></pre>
+      </div>
+
+      <div class="card-grid">
+        <div class="card-sm">
+          <h4 style="color:var(--accent); font-family:'DM Mono',monospace; font-size:0.85rem;">RESOURCE_LOCAL</h4>
+          <p>Transacciones gestionadas por la aplicación (Java SE). El desarrollador controla explícitamente <code>begin()</code>, <code>commit()</code> y <code>rollback()</code>.</p>
+        </div>
+        <div class="card-sm">
+          <h4 style="color:#a5b4fc; font-family:'DM Mono',monospace; font-size:0.85rem;">JTA</h4>
+          <p>Transacciones gestionadas por el contenedor Jakarta EE (WildFly, GlassFish). Permite transacciones distribuidas entre varios recursos.</p>
+        </div>
+      </div>
+
+      <div class="ann-grid" style="margin-top:1rem;">
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/persistence" target="_blank" class="ann-tag">Persistence.createEntityManagerFactory()</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ④ GESTOR DE ENTIDADES -->
+  <section class="section-block" id="gestor">
+    <div class="section-label">04 — EntityManager</div>
+    <h2 class="section-title">Gestor de entidades</h2>
+    <div class="card">
+      <p>El <strong style="color:var(--text);">EntityManager</strong> es la interfaz central de JPA. Gestiona el contexto de persistencia y el ciclo de vida completo de las entidades. En modo <code>RESOURCE_LOCAL</code>, las transacciones se controlan mediante <code>EntityTransaction</code>.</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">Java · Patrón de uso EntityManager</span>
+        </div>
+        <pre><span class="cmt">// 1. Obtener el EntityManagerFactory (una sola vez por aplicación)</span>
+<span class="cls">EntityManagerFactory</span> emf =
+    Persistence.createEntityManagerFactory(<span class="str">"miUnidad"</span>);
+
+<span class="cmt">// 2. Crear EntityManager (uno por operación / hilo)</span>
+<span class="cls">EntityManager</span> em = emf.createEntityManager();
+<span class="cls">EntityTransaction</span> tx = em.getTransaction();
+
+<span class="kw">try</span> {
+    tx.begin();                       <span class="cmt">// Iniciar transacción</span>
+
+    <span class="cls">Empleado</span> emp = <span class="kw">new</span> <span class="cls">Empleado</span>();
+    emp.setNombre(<span class="str">"Laura García"</span>);
+    emp.setEmail(<span class="str">"laura@empresa.com"</span>);
+
+    em.persist(emp);                  <span class="cmt">// NEW → MANAGED</span>
+    tx.commit();                      <span class="cmt">// Confirmar: INSERT en BD</span>
+
+} <span class="kw">catch</span> (<span class="cls">Exception</span> e) {
+    <span class="kw">if</span> (tx.isActive()) tx.rollback(); <span class="cmt">// Deshacer cambios</span>
+    <span class="kw">throw</span> e;
+} <span class="kw">finally</span> {
+    em.close();                       <span class="cmt">// Liberar recursos</span>
+}
+
+<span class="cmt">// 3. Cerrar factory al terminar la aplicación</span>
+emf.close();</pre>
+      </div>
+
+      <div class="card-grid" style="margin-top:1rem;">
+        <div class="card-sm">
+          <h4>Estados de las entidades</h4>
+          <p><strong style="color:#86efac;">NEW</strong> — objeto creado, no gestionado.<br>
+          <strong style="color:var(--accent);">MANAGED</strong> — dentro del contexto de persistencia.<br>
+          <strong style="color:#fbbf24;">DETACHED</strong> — fuera del contexto tras <code>close()</code>.<br>
+          <strong style="color:#f87171;">REMOVED</strong> — marcado para borrar en la BD.</p>
+        </div>
+        <div class="card-sm">
+          <h4>Métodos clave</h4>
+          <p>
+            <code>persist(e)</code> — NEW → MANAGED<br>
+            <code>merge(e)</code> — DETACHED → MANAGED<br>
+            <code>remove(e)</code> — MANAGED → REMOVED<br>
+            <code>find(C, id)</code> — busca por PK<br>
+            <code>flush()</code> — sincroniza con BD<br>
+            <code>refresh(e)</code> — recarga desde BD
+          </p>
+        </div>
+      </div>
+
+      <div class="ann-grid" style="margin-top:1rem;">
+        <a href="https://jakartaee.github.io/persistence/latest/api/jakarta.persistence/jakarta/persistence/EntityManager.html" target="_blank" class="ann-tag">EntityManager API</a>
+        <a href="https://jakartaee.github.io/persistence/latest/api/jakarta.persistence/jakarta/persistence/EntityTransaction.html" target="_blank" class="ann-tag">EntityTransaction API</a>
+        <a href="https://jakartaee.github.io/persistence/latest/api/jakarta.persistence/jakarta/persistence/EntityManagerFactory.html" target="_blank" class="ann-tag">EntityManagerFactory API</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ⑤ CRUD -->
+  <section class="section-block" id="crud">
+    <div class="section-label">05 — Operaciones</div>
+    <h2 class="section-title">Operaciones CRUD</h2>
+    <div class="card">
+      <p>JPA simplifica las cuatro operaciones fundamentales de acceso a datos. Las entidades en estado <code>MANAGED</code> propagan sus cambios automáticamente a la BD al hacer <code>commit()</code> de la transacción.</p>
+
+      <div class="crud-grid" style="margin: 1.5rem 0;">
+        <div class="crud-cell">
+          <span class="crud-label" style="color:#86efac;">Create</span>
+          <span class="crud-method">em.persist(e)</span>
+          <span class="crud-desc">Inserta una nueva entidad en la BD. El objeto pasa de <code>NEW</code> a <code>MANAGED</code>.</span>
+        </div>
+        <div class="crud-cell">
+          <span class="crud-label" style="color:#60a5fa;">Read</span>
+          <span class="crud-method">em.find(C, id)</span>
+          <span class="crud-desc">Busca por clave primaria. Devuelve <code>null</code> si no existe. Usa <code>getReference()</code> para carga perezosa.</span>
+        </div>
+        <div class="crud-cell">
+          <span class="crud-label" style="color:#fbbf24;">Update</span>
+          <span class="crud-method">em.merge(e)</span>
+          <span class="crud-desc">Fusiona una entidad desacoplada. Devuelve la instancia gestionada con los cambios aplicados.</span>
+        </div>
+        <div class="crud-cell">
+          <span class="crud-label" style="color:#f87171;">Delete</span>
+          <span class="crud-method">em.remove(e)</span>
+          <span class="crud-desc">Marca la entidad como <code>REMOVED</code>. El DELETE se ejecuta al commit. La entidad debe estar MANAGED.</span>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">Java · Ejemplo completo CRUD</span>
+        </div>
+        <pre><span class="cmt">// CREATE</span>
+tx.begin();
+<span class="cls">Empleado</span> nuevo = <span class="kw">new</span> <span class="cls">Empleado</span>();
+nuevo.setNombre(<span class="str">"Marcos"</span>);
+em.persist(nuevo);
+tx.commit();
+
+<span class="cmt">// READ</span>
+<span class="cls">Empleado</span> e = em.find(<span class="cls">Empleado</span>.class, <span class="str">1L</span>);
+
+<span class="cmt">// UPDATE</span>
+tx.begin();
+e.setNombre(<span class="str">"Marcos Ruiz"</span>);       <span class="cmt">// dirty checking automático</span>
+tx.commit();
+
+<span class="cmt">// DELETE</span>
+tx.begin();
+<span class="cls">Empleado</span> managed = em.find(<span class="cls">Empleado</span>.class, <span class="str">1L</span>);
+em.remove(managed);
+tx.commit();</pre>
+      </div>
+
+      <div class="highlight-box">
+        <p><strong style="color:var(--accent);">Dirty Checking:</strong> Si una entidad está en estado MANAGED y modificas sus atributos dentro de una transacción, JPA detecta automáticamente los cambios y genera el UPDATE correspondiente sin necesidad de llamar a ningún método adicional.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ⑥ JPQL -->
+  <section class="section-block" id="jpql">
+    <div class="section-label">06 — Consultas</div>
+    <h2 class="section-title">JPQL — Java Persistence Query Language</h2>
+    <div class="card">
+      <p><strong style="color:var(--text);">JPQL</strong> es un lenguaje de consultas orientado a objetos inspirado en SQL, pero que opera sobre entidades Java y sus atributos en lugar de sobre tablas y columnas. Es portable entre proveedores y produce SQL nativo de forma transparente.</p>
+
+      <div style="margin: 1.25rem 0;">
+        <div class="section-label" style="font-size:0.65rem; margin-bottom:0.5rem;">Consulta SELECT con parámetros</div>
+        <div class="code-wrap">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+            <span class="code-lang">Java · TypedQuery</span>
+          </div>
+          <pre><span class="cmt">// Consulta tipada (recomendada sobre Query)</span>
+String jpql = <span class="str">"SELECT e FROM Empleado e WHERE e.departamento.nombre = :dept"</span>;
+<span class="cls">TypedQuery</span>&lt;<span class="cls">Empleado</span>&gt; q = em.createQuery(jpql, <span class="cls">Empleado</span>.class);
+q.setParameter(<span class="str">"dept"</span>, <span class="str">"Ingeniería"</span>);
+q.setMaxResults(<span class="str">10</span>);                   <span class="cmt">// Paginación</span>
+q.setFirstResult(<span class="str">0</span>);
+List&lt;<span class="cls">Empleado</span>&gt; lista = q.getResultList();
+
+<span class="cmt">// Consulta de resultado único</span>
+<span class="cls">Empleado</span> uno = em.createQuery(
+    <span class="str">"SELECT e FROM Empleado e WHERE e.email = :mail"</span>, <span class="cls">Empleado</span>.class)
+    .setParameter(<span class="str">"mail"</span>, <span class="str">"admin@empresa.com"</span>)
+    .getSingleResult();
+
+<span class="cmt">// Actualización masiva</span>
+<span class="kw">int</span> actualizados = em.createQuery(
+    <span class="str">"UPDATE Empleado e SET e.sueldo = e.sueldo * 1.1 WHERE e.antiguedad &gt; 5"</span>)
+    .executeUpdate();
+
+<span class="cmt">// Eliminación masiva</span>
+em.createQuery(<span class="str">"DELETE FROM Empleado e WHERE e.activo = false"</span>).executeUpdate();
+
+<span class="cmt">// Proyección con constructor</span>
+List&lt;<span class="cls">EmpleadoDTO</span>&gt; dtos = em.createQuery(
+    <span class="str">"SELECT NEW com.example.EmpleadoDTO(e.nombre, e.email) FROM Empleado e"</span>,
+    <span class="cls">EmpleadoDTO</span>.class).getResultList();</pre>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="card-sm">
+          <h4>Funciones JPQL</h4>
+          <p>
+            <strong>Agregados:</strong> <code>COUNT()</code>, <code>SUM()</code>, <code>AVG()</code>, <code>MAX()</code>, <code>MIN()</code><br>
+            <strong>Cadenas:</strong> <code>UPPER()</code>, <code>LOWER()</code>, <code>CONCAT()</code>, <code>LENGTH()</code><br>
+            <strong>Fechas:</strong> <code>CURRENT_DATE</code>, <code>CURRENT_TIMESTAMP</code>
+          </p>
+        </div>
+        <div class="card-sm">
+          <h4>Named Queries</h4>
+          <p>Consultas predefinidas anotadas directamente en la entidad con <code>@NamedQuery</code>. Se compilan en el arranque, mejorando el rendimiento y detectando errores temprano.</p>
+        </div>
+        <div class="card-sm">
+          <h4>Criteria API</h4>
+          <p>API programática type-safe como alternativa a JPQL en cadena de texto. Ideal para consultas dinámicas construidas en tiempo de ejecución sin concatenación de strings.</p>
+        </div>
+      </div>
+
+      <div class="ann-grid" style="margin-top:1rem;">
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/query" target="_blank" class="ann-tag purple">Query</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/typedquery" target="_blank" class="ann-tag purple">TypedQuery&lt;X&gt;</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/namedquery" target="_blank" class="ann-tag purple">@NamedQuery</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/criteria/criteriabuilder" target="_blank" class="ann-tag purple">CriteriaBuilder</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ⑦ HERENCIA -->
+  <section class="section-block" id="herencia">
+    <div class="section-label">07 — Herencia</div>
+    <h2 class="section-title">Herencia en JPA</h2>
+    <div class="card">
+      <p>JPA permite mapear jerarquías de clases Java a tablas relacionales mediante la anotación <code>@Inheritance</code>. La elección de estrategia afecta directamente al rendimiento, la normalización y la complejidad de las consultas.</p>
+
+      <div class="strategy-cards">
+        <div class="strategy-card s1">
+          <h4>SINGLE_TABLE</h4>
+          <p>Toda la jerarquía en una única tabla. Usa una <code>@DiscriminatorColumn</code> para identificar el tipo. Estrategia por defecto: máximo rendimiento, consultas sin JOINs, pero con columnas nulas.</p>
+        </div>
+        <div class="strategy-card s2">
+          <h4>JOINED</h4>
+          <p>Una tabla por clase, unidas por la clave primaria. Diseño más normalizado. Recomendada para jerarquías con muchos atributos específicos por subclase y consultas polimórficas.</p>
+        </div>
+        <div class="strategy-card s3">
+          <h4>TABLE_PER_CLASS</h4>
+          <p>Una tabla completa por clase concreta con todos sus atributos. No permite columnas NULL, pero dificulta las consultas polimórficas al requerir UNIONs. No siempre soportada obligatoriamente.</p>
+        </div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">Java · Herencia SINGLE_TABLE</span>
+        </div>
+        <pre><span class="ann">@Entity</span>
+<span class="ann">@Inheritance</span>(strategy = InheritanceType.SINGLE_TABLE)
+<span class="ann">@DiscriminatorColumn</span>(name = <span class="str">"tipo"</span>, discriminatorType = DiscriminatorType.STRING)
+<span class="kw">public abstract class</span> <span class="cls">Persona</span> {
+    <span class="ann">@Id</span> <span class="ann">@GeneratedValue</span> <span class="kw">private</span> Long id;
+    <span class="kw">private</span> String nombre;
+}
+
+<span class="ann">@Entity</span>
+<span class="ann">@DiscriminatorValue</span>(<span class="str">"EMP"</span>)
+<span class="kw">public class</span> <span class="cls">Empleado</span> <span class="kw">extends</span> <span class="cls">Persona</span> {
+    <span class="kw">private</span> String puesto;
+}
+
+<span class="ann">@Entity</span>
+<span class="ann">@DiscriminatorValue</span>(<span class="str">"CLI"</span>)
+<span class="kw">public class</span> <span class="cls">Cliente</span> <span class="kw">extends</span> <span class="cls">Persona</span> {
+    <span class="kw">private</span> String cif;
+}</pre>
+      </div>
+
+      <div class="ann-grid">
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/inheritance" target="_blank" class="ann-tag">@Inheritance</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/inheritancetype" target="_blank" class="ann-tag">InheritanceType</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/discriminatorcolumn" target="_blank" class="ann-tag">@DiscriminatorColumn</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/discriminatorvalue" target="_blank" class="ann-tag">@DiscriminatorValue</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/mappedsuperclass" target="_blank" class="ann-tag orange">@MappedSuperclass</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ⑧ ASOCIACIONES -->
+  <section class="section-block" id="asociaciones">
+    <div class="section-label">08 — Relaciones</div>
+    <h2 class="section-title">Asociaciones y cardinalidad</h2>
+    <div class="card">
+      <p>Las relaciones entre entidades reflejan las claves foráneas del modelo relacional. JPA las expresa mediante anotaciones que especifican la cardinalidad (<em>cuántos</em>) y la navegabilidad (<em>en qué dirección</em>).</p>
+
+      <div class="assoc-row" style="margin: 1.5rem 0;">
+        <div>
+          <div class="code-wrap">
+            <div class="code-header">
+              <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+              <span class="code-lang">Java · Bidireccional @OneToMany / @ManyToOne</span>
+            </div>
+            <pre><span class="ann">@Entity</span>
+<span class="kw">public class</span> <span class="cls">Departamento</span> {
+    <span class="ann">@Id</span> <span class="kw">private</span> Long id;
+    <span class="kw">private</span> String nombre;
+
+    <span class="ann">@OneToMany</span>(mappedBy = <span class="str">"departamento"</span>,
+               cascade = CascadeType.ALL,
+               orphanRemoval = <span class="kw">true</span>)
+    <span class="kw">private</span> List&lt;<span class="cls">Empleado</span>&gt; empleados = <span class="kw">new</span> ArrayList&lt;&gt;();
+}
+
+<span class="ann">@Entity</span>
+<span class="kw">public class</span> <span class="cls">Empleado</span> {
+    <span class="ann">@Id</span> <span class="kw">private</span> Long id;
+
+    <span class="ann">@ManyToOne</span>(fetch = FetchType.LAZY)
+    <span class="ann">@JoinColumn</span>(name = <span class="str">"depto_id"</span>)       <span class="cmt">// FK en tabla empleados</span>
+    <span class="kw">private</span> <span class="cls">Departamento</span> departamento;
+}
+
+<span class="cmt">// ManyToMany con tabla de unión personalizada</span>
+<span class="ann">@ManyToMany</span>
+<span class="ann">@JoinTable</span>(name = <span class="str">"empleado_proyecto"</span>,
+    joinColumns = <span class="ann">@JoinColumn</span>(name = <span class="str">"emp_id"</span>),
+    inverseJoinColumns = <span class="ann">@JoinColumn</span>(name = <span class="str">"proy_id"</span>))
+<span class="kw">private</span> List&lt;<span class="cls">Proyecto</span>&gt; proyectos;</pre>
+          </div>
+        </div>
+        <div>
+          <div class="card-sm" style="margin-bottom:1rem;">
+            <h4>Cardinalidades disponibles</h4>
+            <p>
+              <code>@OneToOne</code> — Un objeto ↔ Un objeto<br>
+              <code>@OneToMany</code> — Un objeto → Muchos<br>
+              <code>@ManyToOne</code> — Muchos → Un objeto<br>
+              <code>@ManyToMany</code> — Muchos ↔ Muchos (tabla intermedia)
+            </p>
+          </div>
+          <div class="card-sm" style="margin-bottom:1rem;">
+            <h4>Cascade & Fetch</h4>
+            <p>
+              <code>cascade</code>: propaga operaciones (PERSIST, MERGE, REMOVE, ALL) a entidades relacionadas.<br><br>
+              <code>fetch</code>: <code>EAGER</code> (carga inmediata) o <code>LAZY</code> (carga diferida al acceder). @ManyToOne es EAGER por defecto, @OneToMany es LAZY.
+            </p>
+          </div>
+          <div class="card-sm">
+            <h4>mappedBy y @JoinColumn</h4>
+            <p><code>mappedBy</code> indica el lado inverso en una relación bidireccional (la que no tiene la clave foránea). <code>@JoinColumn</code> especifica el nombre de la columna FK en la base de datos.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ann-grid">
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/manytoone" target="_blank" class="ann-tag">@ManyToOne</a>
+        <a href="https://jakarta.ee/specifications/persistence/2.2/apidocs/javax/persistence/onetomany" target="_blank" class="ann-tag">@OneToMany</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/onetoone" target="_blank" class="ann-tag">@OneToOne</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/manytomany" target="_blank" class="ann-tag">@ManyToMany</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/joincolumn" target="_blank" class="ann-tag orange">@JoinColumn</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/jointable" target="_blank" class="ann-tag orange">@JoinTable</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/cascadetype" target="_blank" class="ann-tag purple">CascadeType</a>
+        <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/fetchtype" target="_blank" class="ann-tag purple">FetchType</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ⑨ CREACIÓN DESDE BD -->
+  <section class="section-block" id="entidades-bd">
+    <div class="section-label">09 — Ingeniería inversa</div>
+    <h2 class="section-title">Creación de entidades desde BD</h2>
+    <div class="card">
+      <p>La ingeniería inversa (<em>reverse engineering</em>) permite generar automáticamente las clases <code>@Entity</code> y el <code>persistence.xml</code> a partir de un esquema relacional existente, agilizando significativamente el desarrollo.</p>
+
+      <div style="margin: 1.5rem 0;">
+        <div class="tool-row">
+          <span class="tool-num">NetBeans</span>
+          <div>
+            <h4>Entidades desde base de datos</h4>
+            <p>Asistente integrado: <em>New → Entity Classes from Database</em>. Conecta a la BD mediante un DataSource o driver JDBC, selecciona las tablas y genera automáticamente las entidades con sus relaciones, el <code>persistence.xml</code> y el controlador JPA (Facade pattern).</p>
+          </div>
+        </div>
+        <div class="tool-row">
+          <span class="tool-num">IntelliJ IDEA</span>
+          <div>
+            <h4>JPA Reverse Engineering</h4>
+            <p>Herramienta <em>Persistence → Generate Persistence Mapping → By Database Schema</em>. Genera entidades con soporte para estrategias de herencia, tipos de fetch y relaciones bidireccionales. Incluye editor visual de mapeos ORM y validación JPQL en tiempo real.</p>
+          </div>
+        </div>
+        <div class="tool-row">
+          <span class="tool-num">Eclipse Dali</span>
+          <div>
+            <h4>JPA Tools — Generate Entities</h4>
+            <p>Plugin Dali incluido en Eclipse IDE for Enterprise. Genera entidades desde tablas con asistente paso a paso y editor gráfico del <code>persistence.xml</code>. Soporta asociaciones complejas y personalización de columnas.</p>
+          </div>
+        </div>
+        <div class="tool-row">
+          <span class="tool-num">Hibernate Tools</span>
+          <div>
+            <h4>hbm2java / reverse engineering</h4>
+            <p>Plugin Maven / Gradle que genera entidades JPA, archivos de mapeo HBM y esquemas DDL a partir de una BD existente. Configurable mediante fichero <code>reveng.xml</code>.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight-box orange">
+        <p><strong style="color:var(--accent2);">Flujo típico de ingeniería inversa:</strong> (1) Crear conexión JDBC al SGBD en el IDE → (2) Seleccionar esquema y tablas → (3) Configurar opciones (nombre de paquete, estrategia de herencia) → (4) Generar entidades, <code>persistence.xml</code> y controladores JPA → (5) Revisar y ajustar las anotaciones generadas.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ⑩ HERRAMIENTAS -->
+  <section class="section-block" id="herramientas">
+    <div class="section-label">10 — Ecosistema</div>
+    <h2 class="section-title">Controladores JPA & Herramientas</h2>
+    <div class="card">
+      <p>Los <strong style="color:var(--text);">controladores de entidad</strong> (Entity Facades o Stateless Session Beans) encapsulan las operaciones CRUD en clases de servicio reutilizables. Los IDEs modernos los generan automáticamente siguiendo el patrón DAO / Repository.</p>
+
+      <div class="code-wrap">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">Java · Controlador JPA (patrón Facade)</span>
+        </div>
+        <pre><span class="kw">public class</span> <span class="cls">EmpleadoFacade</span> {
+
+    <span class="kw">private final</span> <span class="cls">EntityManagerFactory</span> emf;
+
+    <span class="kw">public</span> <span class="cls">EmpleadoFacade</span>(<span class="cls">EntityManagerFactory</span> emf) {
+        <span class="kw">this</span>.emf = emf;
+    }
+
+    <span class="kw">public void</span> create(<span class="cls">Empleado</span> e) {
+        <span class="cls">EntityManager</span> em = emf.createEntityManager();
+        <span class="kw">try</span> {
+            em.getTransaction().begin();
+            em.persist(e);
+            em.getTransaction().commit();
+        } <span class="kw">finally</span> { em.close(); }
+    }
+
+    <span class="kw">public</span> <span class="cls">Empleado</span> findById(Long id) {
+        <span class="cls">EntityManager</span> em = emf.createEntityManager();
+        <span class="kw">try</span> {
+            <span class="kw">return</span> em.find(<span class="cls">Empleado</span>.class, id);
+        } <span class="kw">finally</span> { em.close(); }
+    }
+
+    <span class="kw">public</span> List&lt;<span class="cls">Empleado</span>&gt; findAll() {
+        <span class="cls">EntityManager</span> em = emf.createEntityManager();
+        <span class="kw">try</span> {
+            <span class="kw">return</span> em.createQuery(<span class="str">"SELECT e FROM Empleado e"</span>, <span class="cls">Empleado</span>.class)
+                     .getResultList();
+        } <span class="kw">finally</span> { em.close(); }
+    }
+
+    <span class="kw">public void</span> remove(Long id) {
+        <span class="cls">EntityManager</span> em = emf.createEntityManager();
+        <span class="kw">try</span> {
+            em.getTransaction().begin();
+            <span class="cls">Empleado</span> ref = em.find(<span class="cls">Empleado</span>.class, id);
+            <span class="kw">if</span> (ref != <span class="kw">null</span>) em.remove(ref);
+            em.getTransaction().commit();
+        } <span class="kw">finally</span> { em.close(); }
+    }
+}</pre>
+      </div>
+
+      <div class="card-grid" style="margin-top:1.25rem;">
+        <div class="card-sm">
+          <div class="card-icon icon-green"><i class="fas fa-cube"></i></div>
+          <h4>Gestión persistence.xml</h4>
+          <p>NetBeans e IntelliJ IDEA ofrecen editores visuales para el archivo persistence.xml: agregar/eliminar entidades, configurar conexiones y ajustar propiedades del proveedor sin editar XML manualmente.</p>
+        </div>
+        <div class="card-sm">
+          <div class="card-icon icon-purple"><i class="fas fa-magic"></i></div>
+          <h4>Asistentes de conexión</h4>
+          <p>Los IDEs permiten crear y gestionar fuentes de datos (DataSources) para MySQL, PostgreSQL, H2, Oracle, etc. con asistentes visuales que configuran drivers y cadenas de conexión JDBC.</p>
+        </div>
+        <div class="card-sm">
+          <div class="card-icon icon-orange"><i class="fas fa-terminal"></i></div>
+          <h4>Apache Maven / Gradle</h4>
+          <p>Dependencia estándar: <code>jakarta.persistence:jakarta.persistence-api:3.1.0</code>. Hibernate Validator y plugins de generación de esquemas DDL simplifican el ciclo de build completo.</p>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:1.25rem;">
+        <p><strong style="color:var(--accent);">Buenas prácticas:</strong> Usar <code>RESOURCE_LOCAL</code> con patrón Facade en Java SE; preferir <code>JTA</code> con <code>@Stateless</code> en Jakarta EE. Definir consultas como <code>@NamedQuery</code> en las entidades. Activar <code>hibernate.show_sql</code> solo en desarrollo. Cerrar siempre el <code>EntityManager</code> en un bloque <code>finally</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- API REFERENCE -->
+  <section class="section-block">
+    <div class="section-label">Referencia</div>
+    <h2 class="section-title">API oficial Jakarta Persistence</h2>
+    <div class="api-grid">
+      <a href="https://jakarta.ee/specifications/persistence/" target="_blank" class="api-item">
+        <span class="api-label">Especificación</span>
+        <span class="api-name">Jakarta Persistence</span>
+      </a>
+      <a href="https://jakarta.ee/specifications/persistence/3.0/apidocs/" target="_blank" class="api-item">
+        <span class="api-label">Javadoc</span>
+        <span class="api-name">JPA 3.0 API</span>
+      </a>
+      <a href="https://jakartaee.github.io/persistence/latest/api/" target="_blank" class="api-item">
+        <span class="api-label">Preview</span>
+        <span class="api-name">Nightly Build API</span>
+      </a>
+      <a href="https://jakarta.ee/learn/specification-guides/persistence-explained/" target="_blank" class="api-item">
+        <span class="api-label">Guía oficial</span>
+        <span class="api-name">Persistence Explained</span>
+      </a>
+      <a href="https://jakarta.ee/specifications/persistence/3.0/jakarta-persistence-spec-3.0.pdf" target="_blank" class="api-item">
+        <span class="api-label">Documento</span>
+        <span class="api-name">Spec PDF (3.0)</span>
+      </a>
+      <a href="https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api" target="_blank" class="api-item">
+        <span class="api-label">Maven Central</span>
+        <span class="api-name">jakarta.persistence-api</span>
+      </a>
+      <a href="https://github.com/jakartaee/persistence" target="_blank" class="api-item">
+        <span class="api-label">Código fuente</span>
+        <span class="api-name">GitHub jakartaee/persistence</span>
+      </a>
+      <a href="https://hibernate.org/orm/documentation/" target="_blank" class="api-item">
+        <span class="api-label">Proveedor</span>
+        <span class="api-name">Hibernate ORM Docs</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p style="margin-bottom:0.5rem;"><strong>Unidad 15 — API de Persistencia de Java</strong></p>
+  <p>Contenido alineado con Jakarta Persistence 3.1+ · Material educativo profesional</p>
+  <p style="margin-top:0.5rem; font-size:0.75rem; color:var(--text-muted);">Todos los enlaces apuntan a documentación oficial de Jakarta EE y Eclipse Foundation</p>
+</footer>
+
+</body>
+</html>
